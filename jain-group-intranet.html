@@ -1,0 +1,2284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Jain Group Intranet</title>
+<style>
+/* ── ROOT ─────────────────────────────── */
+:root{
+  --red:#CC0000;--dr:#8B0000;--lr:#FFF0F0;
+  --blk:#1A1A1A;--gry:#555;--lgry:#F4F4F4;--bdr:#E2E2E2;--wht:#fff;
+  --grn:#2e7d32;--blu:#1565c0;--org:#e65100;--pur:#6a1b9a;
+  --hh:58px;--sw:240px;--ch:28px;
+  --shadow-sm:0 1px 4px rgba(0,0,0,.07);
+  --shadow-md:0 4px 16px rgba(0,0,0,.1);
+  --shadow-lg:0 8px 28px rgba(0,0,0,.14);
+  --radius:10px;--radius-sm:6px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#E8E8E8;color:var(--blk);font-size:13px;height:100vh;overflow:hidden}
+
+/* ── HEADER ──────────────────────────── */
+.hdr{position:fixed;top:0;left:0;right:0;height:var(--hh);
+  background:linear-gradient(135deg,#111 0%,#1a1a1a 60%,#222 100%);
+  display:flex;align-items:center;padding:0 16px;gap:12px;z-index:400;
+  box-shadow:0 2px 14px rgba(0,0,0,.55)}
+.logo-wrap{background:#fff;border-radius:6px;padding:4px 10px;display:flex;align-items:center;height:40px;flex-shrink:0}
+.logo-img{height:30px;width:auto;display:block}
+.logo-fb{font-weight:800;color:var(--red);font-size:14px;letter-spacing:.5px}
+.hdr-div{width:1px;height:26px;background:#3a3a3a;flex-shrink:0}
+.hdr-sub{font-size:11px;color:var(--red);font-weight:700;letter-spacing:.5px;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.hdr-live{background:linear-gradient(135deg,var(--red),var(--dr));color:#fff;
+  font-size:9px;font-weight:700;padding:2px 9px;border-radius:9px;letter-spacing:.8px;
+  box-shadow:0 2px 6px rgba(204,0,0,.4);white-space:nowrap;flex-shrink:0}
+.hdr-search{margin-left:auto;display:flex;align-items:center;gap:7px;
+  background:#fff;border:1.5px solid #ddd;border-radius:20px;padding:5px 14px;
+  transition:border-color .2s,box-shadow .2s;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.hdr-search:focus-within{border-color:var(--red);box-shadow:0 0 0 3px rgba(204,0,0,.12)}
+.hdr-search input{background:none;border:none;color:#1a1a1a;font-size:12px;width:220px;outline:none;font-weight:500}
+.hdr-search input::placeholder{color:#aaa}
+.hdr-menu{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:6px;flex-shrink:0}
+.hdr-menu span{width:20px;height:2px;background:#fff;border-radius:2px;display:block}
+
+/* ── LAYOUT ──────────────────────────── */
+.layout{display:flex;margin-top:var(--hh);height:calc(100vh - var(--hh) - var(--ch))}
+
+/* ── SIDEBAR ─────────────────────────── */
+.sb{width:var(--sw);flex-shrink:0;background:var(--wht);
+  border-right:1px solid var(--bdr);overflow-y:auto;padding:8px 0;
+  box-shadow:2px 0 8px rgba(0,0,0,.04);transition:transform .25s ease}
+.sb::-webkit-scrollbar{width:3px}
+.sb::-webkit-scrollbar-thumb{background:#ddd;border-radius:2px}
+.nl{font-size:9px;font-weight:700;color:#ccc;letter-spacing:1.5px;
+  text-transform:uppercase;padding:14px 15px 5px}
+.ns{font-size:9px;font-weight:700;color:#f9a825;letter-spacing:.8px;
+  text-transform:uppercase;padding:8px 15px 3px 22px;display:flex;align-items:center;gap:6px}
+.ni{display:flex;align-items:center;gap:9px;padding:9px 15px;cursor:pointer;
+  font-size:12.5px;color:var(--gry);border-left:3px solid transparent;
+  user-select:none;transition:all .15s}
+.ni:hover{background:var(--lr);color:var(--red);border-left-color:#ffcccc;padding-left:18px}
+.ni.on{background:var(--lr);color:var(--red);border-left-color:var(--red);font-weight:600}
+.ni-ic{font-size:14px;width:17px;text-align:center;flex-shrink:0}
+
+/* ── MAIN ────────────────────────────── */
+.main{flex:1;overflow-y:auto;padding:20px;background:#E8E8E8}
+.main::-webkit-scrollbar{width:5px}
+.main::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
+
+/* ── PANELS ──────────────────────────── */
+.panel{display:none}
+.panel.on{display:block;animation:fi .2s ease}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── PAGE HEADER ─────────────────────── */
+.ph{display:flex;align-items:flex-start;gap:12px;margin-bottom:20px}
+.ph-ic{font-size:30px;flex-shrink:0;line-height:1}
+.ph-title{font-size:22px;font-weight:700;letter-spacing:-.3px}
+.ph-sub{font-size:12px;color:var(--gry);margin-top:3px;line-height:1.5}
+
+/* ── CARDS ───────────────────────────── */
+.card{background:var(--wht);border:1px solid var(--bdr);border-radius:var(--radius);
+  padding:16px;box-shadow:var(--shadow-sm);transition:box-shadow .2s,transform .2s}
+.card:hover{box-shadow:var(--shadow-md)}
+
+/* ── GRIDS ───────────────────────────── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+/* ── STATS ───────────────────────────── */
+.stat-row{display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.stat{flex:1;min-width:110px;background:var(--wht);border:1px solid var(--bdr);
+  border-radius:var(--radius);padding:13px 16px;border-top:3px solid var(--red);
+  box-shadow:var(--shadow-sm);transition:transform .18s,box-shadow .18s}
+.stat:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.stat-v{font-size:26px;font-weight:900;color:var(--red);letter-spacing:-.5px}
+.stat-l{font-size:11px;color:var(--gry);margin-top:2px}
+
+/* ── ALERTS ──────────────────────────── */
+.al{padding:10px 14px;border-radius:8px;font-size:12px;margin-bottom:12px;line-height:1.6}
+.al-r{background:var(--lr);border-left:4px solid var(--red);color:var(--dr)}
+.al-b{background:#e3f2fd;border-left:4px solid var(--blu);color:#0d47a1}
+.al-g{background:#e8f5e9;border-left:4px solid var(--grn);color:#1b5e20}
+.al-y{background:#fffde7;border-left:4px solid #f9a825;color:#5d4037}
+
+/* ── TABS ────────────────────────────── */
+.tabs{display:flex;gap:0;margin-bottom:16px;border-bottom:2px solid var(--bdr);overflow-x:auto}
+.tab{padding:9px 14px;cursor:pointer;font-size:12px;font-weight:500;color:var(--gry);
+  border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;
+  white-space:nowrap;user-select:none;border-radius:6px 6px 0 0}
+.tab:hover{color:var(--red);background:var(--lr)}
+.tab.on{color:var(--red);border-bottom-color:var(--red);font-weight:700;background:var(--lr)}
+.tc{display:none}.tc.on{display:block}
+
+/* ── TABLES ──────────────────────────── */
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--blk);color:#fff;padding:9px 12px;text-align:left;font-weight:600;font-size:11px;letter-spacing:.2px}
+td{padding:7px 12px;border-bottom:1px solid var(--bdr);vertical-align:middle}
+tr:nth-child(even) td{background:#fafafa}
+tr:hover td{background:var(--lr)}
+.th-red th{background:var(--red)}
+
+/* ── TAGS ────────────────────────────── */
+.tag{display:inline-block;padding:2px 9px;border-radius:8px;font-size:10px;font-weight:600;white-space:nowrap;letter-spacing:.2px}
+.t-r{background:var(--lr);color:var(--red)}
+.t-g{background:#e8f5e9;color:var(--grn)}
+.t-b{background:#e3f2fd;color:var(--blu)}
+.t-y{background:#fff8e1;color:var(--org)}
+.t-k{background:#f5f5f5;color:#555;border:1px solid #e8e8e8}
+.t-p{background:#f3e5f5;color:var(--pur)}
+
+/* ── BUTTONS ─────────────────────────── */
+.btn{padding:8px 16px;border:none;border-radius:var(--radius-sm);cursor:pointer;
+  font-size:12px;font-weight:600;transition:all .16s;letter-spacing:.2px}
+.btn-r{background:linear-gradient(135deg,var(--red),var(--dr));color:#fff;
+  box-shadow:0 2px 6px rgba(204,0,0,.3)}
+.btn-r:hover{background:linear-gradient(135deg,var(--dr),#6b0000);box-shadow:0 4px 10px rgba(204,0,0,.4);transform:translateY(-1px)}
+.btn-o{background:none;border:1.5px solid var(--red);color:var(--red)}
+.btn-o:hover{background:var(--lr);transform:translateY(-1px)}
+.btn-k{background:var(--blk);color:#fff}.btn-k:hover{background:#333}
+.btn-sm{padding:5px 11px;font-size:11px}
+
+/* ── DEPT ITEMS ─────────────────────── */
+.dept-list{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.dept-list a{display:flex;justify-content:space-between;align-items:center;
+  padding:11px 14px;background:#fff;border:1px solid var(--bdr);border-radius:8px;
+  text-decoration:none;color:var(--blk);font-size:12.5px;
+  box-shadow:var(--shadow-sm);transition:all .15s}
+.dept-list a:hover{border-color:var(--red);background:var(--lr);transform:translateX(3px)}
+.dept-list a .arr{color:var(--red);font-weight:700;font-size:14px}
+.dept-list a .ext-ic{color:var(--org);font-size:12px;margin-left:6px}
+
+/* ── PROJECT CARDS ──────────────────── */
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.proj{background:#fff;border:1px solid var(--bdr);border-radius:var(--radius);overflow:hidden;
+  box-shadow:var(--shadow-sm);transition:all .2s}
+.proj:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--red)}
+.proj img{width:100%;height:140px;object-fit:cover;display:block;background:#eee}
+.proj .cap{padding:8px 11px;font-size:12px;font-weight:600;border-top:2px solid var(--red);color:var(--blk)}
+
+/* ── COPYRIGHT BAR ───────────────── */
+.dt-copyright{position:fixed;bottom:0;left:0;right:0;height:var(--ch);
+  background:#1a1a1a;color:#aaa;display:flex;justify-content:space-between;
+  align-items:center;padding:0 16px;font-size:10.5px;z-index:300;
+  border-top:1px solid #333}
+.dt-cp-left,.dt-cp-right{display:flex;gap:10px;align-items:center}
+.dt-cp-right span{color:#666}
+
+/* ── SCROLLBAR ───────────────────────── */
+::-webkit-scrollbar{width:5px;height:4px}
+::-webkit-scrollbar-track{background:#f0f0f0}
+::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--red)}
+
+/* ══════════════════════════════════════
+   MOBILE RESPONSIVE — ≤767px
+   ══════════════════════════════════════ */
+@media (max-width:767px){
+  :root{--hh:52px;--sw:260px;--ch:26px}
+  .hdr{padding:0 12px;gap:8px}
+  .logo-wrap{height:34px;padding:3px 8px}
+  .logo-img{height:24px}
+  .hdr-sub{font-size:10px}
+  .hdr-live{display:none}
+  .hdr-search{display:none}
+  .hdr-menu{display:flex}
+  .mob-search{display:flex;position:fixed;top:var(--hh);left:0;right:0;z-index:399;
+    background:#f5f5f5;padding:7px 12px;gap:8px;align-items:center;
+    border-bottom:1px solid #e0e0e0;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+  .mob-search input{flex:1;background:#fff;border:1.5px solid #ddd;color:#1a1a1a;
+    font-size:13px;padding:7px 12px;border-radius:20px;outline:none;font-weight:500}
+  .layout{margin-top:calc(var(--hh) + 44px);height:calc(100vh - var(--hh) - 44px - var(--ch))}
+  .sb{position:fixed;top:calc(var(--hh) + 44px);left:0;bottom:var(--ch);z-index:500;
+    transform:translateX(-100%);box-shadow:4px 0 20px rgba(0,0,0,.2)}
+  .sb.open{transform:translateX(0)}
+  .sb-overlay{display:none;position:fixed;inset:calc(var(--hh) + 44px) 0 var(--ch) 0;
+    background:rgba(0,0,0,.5);z-index:499}
+  .sb-overlay.on{display:block}
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .dept-list{grid-template-columns:1fr}
+}
+@media (min-width:768px){.mob-search,.sb-overlay{display:none}}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ HEADER ══════════════════ -->
+<header class="hdr">
+  <div class="hdr-menu" id="menuBtn" onclick="toggleSidebar()">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="logo-wrap">
+    <img src="MARKETING/Jain Group Logo.JPG" alt="Jain Group" class="logo-img"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+    <span class="logo-fb" style="display:none">JAIN GROUP</span>
+  </div>
+  <div class="hdr-div"></div>
+  <div class="hdr-sub">Solution Navigator</div>
+  <div class="hdr-live">LIVE TOOL</div>
+  <div class="hdr-search">
+    <span style="color:#999;font-size:12px">&#x1F50D;</span>
+    <input type="text" id="gSearch" placeholder="Search departments, reports, forms, projects, links..."
+      oninput="doSearch(this.value)">
+  </div>
+</header>
+
+<div class="mob-search">
+  <span style="color:#999;font-size:13px">&#x1F50D;</span>
+  <input type="text" id="gSearchMob" placeholder="Search departments, reports, forms..." oninput="doSearch(this.value)">
+</div>
+<div class="sb-overlay" id="sbOverlay" onclick="toggleSidebar()"></div>
+
+<!-- ══════════════════ LAYOUT ══════════════════ -->
+<div class="layout">
+
+<!-- ──────────── SIDEBAR ──────────── -->
+<nav class="sb" id="sidebar">
+  <div class="nl">Start Here</div>
+  <div class="ni on" data-p="home"      onclick="goTo(this)"><span class="ni-ic">&#127968;</span>Dashboard</div>
+  <div class="ni"    data-p="projects"  onclick="goTo(this)"><span class="ni-ic">&#127961;&#65039;</span>Projects</div>
+
+  <div class="nl">Departments</div>
+  <div class="ni" data-p="finance"    onclick="goTo(this)"><span class="ni-ic">&#128176;</span>Acct. &amp; Finance</div>
+  <div class="ni" data-p="audit"      onclick="goTo(this)"><span class="ni-ic">&#128202;</span>Audit, ERP &amp; MIS</div>
+  <div class="ni" data-p="hr"         onclick="goTo(this)"><span class="ni-ic">&#128101;</span>HR, Admin &amp; PR</div>
+  <div class="ni" data-p="it"         onclick="goTo(this)"><span class="ni-ic">&#128187;</span>IT &amp; Other</div>
+  <div class="ni" data-p="legal"      onclick="goTo(this)"><span class="ni-ic">&#128737;&#65039;</span>Legal</div>
+  <div class="ni" data-p="management" onclick="goTo(this)"><span class="ni-ic">&#128188;</span>Management</div>
+  <div class="ni" data-p="marketing"  onclick="goTo(this)"><span class="ni-ic">&#128227;</span>Marketing</div>
+  <div class="ni" data-p="operation"  onclick="goTo(this)"><span class="ni-ic">&#128736;&#65039;</span>Operation</div>
+  <div class="ni" data-p="stores"     onclick="goTo(this)"><span class="ni-ic">&#128230;</span>Stores &amp; Purchase</div>
+
+  <div class="nl">Quick Tools</div>
+  <div class="ni" data-p="quickref" onclick="goTo(this)"><span class="ni-ic">&#128204;</span>Quick Reference</div>
+  <div class="ni" data-p="extlinks" onclick="goTo(this)"><span class="ni-ic">&#128279;</span>External Links</div>
+  <div class="ni" data-p="about"    onclick="goTo(this)"><span class="ni-ic">&#8505;&#65039;</span>About</div>
+</nav>
+
+<!-- ──────────── MAIN ──────────── -->
+<main class="main" id="mainArea">
+
+<!-- ░░░░░ PANEL: HOME ░░░░░ -->
+<div class="panel on" id="p-home">
+  <div class="ph">
+    <div class="ph-ic">&#127968;</div>
+    <div>
+      <div class="ph-title">Welcome to the Jain Group Intranet</div>
+      <div class="ph-sub">Find any department, report or document in one click — or search across the whole organisation.</div>
+    </div>
+    <span class="tag t-r" style="margin-left:auto;padding:5px 12px;font-size:11px">v1.0</span>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat"><div class="stat-v">9</div><div class="stat-l">Departments</div></div>
+    <div class="stat"><div class="stat-v">500+</div><div class="stat-l">Quick-Access Documents</div></div>
+    <div class="stat"><div class="stat-v">17</div><div class="stat-l">Live Projects</div></div>
+    <div class="stat"><div class="stat-v">182</div><div class="stat-l">Company Letterheads</div></div>
+    <div class="stat"><div class="stat-v">25+</div><div class="stat-l">Years in Business</div></div>
+    <div class="stat"><div class="stat-v">170</div><div class="stat-l">Company PAN Cards</div></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:14px">
+    <div class="card" style="border-top:4px solid var(--red)">
+      <div style="font-weight:700;margin-bottom:8px;font-size:14px">&#11088; Most-Used Resources</div>
+      <div style="font-size:12px;color:var(--gry);margin-bottom:10px">The places people open every day.</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span class="tag t-r" onclick="goTo(document.querySelector('[data-p=audit]'))" style="cursor:pointer;padding:6px 13px;font-size:12px">&#128202; ERP &amp; MIS &rarr;</span>
+        <span class="tag t-r" onclick="goTo(document.querySelector('[data-p=management]'))" style="cursor:pointer;padding:6px 13px;font-size:12px">&#128188; Management Reports &rarr;</span>
+        <span class="tag t-r" onclick="goTo(document.querySelector('[data-p=marketing]'))" style="cursor:pointer;padding:6px 13px;font-size:12px">&#128227; Brochures &amp; Forms &rarr;</span>
+      </div>
+    </div>
+    <div class="card" style="border-top:4px solid #888">
+      <div style="font-weight:700;margin-bottom:8px;font-size:14px">&#128279; External Systems</div>
+      <div style="font-size:12px;color:var(--gry);margin-bottom:10px">Logins to FarVision, employee portal and the public site.</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a class="tag t-k" target="_blank" rel="noopener" href="http://192.168.1.5/farvision" style="padding:6px 13px;font-size:12px;text-decoration:none">FarVision HO</a>
+        <a class="tag t-k" target="_blank" rel="noopener" href="http://150.129.134.204/farvision" style="padding:6px 13px;font-size:12px;text-decoration:none">FarVision Site</a>
+        <a class="tag t-k" target="_blank" rel="noopener" href="http://192.168.1.5/fvemployeeportal/jain" style="padding:6px 13px;font-size:12px;text-decoration:none">Employee Portal</a>
+        <a class="tag t-k" target="_blank" rel="noopener" href="http://thejaingroup.com/" style="padding:6px 13px;font-size:12px;text-decoration:none">thejaingroup.com</a>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-weight:700;font-size:14px;margin-bottom:12px">&#128640; Quick Navigation &mdash; What do you need right now?</div>
+  <div class="g3" style="margin-bottom:16px">
+    <div class="card" style="border-left:4px solid var(--red);cursor:pointer" onclick="goTo(document.querySelector('[data-p=finance]'))">
+      <div style="font-size:22px;margin-bottom:5px">&#128176;</div>
+      <div style="font-weight:700;margin-bottom:4px">Acct. &amp; Finance</div>
+      <div style="font-size:11px;color:var(--gry)">Balance sheets, petty cash, PAN cards</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--blu);cursor:pointer" onclick="goTo(document.querySelector('[data-p=audit]'))">
+      <div style="font-size:22px;margin-bottom:5px">&#128202;</div>
+      <div style="font-weight:700;margin-bottom:4px">Audit, ERP &amp; MIS</div>
+      <div style="font-size:11px;color:var(--gry)">ATS Activate, scorecards, ERP, macros</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--grn);cursor:pointer" onclick="goTo(document.querySelector('[data-p=hr]'))">
+      <div style="font-size:22px;margin-bottom:5px">&#128101;</div>
+      <div style="font-weight:700;margin-bottom:4px">HR, Admin &amp; PR</div>
+      <div style="font-size:11px;color:var(--gry)">Letterheads, leaves, holidays, portal</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--org);cursor:pointer" onclick="goTo(document.querySelector('[data-p=legal]'))">
+      <div style="font-size:22px;margin-bottom:5px">&#128737;&#65039;</div>
+      <div style="font-weight:700;margin-bottom:4px">Legal</div>
+      <div style="font-size:11px;color:var(--gry)">Project legal docs, valuations</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--pur);cursor:pointer" onclick="goTo(document.querySelector('[data-p=management]'))">
+      <div style="font-size:22px;margin-bottom:5px">&#128188;</div>
+      <div style="font-weight:700;margin-bottom:4px">Management</div>
+      <div style="font-size:11px;color:var(--gry)">MIS reports, current and archive packs</div>
+    </div>
+    <div class="card" style="border-left:4px solid #00897b;cursor:pointer" onclick="goTo(document.querySelector('[data-p=marketing]'))">
+      <div style="font-size:22px;margin-bottom:5px">&#128227;</div>
+      <div style="font-weight:700;margin-bottom:4px">Marketing</div>
+      <div style="font-size:11px;color:var(--gry)">MIS, brochures, booking &amp; site forms</div>
+    </div>
+  </div>
+
+  <div class="al al-r">&#127919; <strong>Tip.</strong> Use the search box at the top right to jump straight to any department, report or form &mdash; for example type <em>"PAN"</em>, <em>"BRS"</em>, <em>"Dream Valley"</em> or <em>"ERP"</em>.</div>
+
+  <div class="g2">
+    <div class="card">
+      <div style="font-weight:700;margin-bottom:10px;font-size:13px">&#127942; Group Companies &amp; Brands</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <span class="tag t-r">JGPPL</span><span class="tag t-r">Jain Group HO</span>
+        <span class="tag t-r">Dream Valley</span><span class="tag t-r">Dream Residency</span>
+        <span class="tag t-r">Dream Excellency</span><span class="tag t-r">Dream Exotica</span>
+        <span class="tag t-b">Dream Park</span><span class="tag t-b">Dream Palazzo</span>
+        <span class="tag t-b">Dream Apartments</span><span class="tag t-b">Holiday Inn Durgapur</span>
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-weight:700;margin-bottom:10px;font-size:13px">&#127760; Public Web Presence</div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <a class="tag t-k" target="_blank" rel="noopener" href="http://thejaingroup.com/" style="text-decoration:none;padding:7px 12px;font-size:12px">&#128279; thejaingroup.com &mdash; corporate website</a>
+        <a class="tag t-k" target="_blank" rel="noopener" href="https://wheredoc2-1a26f7ade162.herokuapp.com/" style="text-decoration:none;padding:7px 12px;font-size:12px">&#128279; File Index / Where Doc</a>
+        <a class="tag t-k" target="_blank" rel="noopener" href="https://prioritease2-c953f12d76f1.herokuapp.com/" style="text-decoration:none;padding:7px 12px;font-size:12px">&#128279; Prioritease</a>
+      </div>
+    </div>
+  </div>
+</div><!-- /p-home -->
+
+
+<!-- ░░░░░ PANEL: PROJECTS ░░░░░ -->
+<div class="panel" id="p-projects">
+  <div class="ph">
+    <div class="ph-ic">&#127961;&#65039;</div>
+    <div><div class="ph-title">Live Projects</div><div class="ph-sub">Snapshots of current Jain Group developments. Click any image to enlarge.</div></div>
+    <span class="tag t-r" style="margin-left:auto;padding:5px 12px">12 projects</span>
+  </div>
+  <div class="proj-grid">
+    <figure class="proj"><img src="data1/images/dream_valley.jpg" alt="Dream Valley"><figcaption class="cap">Dream Valley</figcaption></figure>
+    <figure class="proj"><img src="data1/images/dream_residency_elevation_copy.jpg" alt="Dream Residency"><figcaption class="cap">Dream Residency</figcaption></figure>
+    <figure class="proj"><img src="data1/images/dream_residency_ext_v0__2hirez_1.jpg" alt="Dream Residency Ext"><figcaption class="cap">Dream Residency (Ext.)</figcaption></figure>
+    <figure class="proj"><img src="data1/images/dream_excellency_elevation.jpg" alt="Dream Excellency"><figcaption class="cap">Dream Excellency</figcaption></figure>
+    <figure class="proj"><img src="data1/images/dream_exotica1.jpg" alt="Dream Exotica"><figcaption class="cap">Dream Exotica</figcaption></figure>
+    <figure class="proj"><img src="data1/images/dream_exotica_gym_view.jpg" alt="Dream Exotica Gym"><figcaption class="cap">Dream Exotica &mdash; Gym</figcaption></figure>
+    <figure class="proj"><img src="data1/images/dream_palazzo.jpg" alt="Dream Palazzo"><figcaption class="cap">Dream Palazzo</figcaption></figure>
+    <figure class="proj"><img src="data1/images/dreampark_elevation.jpg" alt="Dream Park"><figcaption class="cap">Dream Park</figcaption></figure>
+    <figure class="proj"><img src="data1/images/dream_apartments.jpg" alt="Dream Apartments"><figcaption class="cap">Dream Apartments</figcaption></figure>
+    <figure class="proj"><img src="data1/images/dream_villa_elevation.jpg" alt="Dream Villa"><figcaption class="cap">Dream Villa</figcaption></figure>
+    <figure class="proj"><img src="data1/images/arcadia.jpg" alt="Arcadia"><figcaption class="cap">Dream Arcadia</figcaption></figure>
+    <figure class="proj"><img src="data1/images/dr_twins_elevation.jpg" alt="DR Twins"><figcaption class="cap">DR Twins</figcaption></figure>
+    <figure class="proj"><img src="data1/images/durgapur_hotel.jpg" alt="Durgapur Hotel"><figcaption class="cap">Holiday Inn &mdash; Durgapur</figcaption></figure>
+    <figure class="proj"><img src="data1/images/durgapur_final.jpg" alt="Durgapur Final"><figcaption class="cap">Durgapur Project</figcaption></figure>
+    <figure class="proj"><img src="data1/images/cam08.jpg" alt="Cam-08"><figcaption class="cap">Site Cam &mdash; 08</figcaption></figure>
+    <figure class="proj"><img src="data1/images/kolkata_1_lr.jpg" alt="Kolkata Skyline 1"><figcaption class="cap">Kolkata Skyline 1</figcaption></figure>
+    <figure class="proj"><img src="data1/images/kolkata_2_lr.jpg" alt="Kolkata Skyline 2"><figcaption class="cap">Kolkata Skyline 2</figcaption></figure>
+  </div>
+</div>
+
+<!-- ░░░░░ PANEL: ACCT. & FINANCE ░░░░░ -->
+<div class="panel" id="p-finance">
+  <div class="ph">
+    <div class="ph-ic">&#128176;</div>
+    <div><div class="ph-title">Acct. &amp; Finance</div><div class="ph-sub">Balance sheets, petty cash, PAN cards.</div></div>
+  </div>
+  <div class="tabs" id="fin-tabs">
+    <div class="tab on" onclick="swtab('fin-tabs','fin',0,this)">&#128202; Balance Sheets</div>
+    <div class="tab"    onclick="swtab('fin-tabs','fin',1,this)">&#128221; PAN Cards</div>
+    <div class="tab"    onclick="swtab('fin-tabs','fin',2,this)">&#128176; Petty Cash &amp; Trackers</div>
+  </div>
+
+  <div class="tc on" id="fin-0">
+    <div class="al al-b">&#128194; Pick a financial year, then any company — the PDF opens in a new tab.</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
+      <label style="font-size:12px;font-weight:600">Year:</label>
+      <select id="bsYear" onchange="renderBS()" style="padding:7px 12px;border:1.5px solid var(--bdr);border-radius:8px;font-size:12.5px;background:#fff">
+        <option value="18_19">FY 2018-2019</option>
+        <option value="17_18">FY 2017-2018</option>
+        <option value="16_17">FY 2016-2017</option>
+        <option value="15_16">FY 2015-2016</option>
+        <option value="fy15_16">BS F.Y 15-16 (alternate)</option>
+        <option value="14_15">FY 2014-2015</option>
+        <option value="13_14">FY 2013-2014</option>
+      </select>
+      <input id="bsSearch" type="search" placeholder="⌕ Filter companies…" oninput="renderBS()"
+        style="flex:1;min-width:200px;padding:7px 12px;border:1.5px solid var(--bdr);border-radius:8px;font-size:12.5px">
+      <span class="tag t-r" id="bsCount">0</span>
+    </div>
+    <div id="bsList" style="max-height:420px;overflow-y:auto;border:1px solid var(--bdr);border-radius:8px;background:#fafafa"></div>
+    <div style="margin-top:10px;font-size:11px;color:var(--gry)">Year-wise index pages: 
+      <a href="ACCT. & FINANCE/ALL BALANCE SHEET/2018-2019.htm" target="_blank">2018-19</a> ·
+      <a href="ACCT. & FINANCE/ALL BALANCE SHEET/2017-2018.htm" target="_blank">2017-18</a> ·
+      <a href="ACCT. & FINANCE/ALL BALANCE SHEET/2016-2017.htm" target="_blank">2016-17</a> ·
+      <a href="ACCT. & FINANCE/ALL BALANCE SHEET/2015-2016.htm" target="_blank">2015-16</a> ·
+      <a href="ACCT. & FINANCE/ALL BALANCE SHEET/2014-2015.htm" target="_blank">2014-15</a> ·
+      <a href="ACCT. & FINANCE/ALL BALANCE SHEET/2013-2014.htm" target="_blank">2013-14</a>
+    </div>
+  </div>
+
+  <div class="tc" id="fin-1">
+    <div class="al al-b">&#128221; All company PAN cards — 159 PVT LTD + 11 LLP.</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
+      <label style="font-size:12px;font-weight:600">Type:</label>
+      <select id="panType" onchange="renderPAN()" style="padding:7px 12px;border:1.5px solid var(--bdr);border-radius:8px;font-size:12.5px;background:#fff">
+        <option value="pvt">Private Limited (159)</option>
+        <option value="llp">LLP (11)</option>
+      </select>
+      <input id="panSearch" type="search" placeholder="⌕ Filter companies…" oninput="renderPAN()"
+        style="flex:1;min-width:200px;padding:7px 12px;border:1.5px solid var(--bdr);border-radius:8px;font-size:12.5px">
+      <span class="tag t-r" id="panCount">0</span>
+    </div>
+    <div id="panList" style="max-height:420px;overflow-y:auto;border:1px solid var(--bdr);border-radius:8px;background:#fafafa"></div>
+  </div>
+
+  <div class="tc" id="fin-2">
+    <div class="al al-y">&#128274; Site petty cash and trackers stay behind their PHP login screen.</div>
+    <div class="dept-list">
+      <a href="ACCT. & FINANCE/SITE PETTY CASH/DGH,DP,DRM,D.Excel, DA,DR(SITE)/login.php"><span>Site Petty Cash — DGH, DP, DRM, D.Excel, DA, DR</span><span class="arr">&rarr;</span></a>
+      <a href="ACCT. & FINANCE/SITE PETTY CASH/DV,D.Exo,D.Eco,D.Pra(SITE)/login.php"><span>Site Petty Cash — DV, D.Exo, D.Eco, D.Pra</span><span class="arr">&rarr;</span></a>
+      <a href="ACCT. & FINANCE/SITE PETTY CASH/ALL SITE PETTY CASH ANALYSIS/login.php"><span>All Site Petty Cash Analysis</span><span class="arr">&rarr;</span></a>
+      <a target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/1NLBzMaYHy5tDCEj7tLAxJhJMROyiezlH6twQq8hS4RU/edit?gid=0#gid=0"><span>Ver2025-2026: BILL TRACKER (HO / PC: JD / PS: GPS) <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ░░░░░ PANEL: AUDIT, ERP & MIS ░░░░░ -->
+<div class="panel" id="p-audit">
+  <div class="ph">
+    <div class="ph-ic">&#128202;</div>
+    <div><div class="ph-title">Audit, ERP &amp; MIS</div><div class="ph-sub">ATS Activate, audit scorecards, MIS, macros and ERP URLs.</div></div>
+  </div>
+
+  <div class="tabs" id="audit-tabs">
+    <div class="tab on" onclick="swtab('audit-tabs','audit',0,this)">&#128202; MIS &amp; Audit</div>
+    <div class="tab"    onclick="swtab('audit-tabs','audit',1,this)">&#128290; Score Cards</div>
+    <div class="tab"    onclick="swtab('audit-tabs','audit',2,this)">&#9881;&#65039; Macros</div>
+    <div class="tab"    onclick="swtab('audit-tabs','audit',3,this)">&#127760; ERP &amp; Apps</div>
+  </div>
+
+  <div class="tc on" id="audit-0">
+    <div class="dept-list">
+      <a target="_blank" href="AUDIT,ERP,MIS/ATS ACTIVATE & AUDIT TRACK SHEE.html"><span>ATS Activate &amp; Audit Track Sheet (Picker)</span><span class="arr">&rarr;</span></a>
+      <a target="_blank" href="AUDIT,ERP,MIS/AUDIT UNIT.html"><span>Audit Unit Reports (Picker)</span><span class="arr">&rarr;</span></a>
+      <a href="AUDIT,ERP,MIS/MIS/Sales Master.xlsm"><span>MIS &mdash; Sales Department</span><span class="arr">&rarr;</span></a>
+      <a href="AUDIT,ERP,MIS/MIS/Finance & Account.html"><span>MIS &mdash; Finance &amp; Accounts</span><span class="arr">&rarr;</span></a>
+      <a target="_blank" rel="noopener" href="https://www.dropbox.com/s/ctvm6r29kagcfqy/Book1.xlsx?dl=1"><span>SOP &mdash; Site Instruction Manual <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+    </div>
+  </div>
+
+  <div class="tc" id="audit-1">
+    <div class="dept-list">
+      <a target="_blank" rel="noopener" href="https://www.dropbox.com/s/rg56rktby3d8lgg/Finance%20Dept.xlsx?dl=1"><span>Audit Score Card &mdash; Finance <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+      <a target="_blank" rel="noopener" href="https://www.dropbox.com/s/94qp627tl773ru5/Site.xlsx?dl=1"><span>Audit Score Card &mdash; Site (ASC) <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+      <a target="_blank" rel="noopener" href="https://www.dropbox.com/s/be4436ze0xr8fp3/Sales%20%26%20Marketing%20Dept.xlsx?dl=1"><span>Audit Score Card &mdash; Sales &amp; Marketing <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+      <a target="_blank" rel="noopener" href="https://www.dropbox.com/s/c9jc9znmr3wngfr/Human%20Resource%20Dept.xlsx?dl=1"><span>Audit Score Card &mdash; HR <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+    </div>
+  </div>
+
+  <div class="tc" id="audit-2">
+    <div class="dept-list">
+      <a target="_blank" rel="noopener" href="https://www.dropbox.com/s/7lw34pwlcarw99w/Inter%20Co%20Reco%20addin.zip?dl=1"><span>Macro &mdash; Inter-Co Reco <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+      <a target="_blank" rel="noopener" href="https://www.dropbox.com/s/ii47ynj3owsn2p9/All%20TB%20Addin.zip?dl=1"><span>Macro &mdash; All Trial Balance <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+      <a target="_blank" rel="noopener" href="https://www.dropbox.com/s/2ogqv4qhefdjp4w/Auto%20BRS%20Addin.zip?dl=1"><span>Macro &mdash; Auto BRS <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+      <a target="_blank" rel="noopener" href="https://www.dropbox.com/s/v78z141tla95io4/Maintenance%20bill%20generation%20macro.zip?dl=1"><span>Macro &mdash; Maintenance Bill Generator <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+      <a target="_blank" rel="noopener" href="https://www.dropbox.com/s/20s3n7ft6jigbcj/Outstanding%20report%20addin.zip?dl=1"><span>Macro &mdash; Customer Outstanding Report <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+    </div>
+  </div>
+
+  <div class="tc" id="audit-3">
+    <div class="dept-list">
+      <a target="_blank" rel="noopener" href="http://192.168.1.5/farvisionr2"><span>FarVision ERP &mdash; URL for HO <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+      <a target="_blank" rel="noopener" href="http://150.129.134.204/farvisionr2"><span>FarVision ERP &mdash; URL for Site <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+      <a target="_blank" rel="noopener" href="https://prioritease2-c953f12d76f1.herokuapp.com/"><span>Prioritease <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ░░░░░ PANEL: HR ░░░░░ -->
+<div class="panel" id="p-hr">
+  <div class="ph"><div class="ph-ic">&#128101;</div>
+    <div><div class="ph-title">HR, Admin &amp; PR</div><div class="ph-sub">Letter heads, leave forms, holiday list, employee portal.</div></div>
+  </div>
+  <div class="dept-list">
+    <a href="#lh-picker" onclick="document.getElementById('lhSearch').focus();return true"><span>All Letter Heads &mdash; <em style="color:var(--red);font-style:normal;font-weight:600">picker below &darr;</em></span><span class="arr">&darr;</span></a>
+    <a target="_blank" rel="noopener" href="https://www.dropbox.com/s/5zqhundtqbz6cx0/Jain%20Group%20Extension%20%20List.xlsx?dl=1"><span>Extension Numbers <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+    <a href="HR,ADMIN,PR/Leave form.docx"><span>Leave Form</span><span class="arr">&rarr;</span></a>
+    <a href="HR,ADMIN,PR/HOLIDAYS LIST 2026.pdf"><span>Holiday List 2026</span><span class="arr">&rarr;</span></a>
+    <a target="_blank" rel="noopener" href="https://wheredoc2-1a26f7ade162.herokuapp.com/"><span>File Index &amp; Where Doc <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+    <a target="_blank" rel="noopener" href="http://192.168.1.5/fvemployeeportal/jain"><span>Employee Portal <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+  </div>
+
+  <!-- ── ALL LETTER HEADS PICKER ── -->
+  <div class="card" id="lh-picker" style="margin-top:18px;border-top:4px solid var(--red)">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+      <span style="font-size:24px">&#128196;</span>
+      <div>
+        <div style="font-weight:700;font-size:14px">All Letter Heads</div>
+        <div style="font-size:11px;color:var(--gry)">Search 182 group-company letterheads &middot; click <strong>Open</strong> to view the PDF</div>
+      </div>
+      <span class="tag t-r" style="margin-left:auto"><span id="lhCount">182</span> letterheads</span>
+    </div>
+
+    <!-- Search + Dropdown + Go (mirrors the original ALL LETTER HEADS.html) -->
+    <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap">
+      <input id="lhSearch" type="search" placeholder="&#x1F50D;  Type to filter (e.g. Dream, Palanhare, Rishi)…" autocomplete="off"
+        style="flex:1;min-width:220px;padding:9px 13px;border:1.5px solid var(--bdr);border-radius:8px;font-size:13px;outline:none">
+      <select id="lhSelect" aria-label="Select letter head"
+        style="flex:2;min-width:280px;padding:9px 13px;border:1.5px solid var(--bdr);border-radius:8px;font-size:13px;background:#fff;cursor:pointer">
+        <option value="">&mdash; Select a Letter Head &mdash;</option>
+      </select>
+      <button class="btn btn-r" onclick="openLetterhead()" type="button">&#128194; Open</button>
+      <button class="btn btn-o" onclick="document.getElementById('lhSearch').value='';filterLetterheads()" type="button" title="Clear filter">Clear</button>
+    </div>
+
+    <!-- Scrollable filtered card list -->
+    <div id="lhList" style="max-height:340px;overflow-y:auto;border:1px solid var(--bdr);border-radius:8px;background:#fafafa"></div>
+    <div id="lhEmpty" style="display:none;padding:18px;text-align:center;color:var(--gry);font-style:italic;font-size:12px">No matches found. Try a different search.</div>
+
+    <div style="margin-top:10px;font-size:11px;color:var(--gry)">
+      &#128274; Files served from <code>HR,ADMIN,PR/all Letterhead/</code> &mdash; original picker preserved at
+      <a href="HR,ADMIN,PR/ALL LETTER HEADS.html" target="_blank" rel="noopener" style="color:var(--red)">ALL LETTER HEADS.html</a>.
+    </div>
+  </div>
+</div>
+
+<!-- ░░░░░ PANEL: IT ░░░░░ -->
+<div class="panel" id="p-it">
+  <div class="ph"><div class="ph-ic">&#128187;</div>
+    <div><div class="ph-title">IT &amp; Other</div><div class="ph-sub">Application software and infrastructure.</div></div>
+  </div>
+  <div class="dept-list">
+    <a target="_blank" rel="noopener" href="ftp://192.168.1.5"><span>Application Software (FTP) <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+  </div>
+</div>
+
+<!-- ░░░░░ PANEL: LEGAL ░░░░░ -->
+<div class="panel" id="p-legal">
+  <div class="ph"><div class="ph-ic">&#128737;&#65039;</div>
+    <div><div class="ph-title">Legal</div><div class="ph-sub">Project legal scan documents and project valuations.</div></div>
+  </div>
+  <div class="dept-list">
+    <a href="LEGAL/PROJECTS LEGAL SCAN DOCS/PROJECTS LEGAL SCAN DOCS.html"><span>Projects Legal Scan Docs</span><span class="arr">&rarr;</span></a>
+    <a href="LEGAL/PROJECTS LEGAL SCAN DOCS/Check%20Lists%20For%20Scanned%20Docs%20Of%20Different%20projects.xlsx"><span>Check Lists For Scanned Docs (Excel)</span><span class="arr">&rarr;</span></a>
+  </div>
+</div>
+
+<!-- ░░░░░ PANEL: MANAGEMENT ░░░░░ -->
+<div class="panel" id="p-management">
+  <div class="ph"><div class="ph-ic">&#128188;</div>
+    <div><div class="ph-title">Management</div><div class="ph-sub">MIS reports, current and archive packs.</div></div>
+  </div>
+  <div class="dept-list">
+    <!--<a target="_blank" rel="noopener" href="https://www.dropbox.com/s/g3lxcignp30ph0k/Project%20Update.xls?dl=1"><span>Project Update <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a> -->
+    <!-- <a href="MANAGEMENT/CURRENT/login.php"><span>Current Reports</span><span class="arr">&rarr;</span></a> -->
+    <!-- <a href="MANAGEMENT/ARCHIVE/login.php"><span>Archive Reports</span><span class="arr">&rarr;</span></a> -->
+    <a href="https://docs.google.com/spreadsheets/d/10zJc7LAurn2P72hmC5d01VCt9ahPeOGaKkr_Ves5GlQ/edit?gid=874092465#gid=874092465" target="_blank"><span>Goals 26 detail plans // Lakshya 26</span><span class="arr">&rarr;</span></a>
+    <a href="https://docs.google.com/spreadsheets/d/1fwi069anyLuSGYWD9WSWoU_YdNtQ4Ri_CzHo89NlU-w/edit?gid=410510973#gid=410510973" target="_blank"><span>Sarovar Review</span><span class="arr">&rarr;</span></a>
+    <a href="https://docs.google.com/spreadsheets/d/16o6fz-cfDlQoixmCpaiJx6AOlLs0exJt087p0OVbPqU/edit?usp=sharing" target="_blank"><span>Hooliday Inn Review</span><span class="arr">&rarr;</span></a>
+    <a href="https://docs.google.com/spreadsheets/d/1kwUHDFQ5wjQQK2JrPVO7X2R0mXYMqRwEB9tpP14_uck/edit?usp=sharing" target="_blank"><span>HOD </span><span class="arr">&rarr;</span></a>
+    <a href="https://docs.google.com/spreadsheets/d/16J4KntBWQReyG6YW0y2mZ924dSkNuxqm_7-03QuwaQg/edit?usp=sharing" target="_blank"><span>Post sales </span><span class="arr">&rarr;</span></a>
+    <a href="https://docs.google.com/spreadsheets/d/1c9NzuyEP1uX9-1zWo6-IF6-cMirlnnZHSSD1ToOh4Gc/edit?usp=sharing" target="_blank"><span>Accounts </span><span class="arr">&rarr;</span></a>
+  </div>
+</div>
+
+<!-- ░░░░░ PANEL: MARKETING ░░░░░ -->
+<div class="panel" id="p-marketing">
+  <div class="ph"><div class="ph-ic">&#128227;</div>
+    <div><div class="ph-title">Marketing</div><div class="ph-sub">MIS, brochures, booking &amp; site forms, agreement papers.</div></div>
+  </div>
+  <div class="dept-list">
+    <a target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/1ASn3lILz71K7GaO-0xOCpvx6Ccpbrqoq170ysiIELZY/edit?gid=1289017220#gid=1289017220"><span>Marketing MIS Reports <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+    <a href="MARKETING/BOOKING FORM/PROJECT BOOKING FROM.html"><span>Project Booking Form</span><span class="arr">&rarr;</span></a>
+    <a href="MARKETING/BOOKING FORM/SITE VISIT FORM.pdf"><span>Site Visit Form (PDF)</span><span class="arr">&rarr;</span></a>
+    <a href="MARKETING/All Project Brochure/All Project Brochure.html"><span>All Project Brochures</span><span class="arr">&rarr;</span></a>
+    <a href="MARKETING/home loan legal docs/login.php"><span>Home Loan Legal Docs (login required)</span><span class="arr">&rarr;</span></a>
+    <a href="MARKETING/Agreement paper/Agreement paper for Dream Patham.pdf" target="_blank"><span>Agreement Paper &mdash; Dream Pratham</span><span class="arr">&rarr;</span></a>
+    <a href="LEGAL/PROJECTS LEGAL SCAN DOCS/PROJECTS LEGAL SCAN DOCS.html" target="_blank"><span>Agreement Paper &mdash; All Projects</span><span class="arr">&rarr;</span></a>
+    <a target="_blank" href="MARKETING/Dream Valley/DREAM VALLEY.html" ><span>Dream Valley</span><span class="arr">&rarr;</span></a>
+    <a href="MARKETING/All Projects legal docs downloadable link.html"><span>All Project Legal Docs (downloadable)</span><span class="arr">&rarr;</span></a>
+  </div>
+</div>
+
+<!-- ░░░░░ PANEL: OPERATION ░░░░░ -->
+<div class="panel" id="p-operation">
+  <div class="ph"><div class="ph-ic">&#128736;&#65039;</div>
+    <div><div class="ph-title">Operation</div><div class="ph-sub">Site operation MIS and trackers.</div></div>
+  </div>
+  <div class="dept-list">
+    <a target="_blank" rel="noopener" href="http://192.168.1.5/farvisionr2"><span>FarVision ERP &mdash; Operations module <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+  </div>
+</div>
+
+<!-- ░░░░░ PANEL: STORES ░░░░░ -->
+<div class="panel" id="p-stores">
+  <div class="ph"><div class="ph-ic">&#128230;</div>
+    <div><div class="ph-title">Stores &amp; Purchase</div><div class="ph-sub">Indents, GRNs, vendor documents.</div></div>
+  </div>
+  <div class="dept-list">
+    <a target="_blank" rel="noopener" href="http://192.168.1.5/farvisionr2"><span>FarVision ERP &mdash; Stores &amp; Purchase module <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+  </div>
+</div>
+
+<!-- ░░░░░ PANEL: QUICK REF ░░░░░ -->
+<div class="panel" id="p-quickref">
+  <div class="ph"><div class="ph-ic">&#128204;</div>
+    <div><div class="ph-title">Quick Reference</div><div class="ph-sub">Every link in the intranet, in one searchable table.</div></div>
+  </div>
+  <table id="quickRefTable">
+    <thead><tr class="th-red"><th>Department</th><th>Resource</th><th>Type</th><th>Open</th></tr></thead>
+    <tbody><!-- Filled by JS --></tbody>
+  </table>
+</div>
+
+<!-- ░░░░░ PANEL: EXTERNAL LINKS ░░░░░ -->
+<div class="panel" id="p-extlinks">
+  <div class="ph"><div class="ph-ic">&#128279;</div>
+    <div><div class="ph-title">External Links</div><div class="ph-sub">FarVision ERP, employee portal, public website and more.</div></div>
+  </div>
+  <div class="dept-list">
+    <a target="_blank" rel="noopener" href="http://thejaingroup.com/"><span>thejaingroup.com &mdash; corporate website <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+    <a target="_blank" rel="noopener" href="http://192.168.1.5/farvisionr2"><span>FarVision ERP &mdash; HO <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+    <a target="_blank" rel="noopener" href="http://150.129.134.204/farvisionr2"><span>FarVision ERP &mdash; Site <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+    <a target="_blank" rel="noopener" href="http://192.168.1.5/fvemployeeportal/jain"><span>Employee Portal <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+    <a target="_blank" rel="noopener" href="https://wheredoc2-1a26f7ade162.herokuapp.com/"><span>File Index / Where Doc <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+    <a target="_blank" rel="noopener" href="https://prioritease2-c953f12d76f1.herokuapp.com/"><span>Prioritease <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+    <a target="_blank" rel="noopener" href="ftp://192.168.1.5"><span>Application Software (FTP) <span class="ext-ic">&#x2197;</span></span><span class="arr">&rarr;</span></a>
+  </div>
+</div>
+
+<!-- ░░░░░ PANEL: ABOUT ░░░░░ -->
+<div class="panel" id="p-about">
+  <div class="ph"><div class="ph-ic">&#8505;&#65039;</div>
+    <div><div class="ph-title">About this Intranet</div><div class="ph-sub">A unified front door to every department, project and document.</div></div>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <p style="font-size:13px;line-height:1.7;color:var(--gry);margin:0">
+      The <strong>Jain Group Intranet</strong> is the central navigator for departments, projects and shared documents at Jain Group head office. It pulls together resources from Accounts &amp; Finance, Audit/ERP/MIS, HR/Admin/PR, IT, Legal, Management, Marketing, Operations and Stores &amp; Purchase into a single, searchable Solution Navigator.
+    </p>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <div style="font-weight:700;margin-bottom:8px;font-size:14px">&#128193; How resources are organised</div>
+    <p style="font-size:13px;line-height:1.7;color:var(--gry);margin:0">
+      Every link visible on this intranet maps directly into the <code>G:\Jain HO Web</code> shared folder, the FarVision ERP, or a Dropbox / web URL the IT department maintains. Login-protected sections continue to use the existing PHP login screens &mdash; this intranet is purely a unified front door, it does not replace those access controls.
+    </p>
+  </div>
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:8px;font-size:14px">&#9881;&#65039; Need to add or update a link?</div>
+    <p style="font-size:13px;line-height:1.7;color:var(--gry);margin:0">
+      Open this file in any text editor and edit the <code>DATA</code> array at the bottom of the &lt;script&gt; section &mdash; it drives the dashboard cards, every department panel and the Quick Reference table. A single edit propagates everywhere.
+    </p>
+  </div>
+  <p class="muted" style="margin-top:14px;text-align:center;font-size:11px;color:#999">Created by the IT Department &middot; v1.0 &middot; Modeled on the DURATUF Solution Navigator pattern</p>
+</div>
+
+</main>
+</div><!-- /.layout -->
+
+<!-- ══════════════════ COPYRIGHT BAR ══════════════════ -->
+<div class="dt-copyright">
+  <div class="dt-cp-left">
+    <span style="color:#fff;font-weight:600">&copy; <span id="yr">2026</span> Jain Group</span>
+    <span>&middot;</span><span>Intranet v1.0</span>
+    <span>&middot;</span><span>Built by IT Department</span>
+  </div>
+  <div class="dt-cp-right">
+    <span>thejaingroup.com</span>
+  </div>
+</div>
+
+<script>
+/* ─── Year ─── */
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* ─── Sidebar drawer (mobile) ─── */
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sbOverlay').classList.toggle('on');
+}
+
+/* ─── Panel switching ─── */
+function goTo(el){
+  if (!el) return;
+  var p = el.dataset.p;
+  document.querySelectorAll('.ni').forEach(n => n.classList.remove('on'));
+  document.querySelectorAll('[data-p="'+p+'"]').forEach(n => n.classList.add('on'));
+  document.querySelectorAll('.panel').forEach(pn => pn.classList.remove('on'));
+  var target = document.getElementById('p-'+p);
+  if (target) target.classList.add('on');
+  document.getElementById('mainArea').scrollTop = 0;
+  if (window.innerWidth < 768) {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sbOverlay').classList.remove('on');
+  }
+}
+
+/* ─── Tabs (in panels) ─── */
+function swtab(barId, prefix, idx, btn){
+  var bar = document.getElementById(barId);
+  if (!bar) return;
+  bar.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  btn.classList.add('on');
+  for (var i=0;;i++){
+    var tc = document.getElementById(prefix+'-'+i);
+    if (!tc) break;
+    tc.classList.toggle('on', i === idx);
+  }
+}
+
+/* ─── Search across all panels (and Quick Ref table) ─── */
+function doSearch(q){
+  q = (q || '').trim().toLowerCase();
+  // sync mobile/desktop inputs
+  ['gSearch','gSearchMob'].forEach(id => {
+    var el = document.getElementById(id);
+    if (el && el.value !== q && document.activeElement !== el) el.value = q;
+  });
+  // filter every link inside dept-list
+  var hasAny = false;
+  document.querySelectorAll('.panel').forEach(panel => {
+    var items = panel.querySelectorAll('.dept-list a, .proj');
+    items.forEach(it => {
+      var txt = (it.textContent || '').toLowerCase() + ' ' + (it.querySelector('img') ? (it.querySelector('img').alt||'').toLowerCase() : '');
+      var match = !q || txt.indexOf(q) !== -1;
+      it.style.display = match ? '' : 'none';
+      if (match) hasAny = true;
+    });
+  });
+  // jump to Quick Ref panel when searching, dashboard otherwise
+  if (q) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+    document.getElementById('p-quickref').classList.add('on');
+    document.querySelectorAll('.ni').forEach(n => n.classList.remove('on'));
+    document.querySelectorAll('[data-p="quickref"]').forEach(n => n.classList.add('on'));
+    // filter the quick-ref table
+    document.querySelectorAll('#quickRefTable tbody tr').forEach(tr => {
+      tr.style.display = tr.textContent.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
+    });
+  } else {
+    document.querySelectorAll('#quickRefTable tbody tr').forEach(tr => tr.style.display='');
+  }
+}
+
+/* ─── Quick Reference table — generated from sidebar links ─── */
+(function buildQuickRef(){
+  var deptName = {finance:'Acct. & Finance', audit:'Audit, ERP & MIS', hr:'HR, Admin & PR',
+    it:'IT & Other', legal:'Legal', management:'Management', marketing:'Marketing',
+    operation:'Operation', stores:'Stores & Purchase'};
+  var rows = [];
+  Object.keys(deptName).forEach(k => {
+    var panel = document.getElementById('p-'+k);
+    if (!panel) return;
+    panel.querySelectorAll('.dept-list a').forEach(a => {
+      var label = (a.querySelector('span:first-child')||a).textContent.replace(/↗/g,'').trim();
+      var href  = a.getAttribute('href') || '';
+      var ext   = /^(https?|ftp):\/\//.test(href);
+      var type  = ext ? 'External' : (href.toLowerCase().indexOf('login.php')>-1 ? 'Login' : 'Internal');
+      rows.push({dept: deptName[k], label: label, href: href, ext: ext, type: type});
+    });
+  });
+  var html = rows.map(r =>
+    '<tr><td><strong>'+r.dept+'</strong></td>'+
+    '<td>'+r.label+'</td>'+
+    '<td><span class="tag '+(r.type==='External'?'t-y':r.type==='Login'?'t-r':'t-b')+'">'+r.type+'</span></td>'+
+    '<td><a class="btn btn-r btn-sm" '+(r.ext?'target="_blank" rel="noopener"':'')+' href="'+r.href+'" style="text-decoration:none;color:#fff">Open</a></td></tr>'
+  ).join('');
+  document.querySelector('#quickRefTable tbody').innerHTML = html;
+})();
+
+/* ─── Image lightbox (click-to-enlarge for project pics) ─── */
+document.querySelectorAll('.proj img').forEach(img => {
+  img.style.cursor = 'zoom-in';
+  img.addEventListener('click', () => {
+    var bg = document.createElement('div');
+    bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:zoom-out';
+    bg.innerHTML = '<img src="'+img.src+'" style="max-width:90vw;max-height:85vh;object-fit:contain;border-radius:6px;box-shadow:0 20px 60px rgba(0,0,0,.5)">';
+    bg.onclick = () => bg.remove();
+    document.body.appendChild(bg);
+  });
+});
+
+
+/* ─── ALL LETTER HEADS picker ─── */
+const LETTERHEADS=[
+  {l:"ALBELA VANIJYA PVT LTD",f:"ALBELA VANIJYA PVT LTD.pdf"},
+  {l:"ALBELA VINTRADE PVT LTD",f:"ALBELA VINTRADE PVT LTD.pdf"},
+  {l:"ARTMIKADO PRIVATE LIMITED",f:"ARTMIKADO PRIVATE LIMITED.pdf"},
+  {l:"ARUN INFRACOM & COMMERCIAL LLP",f:"ARUN INFRACOM & COMMERCIAL LLP.pdf"},
+  {l:"ARUN INVESTMENTS & COMMMERCIAL PVT.LTD",f:"ARUN INVESTMENTS & COMMMERCIAL PVT.LTD..pdf"},
+  {l:"BAJRANG CREATIONS PVT.LTD",f:"BAJRANG CREATIONS PVT.LTD..pdf"},
+  {l:"BISWAPITA PROPERTIES PVT. LTD",f:"BISWAPITA PROPERTIES PVT. LTD..pdf"},
+  {l:"BLUE HORIZON COMMODITIES PVT LTD",f:"BLUE HORIZON COMMODITIES PVT LTD.pdf"},
+  {l:"BOOTHNATH MARCOM PVT LTD",f:"BOOTHNATH MARCOM PVT LTD.pdf"},
+  {l:"BUTTLE CONSULTANCY PVT LTD",f:"BUTTLE CONSULTANCY PVT LTD.pdf"},
+  {l:"BUTTLE DISTRIBUTOR PVT LTD",f:"BUTTLE DISTRIBUTOR PVT LTD.pdf"},
+  {l:"DAMODAR TRADING PVT.LTD",f:"DAMODAR TRADING PVT.LTD..pdf"},
+  {l:"DAYAWAN COMMOSALE PVT LTD",f:"DAYAWAN COMMOSALE PVT LTD.pdf"},
+  {l:"DHANRISHI SALES PVT. LTD",f:"DHANRISHI SALES PVT. LTD..pdf"},
+  {l:"DOLPHIN AGENTMENTS PVT.LTD",f:"DOLPHIN AGENTMENTS PVT.LTD..pdf"},
+  {l:"DREAM APARTMENT HOUSING PVT.LTD",f:"DREAM APARTMENT HOUSING PVT.LTD..pdf"},
+  {l:"DREAM APARTMENTS LOGO",f:"DREAM APARTMENTS LOGO.pdf"},
+  {l:"DREAM APARTMENTS",f:"DREAM APARTMENTS.pdf"},
+  {l:"DREAM APPLICATION SOFTWARE PVT.LTD",f:"DREAM APPLICATION SOFTWARE PVT.LTD..pdf"},
+  {l:"DREAM DEVELOPERS LOGO",f:"DREAM DEVELOPERS LOGO.pdf"},
+  {l:"DREAM DEVELOPERS PVT.LTD. LOGO",f:"DREAM DEVELOPERS PVT.LTD. LOGO.pdf"},
+  {l:"DREAM DEVELOPERS PVT.LTD",f:"DREAM DEVELOPERS PVT.LTD..pdf"},
+  {l:"DREAM DEVELOPERS",f:"DREAM DEVELOPERS.pdf"},
+  {l:"DREAM ENCLAVE PVT.LTD",f:"DREAM ENCLAVE PVT.LTD..pdf"},
+  {l:"DREAM EXCELLENCY LOGO",f:"DREAM EXCELLENCY LOGO.pdf"},
+  {l:"DREAM EXCELLENCY",f:"DREAM EXCELLENCY.pdf"},
+  {l:"DREAM GATEWAY HOTELS FOR DREAM EXOTICA",f:"DREAM GATEWAY HOTELS FOR DREAM EXOTICA.pdf"},
+  {l:"DREAM GATEWAY HOTELS FOR DREAM LEGACY",f:"DREAM GATEWAY HOTELS FOR DREAM LEGACY.pdf"},
+  {l:"DREAM GATEWAY HOTELS FOR DREAM ONE",f:"DREAM GATEWAY HOTELS FOR DREAM ONE.pdf"},
+  {l:"DREAM GATEWAY HOTELS FOR DREAM PRATHAM",f:"DREAM GATEWAY HOTELS FOR DREAM PRATHAM.pdf"},
+  {l:"DREAM GATEWAY HOTELS FOR DREAM WORLD CITY",f:"DREAM GATEWAY HOTELS FOR DREAM WORLD CITY.pdf"},
+  {l:"DREAM GATEWAY HOTELS LIMITED",f:"DREAM GATEWAY HOTELS LIMITED.pdf"},
+  {l:"DREAM GATEWAY HOTELS PVT.LTD",f:"DREAM GATEWAY HOTELS PVT.LTD..pdf"},
+  {l:"DREAM INFRA NIRMAAN PVT.LTD",f:"DREAM INFRA NIRMAAN PVT.LTD..pdf"},
+  {l:"DREAM NIRMAN PVT.LTD",f:"DREAM NIRMAN PVT.LTD..pdf"},
+  {l:"DREAM PARK HOUSING PVT.LTD",f:"DREAM PARK HOUSING PVT.LTD..pdf"},
+  {l:"DREAM PLAZA PVT.LTD",f:"DREAM PLAZA PVT.LTD..pdf"},
+  {l:"DREAM PROJECT FOR DREAM PALAZZO",f:"DREAM PROJECT FOR DREAM PALAZZO.pdf"},
+  {l:"DREAM REALITIES PVT.LTD",f:"DREAM REALITIES PVT.LTD..pdf"},
+  {l:"DREAM RESIDENCY HOUSING PVT.LTD",f:"DREAM RESIDENCY HOUSING PVT.LTD..pdf"},
+  {l:"DREAM RESIDENCY LOGO",f:"DREAM RESIDENCY LOGO.pdf"},
+  {l:"DREAM RESIDENCY TWINS FOR DREAM RESIDENCY MANOR",f:"DREAM RESIDENCY TWINS FOR DREAM RESIDENCY MANOR.pdf"},
+  {l:"DREAM RESIDENCY TWINS LOGO",f:"DREAM RESIDENCY TWINS LOGO.pdf"},
+  {l:"DREAM RESIDENCY TWINS",f:"DREAM RESIDENCY TWINS.pdf"},
+  {l:"DREAM RESIDENCY",f:"DREAM RESIDENCY.pdf"},
+  {l:"DREAM RETREATS PVT.LTD",f:"DREAM RETREATS PVT.LTD..pdf"},
+  {l:"DREAM SKYSCRAPERS PVT.LTD",f:"DREAM SKYSCRAPERS PVT.LTD..pdf"},
+  {l:"DREAM TOWER KOLKATA PVT.LTD",f:"DREAM TOWER KOLKATA PVT.LTD..pdf"},
+  {l:"DUBSON DEALCOM PVT.LTD",f:"DUBSON DEALCOM PVT.LTD..pdf"},
+  {l:"FAIRDEAL ENCLAVE PVT. LTD",f:"FAIRDEAL ENCLAVE PVT. LTD..pdf"},
+  {l:"FAIRDEAL GRIHA NIRMAN PVT. LTD",f:"FAIRDEAL GRIHA NIRMAN PVT. LTD..pdf"},
+  {l:"FAIRDEAL HEIGHTS PVT. LTD",f:"FAIRDEAL HEIGHTS PVT. LTD..pdf"},
+  {l:"FAIRDEAL HOUSING PVT. LTD",f:"FAIRDEAL HOUSING PVT. LTD..pdf"},
+  {l:"FAIRDEAL INFRA BUILDERS PVT. LTD",f:"FAIRDEAL INFRA BUILDERS PVT. LTD..pdf"},
+  {l:"FAIRDEAL INFRA VENTURE PVT. LTD",f:"FAIRDEAL INFRA VENTURE PVT. LTD..pdf"},
+  {l:"FAIRDEAL REAL ESTATE DEVELOPERS PVT. LTD",f:"FAIRDEAL REAL ESTATE DEVELOPERS PVT. LTD..pdf"},
+  {l:"FAIRDEAL SKYHIGH PVT. LTD",f:"FAIRDEAL SKYHIGH PVT. LTD..pdf"},
+  {l:"FAIRDEAL SKYRISE PVT. LTD",f:"FAIRDEAL SKYRISE PVT. LTD..pdf"},
+  {l:"FAIRDEAL SKYSCRAPERS PVT. LTD",f:"FAIRDEAL SKYSCRAPERS PVT. LTD..pdf"},
+  {l:"GILLANDERS PROPERTIES PVT.LTD. FOR DREAM VILLA",f:"GILLANDERS PROPERTIES PVT.LTD. FOR DREAM VILLA.pdf"},
+  {l:"GILLANDERS PROPERTIES PVT.LTD",f:"GILLANDERS PROPERTIES PVT.LTD..pdf"},
+  {l:"GOLDVIEW VANIJYA PVT. LTD",f:"GOLDVIEW VANIJYA PVT. LTD..pdf"},
+  {l:"Growwell Vyapaar Pvt. Ltd",f:"Growwell Vyapaar Pvt. Ltd..pdf"},
+  {l:"GROWWELL VYAPAAR PVT.LTD",f:"GROWWELL VYAPAAR PVT.LTD..pdf"},
+  {l:"HOLIDAY INN KOL AIRPORT",f:"HOLIDAY INN KOL AIRPORT.pdf"},
+  {l:"INNOCENT DESIGNER PVT LTD",f:"INNOCENT DESIGNER PVT LTD.pdf"},
+  {l:"JAI MATA CREATIONS PVT.LTD",f:"JAI MATA CREATIONS PVT.LTD..pdf"},
+  {l:"JAIN BIILDCON PVT. LTD",f:"JAIN BIILDCON PVT. LTD..pdf"},
+  {l:"JAIN GROUP PROJECT PVT.LTD. For DREAM ONE",f:"JAIN GROUP PROJECT PVT.LTD. For DREAM ONE.pdf"},
+  {l:"JAIN GROUP PROJECT PVT.LTD. FOR DREAM VALLY",f:"JAIN GROUP PROJECT PVT.LTD. FOR DREAM VALLY.pdf"},
+  {l:"JAIN GROUP PROJECT PVT.LTD. For DREAM WORLD CITY",f:"JAIN GROUP PROJECT PVT.LTD. For DREAM WORLD CITY.pdf"},
+  {l:"JAIN GROUP PROJECTS PVT.LTD. FOR DREAM ECO CITY",f:"JAIN GROUP PROJECTS PVT.LTD. FOR DREAM ECO CITY.pdf"},
+  {l:"JAIN GROUP PROJECTS PVT.LTD",f:"JAIN GROUP PROJECTS PVT.LTD..pdf"},
+  {l:"JAIN HEIGHTS PVT.LTD",f:"JAIN HEIGHTS PVT.LTD..pdf"},
+  {l:"JAIN MOTORS PVT. LTD",f:"JAIN MOTORS  PVT. LTD.pdf"},
+  {l:"JAIN PLAZA PVT.LTD",f:"JAIN PLAZA PVT.LTD..pdf"},
+  {l:"JAINEX COMMERCE PVT.LTD",f:"JAINEX COMMERCE PVT.LTD..pdf"},
+  {l:"JFC HIRE PURCHASE PVT.LTD",f:"JFC HIRE PURCHASE PVT.LTD..pdf"},
+  {l:"KATHRENE DESIGNER PVT LTD",f:"KATHRENE DESIGNER PVT LTD.pdf"},
+  {l:"MAHABIR BHOOMI DEVELOPERS PVT. LTD",f:"MAHABIR BHOOMI DEVELOPERS PVT. LTD..pdf"},
+  {l:"MAHABIR ENCLAVE PVT. LTD",f:"MAHABIR ENCLAVE PVT. LTD..pdf"},
+  {l:"MAHABIR GARDEN PVT. LTD",f:"MAHABIR GARDEN PVT. LTD..pdf"},
+  {l:"MAHABIR GRIHA NIRMAN PVT. LTD",f:"MAHABIR GRIHA NIRMAN PVT. LTD..pdf"},
+  {l:"MAHABIR HEIGHTS PVT. LTD",f:"MAHABIR HEIGHTS PVT. LTD..pdf"},
+  {l:"MAHABIR HOMES PVT. LTD",f:"MAHABIR HOMES PVT. LTD..pdf"},
+  {l:"MAHABIR REAL ESTATE DEVELOPERS PVT. LTD",f:"MAHABIR REAL ESTATE DEVELOPERS PVT. LTD..pdf"},
+  {l:"MAHABIR SKYHIGH PVT. LTD",f:"MAHABIR SKYHIGH PVT. LTD..pdf"},
+  {l:"MANIK FINTRADE PVT.LTD",f:"MANIK FINTRADE PVT.LTD..pdf"},
+  {l:"MANOMAY ADVISORY PVT LTD",f:"MANOMAY ADVISORY PVT LTD.pdf"},
+  {l:"MOTITREE PROJECT MANAGERS PVT.LTD",f:"MOTITREE PROJECT MANAGERS PVT.LTD..pdf"},
+  {l:"NETTLES TRADERS PVT. LTD",f:"NETTLES TRADERS PVT. LTD..pdf"},
+  {l:"NIDHI BHOOMI NIRMAAN PVT.LTD",f:"NIDHI BHOOMI NIRMAAN PVT.LTD..pdf"},
+  {l:"NIDHI GRIHA NIRMAN PVT.LTD",f:"NIDHI GRIHA NIRMAN PVT.LTD..pdf"},
+  {l:"NIDHI HEIGHTS PVT. LTD",f:"NIDHI HEIGHTS PVT. LTD..pdf"},
+  {l:"NIDHI INFRA DEVELOPMENT PVT. LTD",f:"NIDHI INFRA DEVELOPMENT PVT. LTD..pdf"},
+  {l:"NIDHI INFRA NIRMAAN PVT.LTD",f:"NIDHI INFRA NIRMAAN PVT.LTD..pdf"},
+  {l:"NORTEL DELCOM PVT.LTD",f:"NORTEL DELCOM PVT.LTD..pdf"},
+  {l:"OMKARA DESIGNER PVT LTD",f:"OMKARA DESIGNER PVT LTD.pdf"},
+  {l:"PALANHARE APARTMENT PVT. LTD",f:"PALANHARE APARTMENT PVT. LTD..pdf"},
+  {l:"PALANHARE AWAS PVT. LTD",f:"PALANHARE AWAS PVT. LTD..pdf"},
+  {l:"PALANHARE BHOOMI NIRMAN PVT. LTD",f:"PALANHARE BHOOMI NIRMAN PVT. LTD..pdf"},
+  {l:"PALANHARE BUILDCON PVT. LTD",f:"PALANHARE BUILDCON PVT. LTD..pdf"},
+  {l:"PALANHARE BUILDTECH PVT. LTD",f:"PALANHARE BUILDTECH PVT. LTD..pdf"},
+  {l:"PALANHARE BUILDWELL PVT.LTD",f:"PALANHARE BUILDWELL PVT.LTD..pdf"},
+  {l:"PALANHARE CONCLAVE PVT. LTD",f:"PALANHARE CONCLAVE PVT. LTD..pdf"},
+  {l:"PALANHARE DEVELOPERS PVT. LTD",f:"PALANHARE DEVELOPERS PVT. LTD..pdf"},
+  {l:"PALANHARE ENCLAVE PVT. LTD",f:"PALANHARE ENCLAVE PVT. LTD..pdf"},
+  {l:"PALANHARE FORT PVT. LTD",f:"PALANHARE FORT PVT. LTD..pdf"},
+  {l:"PALANHARE HEIGHTS PVT. LTD",f:"PALANHARE HEIGHTS PVT. LTD..pdf"},
+  {l:"PALANHARE HIGHRISE PVT. LTD",f:"PALANHARE HIGHRISE PVT. LTD..pdf"},
+  {l:"PALANHARE INFRABUILD PVT. LTD",f:"PALANHARE INFRABUILD PVT. LTD..pdf"},
+  {l:"PALANHARE INFRACON PVT. LTD",f:"PALANHARE INFRACON PVT. LTD..pdf"},
+  {l:"PALANHARE INFRAESTATE PVT. LTD",f:"PALANHARE INFRAESTATE PVT. LTD..pdf"},
+  {l:"PALANHARE INFRASTRUCTURE PVT. LTD",f:"PALANHARE INFRASTRUCTURE PVT. LTD..pdf"},
+  {l:"PALANHARE KUTIR PVT. LTD",f:"PALANHARE KUTIR PVT. LTD..pdf"},
+  {l:"PALANHARE MANORE PVT. LTD",f:"PALANHARE MANORE PVT. LTD..pdf"},
+  {l:"PALANHARE NIRMAAN PVT. LTD",f:"PALANHARE NIRMAAN PVT. LTD..pdf"},
+  {l:"PALANHARE NIWAS PVT. LTD",f:"PALANHARE NIWAS PVT. LTD..pdf"},
+  {l:"PALANHARE PLAZA PVT. LTD",f:"PALANHARE PLAZA PVT. LTD..pdf"},
+  {l:"PALANHARE PRODEV BUILDERS PVT. LTD",f:"PALANHARE PRODEV BUILDERS PVT. LTD..pdf"},
+  {l:"PALANHARE PROMOTER PVT. LTD",f:"PALANHARE PROMOTER PVT. LTD..pdf"},
+  {l:"PALANHARE PROPERTY PVT. LTD",f:"PALANHARE PROPERTY PVT. LTD..pdf"},
+  {l:"PALANHARE REALCON PVT. LTD",f:"PALANHARE REALCON PVT. LTD..pdf"},
+  {l:"PALANHARE REALTORS PVT. LTD",f:"PALANHARE REALTORS PVT. LTD..pdf"},
+  {l:"PALANHARE SKYRISE PVT. LTD",f:"PALANHARE SKYRISE PVT. LTD..pdf"},
+  {l:"PALANHARE SKYSCRAPERS PVT. LTD",f:"PALANHARE SKYSCRAPERS PVT. LTD..pdf"},
+  {l:"PALANHARE TOWER PVT. LTD",f:"PALANHARE TOWER PVT. LTD..pdf"},
+  {l:"PALANHARE VILLA PVT. LTD",f:"PALANHARE VILLA PVT. LTD..pdf"},
+  {l:"PARAS FINVEST PVT.LTD",f:"PARAS FINVEST PVT.LTD..pdf"},
+  {l:"PICS DEALER PRIVATE LIMITED",f:"PICS DEALER PRIVATE LIMITED.pdf"},
+  {l:"PINKU SONU INVT & PROPERTIES PVT.LTD",f:"PINKU SONU INVT & PROPERTIES PVT.LTD..pdf"},
+  {l:"PJ BHOOMI NIRMAN PVT. LTD",f:"PJ BHOOMI NIRMAN PVT. LTD..pdf"},
+  {l:"PJ BUILDCON PVT. LTD",f:"PJ BUILDCON PVT. LTD..pdf"},
+  {l:"PJ GRIHA NIRMAN PVT. LTD",f:"PJ GRIHA NIRMAN PVT. LTD..pdf"},
+  {l:"PJ Heights Pvt. Ltd",f:"PJ Heights Pvt. Ltd..pdf"},
+  {l:"PJ Infra Development Pvt. Ltd",f:"PJ Infra Development  Pvt. Ltd..pdf"},
+  {l:"PJ Infra Nirman Pvt. Ltd",f:"PJ Infra Nirman  Pvt. Ltd..pdf"},
+  {l:"PRAMILA JAIN",f:"PRAMILA JAIN.pdf"},
+  {l:"PREM LAL JAIN For Dream Villa",f:"PREM LAL JAIN For Dream Villa.pdf"},
+  {l:"PREM LAL JAIN",f:"PREM LAL JAIN.pdf"},
+  {l:"R J GARDEN PVT. LTD",f:"R J GARDEN PVT. LTD..pdf"},
+  {l:"R J HEIGHTS PVT. LTD",f:"R J HEIGHTS PVT. LTD..pdf"},
+  {l:"R J HOMES PVT. LTD",f:"R J HOMES PVT. LTD..pdf"},
+  {l:"R J REALTORS PVT. LTD",f:"R J REALTORS PVT. LTD..pdf"},
+  {l:"R J SKYHIGH PVT. LTD",f:"R J SKYHIGH PVT. LTD..pdf"},
+  {l:"RECEPTION AGENCIES PVT LTD",f:"RECEPTION AGENCIES PVT LTD.pdf"},
+  {l:"RECEPTION MARKETING PVT LTD",f:"RECEPTION MARKETING PVT LTD.pdf"},
+  {l:"RECEPTION TRADER PVT LTD",f:"RECEPTION TRADER PVT LTD.pdf"},
+  {l:"Reverie Infra Estate Pvt. Ltd",f:"Reverie Infra Estate Pvt. Ltd..pdf"},
+  {l:"Reverie Infra Structural Development Pvt. Ltd",f:"Reverie Infra Structural Development  Pvt. Ltd..pdf"},
+  {l:"Reverie SkyScrapers Pvt. Ltd",f:"Reverie SkyScrapers  Pvt. Ltd..pdf"},
+  {l:"Rishi Bhoomi Nirman Pvt. Ltd",f:"Rishi Bhoomi Nirman  Pvt. Ltd..pdf"},
+  {l:"Rishi Heights Pvt. Ltd",f:"Rishi Heights Pvt. Ltd..pdf"},
+  {l:"RISHI INFRA BUILDERS PVT. LTD",f:"RISHI INFRA BUILDERS PVT. LTD..pdf"},
+  {l:"Rishi Infra Nirman Pvt. Ltd",f:"Rishi Infra Nirman  Pvt. Ltd..pdf"},
+  {l:"RISHI JAIN",f:"RISHI JAIN.pdf"},
+  {l:"RISHI SKYHIGH PVT. LTD",f:"RISHI SKYHIGH PVT. LTD..pdf"},
+  {l:"RISHI SKYRISE PVT. LTD",f:"RISHI SKYRISE PVT. LTD..pdf"},
+  {l:"RISHI SKYSCRAPERS PVT. LTD",f:"RISHI SKYSCRAPERS PVT. LTD..pdf"},
+  {l:"RISU IMPEX PVT.LTD",f:"RISU IMPEX PVT.LTD..pdf"},
+  {l:"Riverie Griha Nirman Pvt. Ltd",f:"Riverie Griha Nirman Pvt. Ltd.pdf"},
+  {l:"Riverie Infra Developers Pvt. Ltd",f:"Riverie Infra Developers Pvt. Ltd..pdf"},
+  {l:"Riverie Infra Nirman Pvt. Ltd",f:"Riverie Infra Nirman Pvt. Ltd..pdf"},
+  {l:"S J HOMES PVT. LTD",f:"S J HOMES PVT. LTD..pdf"},
+  {l:"S J INFRA PROJECT PVT. LTD",f:"S J INFRA PROJECT PVT. LTD..pdf"},
+  {l:"S J SKYSCRAPERS PVT. LTD",f:"S J SKYSCRAPERS PVT. LTD..pdf"},
+  {l:"SALSIFY COMMOSALES PVT. LTD",f:"SALSIFY COMMOSALES PVT. LTD..pdf"},
+  {l:"SHALLOT TRADERS PVT. LTD",f:"SHALLOT TRADERS PVT. LTD..pdf"},
+  {l:"SHRAYANS JAIN",f:"SHRAYANS JAIN.pdf"},
+  {l:"Shree Mahavir Infra Nirmaan Pvt. Ltd",f:"Shree Mahavir Infra Nirmaan Pvt. Ltd.pdf"},
+  {l:"SURBHI JAIN",f:"SURBHI JAIN.pdf"},
+  {l:"SYMPHONIC VANIJYA PVT.LTD",f:"SYMPHONIC VANIJYA PVT.LTD..pdf"},
+  {l:"Trance Infra Projects Pvt. Ltd",f:"Trance  Infra  Projects  Pvt. Ltd..pdf"},
+  {l:"Trance Buildcon Pvt. Ltd",f:"Trance Buildcon  Pvt. Ltd..pdf"},
+  {l:"Trance Infra Heights Pvt. Ltd",f:"Trance Infra Heights Pvt. Ltd..pdf"},
+  {l:"TRANCE INFRA PROJECTS PVT. LTD",f:"TRANCE INFRA PROJECTS PVT. LTD..pdf"},
+  {l:"Trance Infra Structural Development Pvt. Ltd",f:"Trance Infra Structural Development  Pvt. Ltd..pdf"},
+  {l:"Trance Skyscrapers Pvt. Ltd",f:"Trance Skyscrapers Pvt. Ltd..pdf"},
+  {l:"U S CREATION PVT.LDT",f:"U S CREATION PVT.LDT..pdf"},
+  {l:"U S CREATION PVT.LTD",f:"U S CREATION PVT.LTD..pdf"},
+  {l:"WHOLESOME DESIGNER PVT LTD",f:"WHOLESOME DESIGNER PVT LTD.pdf"},
+  {l:"WHOLESOME SUPPLIER PVT LTD",f:"WHOLESOME SUPPLIER PVT LTD.pdf"}
+];
+const LH_BASE = 'HR,ADMIN,PR/all Letterhead/';
+function lhUrl(file){
+  // Encode path safely; keeps "/" intact, encodes spaces, ampersands etc.
+  return LH_BASE.split('/').map(encodeURIComponent).join('/') + encodeURIComponent(file);
+}
+function buildLetterheads(){
+  var sel = document.getElementById('lhSelect');
+  var list = document.getElementById('lhList');
+  if (!sel || !list) return;
+  var optsHtml = '<option value="">— Select a Letter Head —</option>';
+  var rowsHtml = '';
+  LETTERHEADS.forEach(function(it, i){
+    var safe = it.l.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    optsHtml += '<option value="'+encodeURIComponent(it.f)+'" data-file="'+encodeURIComponent(it.f)+'">'+safe+'</option>';
+    rowsHtml += '<div class="lh-row" data-search="'+it.l.toLowerCase().replace(/"/g,'&quot;')+'" '+
+      'style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid var(--bdr);font-size:12.5px;background:'+(i%2?'#fff':'#fafafa')+'">'+
+      '<span style="flex:1;padding-right:10px">'+safe+'</span>'+
+      '<a class="btn btn-r btn-sm" target="_blank" rel="noopener" href="'+lhUrl(it.f)+'" '+
+        'style="text-decoration:none;color:#fff;flex-shrink:0">Open ↗</a>'+
+      '</div>';
+  });
+  sel.innerHTML = optsHtml;
+  list.innerHTML = rowsHtml;
+  document.getElementById('lhCount').textContent = LETTERHEADS.length;
+}
+function filterLetterheads(){
+  var inp = document.getElementById('lhSearch');
+  if (!inp) return;
+  var q = inp.value.toLowerCase().trim();
+  var visible = 0;
+  document.querySelectorAll('#lhList .lh-row').forEach(function(r){
+    var m = !q || r.dataset.search.indexOf(q) !== -1;
+    r.style.display = m ? 'flex' : 'none';
+    if (m) visible++;
+  });
+  document.getElementById('lhEmpty').style.display = visible ? 'none' : 'block';
+  // Filter dropdown options too
+  var sel = document.getElementById('lhSelect');
+  Array.from(sel.options).forEach(function(opt){
+    if (!opt.value) return;
+    opt.style.display = !q || opt.textContent.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
+  });
+  document.getElementById('lhCount').textContent = visible;
+}
+function openLetterhead(){
+  var sel = document.getElementById('lhSelect');
+  if (!sel.value){
+    alert('Please pick a letter head from the list first.');
+    sel.focus();
+    return;
+  }
+  // sel.value is already URI-encoded filename
+  window.open(LH_BASE.split('/').map(encodeURIComponent).join('/') + sel.value, '_blank');
+}
+document.addEventListener('DOMContentLoaded', function(){
+  buildLetterheads();
+  var s = document.getElementById('lhSearch');
+  if (s) s.addEventListener('input', filterLetterheads);
+});
+// Run immediately too in case DOMContentLoaded already fired (script is at body end)
+buildLetterheads();
+var _lhs = document.getElementById('lhSearch');
+if (_lhs) _lhs.addEventListener('input', filterLetterheads);
+
+
+/* ═══════════════════════════════════════════════
+   FINANCE PICKERS — PAN CARDS & BALANCE SHEETS
+   Data inventoried from the actual folders.
+   ═══════════════════════════════════════════════ */
+
+const PAN_PVT = [
+  {l:"ALBELA VANIJYA PVT LTD",f:"ALBELA VANIJYA PVT LTD.pdf"},
+  {l:"ALBELA VINTRADE PVT LTD",f:"ALBELA VINTRADE PVT LTD.pdf"},
+  {l:"ARUN INVESTMENTS AND COMMERCIAL PVT LTD",f:"ARUN INVESTMENTS AND COMMERCIAL PVT LTD.pdf"},
+  {l:"BAJRANG CREATIONS PVT LTD",f:"BAJRANG CREATIONS PVT LTD.pdf"},
+  {l:"BISWAPITA PROPERTIES PVT LTD",f:"BISWAPITA PROPERTIES PVT LTD.pdf"},
+  {l:"BLUE HORIZON COMMODITIES PRIVATE LIMITED",f:"BLUE HORIZON COMMODITIES PRIVATE LIMITED.pdf"},
+  {l:"BOOTHNATH MARCOM PVT LTD",f:"BOOTHNATH MARCOM PVT LTD.pdf"},
+  {l:"BUTTLE CONSULTANCY PVT LTD",f:"BUTTLE CONSULTANCY PVT LTD.pdf"},
+  {l:"BUTTLE DISTRIBUTOR PVT LTD",f:"BUTTLE DISTRIBUTOR PVT LTD.pdf"},
+  {l:"DAMODAR TRADING PVT LTD",f:"DAMODAR TRADING PVT LTD.pdf"},
+  {l:"DAYAWAN COMMOSALE PVT LTD",f:"DAYAWAN COMMOSALE PVT LTD.pdf"},
+  {l:"DHANRISHI SALES PRIVATE LIMITED",f:"DHANRISHI SALES PRIVATE LIMITED.pdf"},
+  {l:"DOLPHIN AGENTS PVT LTD",f:"DOLPHIN AGENTS PVT LTD.pdf"},
+  {l:"DREAM APARTMENT HOUSING PVT LTD",f:"DREAM APARTMENT HOUSING PVT LTD.pdf"},
+  {l:"DREAM APPLICATION SOFTWARE PVT LTD",f:"DREAM APPLICATION SOFTWARE PVT LTD.pdf"},
+  {l:"DREAM DEVELOPERS PVT LTD",f:"DREAM DEVELOPERS PVT LTD.pdf"},
+  {l:"DREAM DEVELOPERS",f:"DREAM DEVELOPERS.pdf"},
+  {l:"DREAM ENCLAVE PVT LTD",f:"DREAM ENCLAVE PVT LTD.pdf"},
+  {l:"DREAM EXCELLENCY",f:"DREAM EXCELLENCY.pdf"},
+  {l:"DREAM GATEWAY HOTELS PVT LTD",f:"DREAM GATEWAY HOTELS PVT LTD.pdf"},
+  {l:"DREAM INFRA NIRMAAN PRIVATE LIMITED",f:"DREAM INFRA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"DREAM NIRMAN PVT LTD",f:"DREAM NIRMAN PVT LTD.pdf"},
+  {l:"DREAM PARK HOUSING PVT LTD",f:"DREAM PARK HOUSING PVT LTD.pdf"},
+  {l:"DREAM PLAZA PVT LTD",f:"DREAM PLAZA PVT LTD.pdf"},
+  {l:"DREAM PROJECTS",f:"DREAM PROJECTS.pdf"},
+  {l:"DREAM REALITIES PVT LTD",f:"DREAM REALITIES PVT LTD.pdf"},
+  {l:"DREAM RESIDENCY HOUSING PVT LTD",f:"DREAM RESIDENCY HOUSING PVT LTD.pdf"},
+  {l:"DREAM RESIDENCY TWINS",f:"DREAM RESIDENCY TWINS.pdf"},
+  {l:"DREAM RESIDENCY",f:"DREAM RESIDENCY.pdf"},
+  {l:"DREAM RETREATS PVT LTD",f:"DREAM RETREATS PVT LTD.pdf"},
+  {l:"DREAM SKYSCRAPERS PRIVATE LIMITED",f:"DREAM SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"DREAM TOWER KOLKATA PVT LTD",f:"DREAM TOWER KOLKATA PVT LTD.pdf"},
+  {l:"DUBSON DEALCOM PVT LTD",f:"DUBSON DEALCOM PVT LTD.pdf"},
+  {l:"FAIRDEAL ENCLAVE PVT LTD",f:"FAIRDEAL ENCLAVE PVT LTD.pdf"},
+  {l:"FAIRDEAL GRIHA NIRMAN PVT LTD",f:"FAIRDEAL GRIHA NIRMAN PVT LTD.pdf"},
+  {l:"FAIRDEAL HEIGHTS PVT LTD",f:"FAIRDEAL HEIGHTS PVT LTD.pdf"},
+  {l:"FAIRDEAL HOUSING PVT LTD",f:"FAIRDEAL HOUSING PVT LTD.pdf"},
+  {l:"FAIRDEAL INFRA BUILDERS PVT LTD",f:"FAIRDEAL INFRA BUILDERS PVT LTD.pdf"},
+  {l:"FAIRDEAL INFRA VENTURES PVT LTD",f:"FAIRDEAL INFRA VENTURES PVT LTD.pdf"},
+  {l:"FAIRDEAL REAL ESTATE DEVELOPERS PVT LTD (2)",f:"FAIRDEAL REAL ESTATE DEVELOPERS PVT LTD (2).pdf"},
+  {l:"FAIRDEAL SKYHIGH PVT LTD",f:"FAIRDEAL SKYHIGH PVT LTD.pdf"},
+  {l:"FAIRDEAL SKYRISE PVT LTD",f:"FAIRDEAL SKYRISE PVT LTD.pdf"},
+  {l:"FAIRDEAL SKYSCRAPERS PVT LTD",f:"FAIRDEAL SKYSCRAPERS PVT LTD.pdf"},
+  {l:"GILLANDERS PROPERTIES PVT LTD",f:"GILLANDERS PROPERTIES PVT LTD.pdf"},
+  {l:"GOLDVIEW VANIJYA PVT LTD",f:"GOLDVIEW VANIJYA PVT LTD.pdf"},
+  {l:"GROWWELL VYAPAAR PVT LTD",f:"GROWWELL VYAPAAR PVT LTD.pdf"},
+  {l:"INNOCENT DESIGNER PVT LTD",f:"INNOCENT DESIGNER PVT LTD.pdf"},
+  {l:"JAI MATA CREATIONS PVT LTD",f:"JAI MATA CREATIONS PVT LTD.pdf"},
+  {l:"JAIN BUILDCON PRIVATE LIMITED",f:"JAIN BUILDCON PRIVATE LIMITED.pdf"},
+  {l:"JAIN GROUP PROJECTS PVT LTD",f:"JAIN GROUP PROJECTS PVT LTD.pdf"},
+  {l:"JAIN HEIGHTS PRIVATE LIMITED",f:"JAIN HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"JAIN PLAZA PVT LTD",f:"JAIN PLAZA PVT LTD.pdf"},
+  {l:"JAINEX COMMERCE PVT LTD",f:"JAINEX COMMERCE PVT LTD.pdf"},
+  {l:"JFC HIRE PURCHASE PVT LTD",f:"JFC HIRE PURCHASE PVT LTD.pdf"},
+  {l:"KATHRENE DESIGNER PVT LTD",f:"KATHRENE DESIGNER PVT LTD.pdf"},
+  {l:"MAHABIR BHOOMI DEVELOPERS PVT LTD",f:"MAHABIR BHOOMI DEVELOPERS PVT LTD.pdf"},
+  {l:"MAHABIR ENCLAVE PVT LTD",f:"MAHABIR ENCLAVE PVT LTD.pdf"},
+  {l:"MAHABIR GARDEN PVT LTD",f:"MAHABIR GARDEN PVT LTD.pdf"},
+  {l:"MAHABIR GRIHA NIRMAN PVT LTD",f:"MAHABIR GRIHA NIRMAN PVT LTD.pdf"},
+  {l:"MAHABIR HEIGHTS PVT LTD",f:"MAHABIR HEIGHTS PVT LTD.pdf"},
+  {l:"MAHABIR HOMES PVT LTD",f:"MAHABIR HOMES PVT LTD.pdf"},
+  {l:"MAHABIR REAL ESTATE DEVELOPERS PVT LTD",f:"MAHABIR REAL ESTATE DEVELOPERS PVT LTD.pdf"},
+  {l:"MAHABIR SKYHIGH PVT LTD",f:"MAHABIR SKYHIGH PVT LTD.pdf"},
+  {l:"MANIK FINTRADE PVT LTD",f:"MANIK FINTRADE PVT LTD.pdf"},
+  {l:"MANOMAY ADVISORY PVT LTD",f:"MANOMAY ADVISORY PVT LTD.pdf"},
+  {l:"MOTITREE PROJECT MANAGERS PRIVATE LIMITED",f:"MOTITREE PROJECT MANAGERS PRIVATE LIMITED.pdf"},
+  {l:"NETTLES TRADERS PRIVATE LIMITED",f:"NETTLES TRADERS PRIVATE LIMITED.pdf"},
+  {l:"NIDHI BHOOMI NIRMAAN PRIVATE LIMITED",f:"NIDHI BHOOMI NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"NIDHI GRIHA NIRMAN PRIVATE LIMITED",f:"NIDHI GRIHA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"NIDHI HEIGHTS PRIVATE LIMITED",f:"NIDHI HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"NIDHI INFRA DEVELOPMENT PRIVATE LIMITED",f:"NIDHI INFRA DEVELOPMENT PRIVATE LIMITED.pdf"},
+  {l:"NIDHI INFRA NIRMAAN PRIVATE LIMITED",f:"NIDHI INFRA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"NORTEL DEALCOM PVT LTD",f:"NORTEL DEALCOM PVT LTD.pdf"},
+  {l:"OMKARA DESIGNER PVT LTD",f:"OMKARA DESIGNER PVT LTD.pdf"},
+  {l:"P J BHOOMI NIRMAN PRIVATE LIMITED",f:"P J BHOOMI NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"P J BUILDCON PRIVATE LIMITED",f:"P J BUILDCON PRIVATE LIMITED.pdf"},
+  {l:"P J GRIHA NIRMAN PRIVATE LIMITED",f:"P J GRIHA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"P J HEIGHTS PRIVATE LIMITED",f:"P J HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"P J INFRA DEVELOPMENT PRIVATE LIMITED",f:"P J INFRA DEVELOPMENT PRIVATE LIMITED.pdf"},
+  {l:"P J INFRA NIRMAN PRIVATE LIMITED",f:"P J INFRA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"P L JAIN (HUF)",f:"P L JAIN (HUF).pdf"},
+  {l:"PALANHARE APARTMENT PVT LTD",f:"PALANHARE APARTMENT PVT LTD.pdf"},
+  {l:"PALANHARE AWAS PVT LTD",f:"PALANHARE AWAS PVT LTD.pdf"},
+  {l:"PALANHARE BHOOMI NIRMAN PVT LTD",f:"PALANHARE BHOOMI NIRMAN PVT LTD.pdf"},
+  {l:"PALANHARE BUILDCON PVT LTD",f:"PALANHARE BUILDCON PVT LTD.pdf"},
+  {l:"PALANHARE BUILDTECH PVT LTD",f:"PALANHARE BUILDTECH PVT LTD.pdf"},
+  {l:"PALANHARE BUILDWELL PVT LTD",f:"PALANHARE BUILDWELL PVT LTD.pdf"},
+  {l:"PALANHARE CONCLAVE PVT LTD",f:"PALANHARE CONCLAVE PVT LTD.pdf"},
+  {l:"PALANHARE DEVELOPERS PVT LTD",f:"PALANHARE DEVELOPERS PVT LTD.pdf"},
+  {l:"PALANHARE ENCLAVE PVT LTD",f:"PALANHARE ENCLAVE PVT LTD.pdf"},
+  {l:"PALANHARE FORT PVT LTD",f:"PALANHARE FORT PVT LTD.pdf"},
+  {l:"PALANHARE HEIGHTS PVT LTD",f:"PALANHARE HEIGHTS PVT LTD.pdf"},
+  {l:"PALANHARE HIGHRISE PVT LTD",f:"PALANHARE HIGHRISE PVT LTD.pdf"},
+  {l:"PALANHARE INFRABUILD PVT LTD",f:"PALANHARE INFRABUILD PVT LTD.pdf"},
+  {l:"PALANHARE INFRACON PVT LTD",f:"PALANHARE INFRACON PVT LTD.pdf"},
+  {l:"PALANHARE INFRAESTATE PVT LTD",f:"PALANHARE INFRAESTATE PVT LTD.pdf"},
+  {l:"PALANHARE INFRASTRUCTURE PVT LTD",f:"PALANHARE INFRASTRUCTURE PVT LTD.pdf"},
+  {l:"PALANHARE KUTIR PVT LTD",f:"PALANHARE KUTIR PVT LTD.pdf"},
+  {l:"PALANHARE MANORE PVT LTD",f:"PALANHARE MANORE PVT LTD.pdf"},
+  {l:"PALANHARE NIRMAAN PVT LTD",f:"PALANHARE NIRMAAN PVT LTD.pdf"},
+  {l:"PALANHARE NIWAS PVT LTD",f:"PALANHARE NIWAS PVT LTD.pdf"},
+  {l:"PALANHARE PLAZA PVT LTD",f:"PALANHARE PLAZA PVT LTD.pdf"},
+  {l:"PALANHARE PRODEV BUILDERS PVT LTD",f:"PALANHARE PRODEV BUILDERS PVT LTD.pdf"},
+  {l:"PALANHARE PROMOTER PVT LTD",f:"PALANHARE PROMOTER PVT LTD.pdf"},
+  {l:"PALANHARE PROPERTY PVT LTD",f:"PALANHARE PROPERTY PVT LTD.pdf"},
+  {l:"PALANHARE REALCON PVT LTD",f:"PALANHARE REALCON PVT LTD.pdf"},
+  {l:"PALANHARE REALTORS PVT LTD",f:"PALANHARE REALTORS PVT LTD.pdf"},
+  {l:"PALANHARE SKYRISE PVT LTD",f:"PALANHARE SKYRISE PVT LTD.pdf"},
+  {l:"PALANHARE SKYSCRAPERS PVT LTD",f:"PALANHARE SKYSCRAPERS PVT LTD.pdf"},
+  {l:"PALANHARE TOWER PVT LTD",f:"PALANHARE TOWER PVT LTD.pdf"},
+  {l:"PALANHARE VILLA PVT LTD",f:"PALANHARE VILLA PVT LTD.pdf"},
+  {l:"PARAS FINVEST PVT LTD",f:"PARAS FINVEST PVT LTD.pdf"},
+  {l:"PICS DEALER PVT LTD",f:"PICS DEALER PVT LTD.pdf"},
+  {l:"PINKU SONU INVESTMENTS & PROPERTIES PVT LTD",f:"PINKU SONU INVESTMENTS & PROPERTIES PVT LTD.pdf"},
+  {l:"PRAMILA JAIN",f:"PRAMILA JAIN.pdf"},
+  {l:"PREM LAL JAIN",f:"PREM LAL JAIN.pdf"},
+  {l:"R J GARDEN PVT LTD",f:"R J GARDEN PVT LTD.pdf"},
+  {l:"R J HEIGHTS PVT LTD",f:"R J HEIGHTS PVT LTD.pdf"},
+  {l:"R J HOMES PVT LTD",f:"R J HOMES PVT LTD.pdf"},
+  {l:"R J REALTORS PVT LTD",f:"R J REALTORS PVT LTD.pdf"},
+  {l:"R J SKYHIGH PVT LTD",f:"R J SKYHIGH PVT LTD.pdf"},
+  {l:"RECEPTION AGENCIES PVT LTD",f:"RECEPTION AGENCIES PVT LTD.pdf"},
+  {l:"RECEPTION MARKETING PVT LTD",f:"RECEPTION MARKETING PVT LTD.pdf"},
+  {l:"RECEPTION TRADER PVT LTD",f:"RECEPTION TRADER PVT LTD.pdf"},
+  {l:"REVERIE INFRA ESTATE PRIVATE LIMITED",f:"REVERIE INFRA ESTATE PRIVATE LIMITED.pdf"},
+  {l:"REVERIE INFRA STRUCTURAL DEVELOPMENT PRIVATE LIMITED",f:"REVERIE INFRA STRUCTURAL DEVELOPMENT PRIVATE LIMITED.pdf"},
+  {l:"REVERIE SKYSCRAPERS PRIVATE LIMITED",f:"REVERIE SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"RISHI BHOOMI NIRMAN PRIVATE LIMITED",f:"RISHI BHOOMI NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"RISHI HEIGHTS PRIVATE LIMITED",f:"RISHI HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"RISHI INFRA BUILDERS PVT LTD",f:"RISHI INFRA BUILDERS PVT LTD.pdf"},
+  {l:"RISHI INFRA NIRMAN PRIVATE LIMITED",f:"RISHI INFRA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"RISHI JAIN",f:"RISHI JAIN.pdf"},
+  {l:"RISHI SKYHIGH PVT LTD",f:"RISHI SKYHIGH PVT LTD.pdf"},
+  {l:"RISHI SKYRISE PVT LTD",f:"RISHI SKYRISE PVT LTD.pdf"},
+  {l:"RISHI SKYSCRAPERS PVT LTD",f:"RISHI SKYSCRAPERS PVT LTD.pdf"},
+  {l:"RISU IMPEX PVT. LTD.",f:"RISU IMPEX PVT. LTD..pdf"},
+  {l:"RIVERIE GRIHA NIRMAN PRIVATE LIMITED",f:"RIVERIE GRIHA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"RIVERIE GRIHA NIRMAN PVT. LTD.",f:"RIVERIE GRIHA NIRMAN PVT. LTD..pdf"},
+  {l:"RIVERIE INFRA DEVELOPERS PRIVATE LIMITED",f:"RIVERIE INFRA DEVELOPERS PRIVATE LIMITED.pdf"},
+  {l:"RIVERIE INFRA NIRMAN PRIVATE LIMITED",f:"RIVERIE INFRA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"S J HOMES PVT LTD",f:"S J HOMES PVT LTD.pdf"},
+  {l:"S J INFRA PROJECT PVT LTD",f:"S J INFRA PROJECT PVT LTD.pdf"},
+  {l:"S J SKYSCRAPERS PVT LTD",f:"S J SKYSCRAPERS PVT LTD.pdf"},
+  {l:"SALSIFY COMMOSALES PRIVATE LIMITED",f:"SALSIFY COMMOSALES PRIVATE LIMITED.pdf"},
+  {l:"SHALLOT TRADERS PRIVATE LIMITED",f:"SHALLOT TRADERS PRIVATE LIMITED.pdf"},
+  {l:"SHANKARLAL SHARMA",f:"SHANKARLAL SHARMA.pdf"},
+  {l:"SHRAYANS JAIN",f:"SHRAYANS JAIN.pdf"},
+  {l:"SHREE MAHAVIR INFRA NIRMAAN PRIVATE LIMITED",f:"SHREE MAHAVIR INFRA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"SURABHI JAIN",f:"SURABHI JAIN.pdf"},
+  {l:"SURBHI  AGRAWAL",f:"SURBHI  AGRAWAL.pdf"},
+  {l:"SYMPHONIC VANIJYA PVT LTD",f:"SYMPHONIC VANIJYA PVT LTD.pdf"},
+  {l:"TRANCE BUILDCON PRIVATE LIMITED",f:"TRANCE BUILDCON PRIVATE LIMITED.pdf"},
+  {l:"TRANCE INFRA HEIGHTS PRIVATE LIMITED",f:"TRANCE INFRA HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"TRANCE INFRA PROJECTS PRIVATE LIMITED",f:"TRANCE INFRA PROJECTS PRIVATE LIMITED.pdf"},
+  {l:"TRANCE INFRA STRUCTURAL DEVELOPMENT PRIVATE LIMITED",f:"TRANCE INFRA STRUCTURAL DEVELOPMENT PRIVATE LIMITED.pdf"},
+  {l:"TRANCE SKYSCRAPERS PRIVATE LIMITED",f:"TRANCE SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"U. S. CREATION PVT LTD",f:"U. S. CREATION PVT LTD.pdf"},
+  {l:"WHOLESOME DESIGNER PVT LTD",f:"WHOLESOME DESIGNER PVT LTD.pdf"},
+  {l:"WHOLESOME SUPPLIER PVT LTD",f:"WHOLESOME SUPPLIER PVT LTD.pdf"}
+];
+const PAN_LLP = [
+  {l:"ARUN INFRACON AND COMMERCIAL LLP",f:"ARUN INFRACON AND COMMERCIAL LLP.pdf"},
+  {l:"PALANHARE AWAS LLP",f:"PALANHARE AWAS LLP.pdf"},
+  {l:"PALANHARE DEVELOPERS LLP",f:"PALANHARE DEVELOPERS LLP.pdf"},
+  {l:"PALANHARE HEIGHTS LLP",f:"PALANHARE HEIGHTS LLP.pdf"},
+  {l:"PALANHARE HIGHRISE LLP",f:"PALANHARE HIGHRISE LLP.pdf"},
+  {l:"PALANHARE INFRABUILD LLP",f:"PALANHARE INFRABUILD LLP.pdf"},
+  {l:"PALANHARE MAINTENANCE LLP",f:"PALANHARE MAINTENANCE LLP.pdf"},
+  {l:"PALANHARE MANORE LLP",f:"PALANHARE MANORE LLP.pdf"},
+  {l:"PALANHARE PROMOTER LLP",f:"PALANHARE PROMOTER LLP.pdf"},
+  {l:"PALANHARE SKYRISE LLP",f:"PALANHARE SKYRISE LLP.pdf"},
+  {l:"PALANHARE SKYSCRAPERS LLP",f:"PALANHARE SKYSCRAPERS LLP.pdf"}
+];
+
+const BS_DATA = {
+  "13_14": [
+  {l:"ARUN INVESTMENT AND COMMERCE PVT LTD",f:"ARUN INVESTMENT AND COMMERCE PVT LTD.pdf"},
+  {l:"Albela Vanijya Pvt Ltd",f:"Albela Vanijya Pvt Ltd.pdf"},
+  {l:"Albela Vintrade Pvt Ltd",f:"Albela Vintrade Pvt Ltd.pdf"},
+  {l:"BAJRANG CREATIONS PVT LTD",f:"BAJRANG CREATIONS PVT LTD.pdf"},
+  {l:"BISWAPITA PROPERTIES PVT LTD",f:"BISWAPITA PROPERTIES PVT LTD.pdf"},
+  {l:"BLUE HORIZON COMMODITIES PVT LTD1",f:"BLUE HORIZON COMMODITIES PVT LTD1.pdf"},
+  {l:"Boothnath Marcom Pvt Ltd",f:"Boothnath Marcom Pvt Ltd.pdf"},
+  {l:"Buttle Consultancy Pvt Ltd",f:"Buttle Consultancy Pvt Ltd.pdf"},
+  {l:"Buttle Distributor Pvt Ltd",f:"Buttle Distributor Pvt Ltd.pdf"},
+  {l:"DAMODAR TRADING PVT LTD",f:"DAMODAR TRADING PVT LTD.pdf"},
+  {l:"DHANRISHI SALES PVT LTD",f:"DHANRISHI SALES PVT LTD.pdf"},
+  {l:"DOLPHIN AGENTS PVT LTD",f:"DOLPHIN AGENTS PVT LTD.pdf"},
+  {l:"DREAM APPLICATION SOFTWARE PVT LTD",f:"DREAM APPLICATION SOFTWARE PVT LTD.pdf"},
+  {l:"DREAM ENCLAVE PVT LTD",f:"DREAM ENCLAVE PVT LTD.pdf"},
+  {l:"DREAM GATEWAY HOTELS PVT LTD",f:"DREAM GATEWAY HOTELS PVT LTD.pdf"},
+  {l:"DREAM INFRA NIRMAN PVT LTD",f:"DREAM INFRA NIRMAN PVT LTD.pdf"},
+  {l:"DREAM NIRMAN PVT LTD",f:"DREAM NIRMAN PVT LTD.pdf"},
+  {l:"DREAM PLAZA PVT LTD",f:"DREAM PLAZA PVT LTD.pdf"},
+  {l:"DREAM REALITIES PVT LTD",f:"DREAM REALITIES PVT LTD.pdf"},
+  {l:"DREAM RETREATS PVT LTD",f:"DREAM RETREATS PVT LTD.pdf"},
+  {l:"DREAM SKY SCRAPERS PVT LTD",f:"DREAM SKY SCRAPERS PVT LTD.pdf"},
+  {l:"DUBSON DEALCOM PVT LTD",f:"DUBSON DEALCOM PVT LTD.pdf"},
+  {l:"Dayawan Commosale Pvt Ltd",f:"Dayawan Commosale Pvt Ltd.pdf"},
+  {l:"FAIRDEAL ENCLAVE PVT LTD",f:"FAIRDEAL ENCLAVE PVT LTD.pdf"},
+  {l:"FAIRDEAL GRIHA NIRMAN PVT LTD",f:"FAIRDEAL GRIHA NIRMAN PVT LTD.pdf"},
+  {l:"FAIRDEAL HEIGHTS PVT LTD",f:"FAIRDEAL HEIGHTS PVT LTD.pdf"},
+  {l:"FAIRDEAL HOUSING PVT LTD",f:"FAIRDEAL HOUSING PVT LTD.pdf"},
+  {l:"FAIRDEAL INFRABUILDERS PVT LTD",f:"FAIRDEAL INFRABUILDERS PVT LTD.pdf"},
+  {l:"FAIRDEAL INFRAVENTURES PVT LTD",f:"FAIRDEAL INFRAVENTURES PVT LTD.pdf"},
+  {l:"FAIRDEAL REALESTATE PVT LTD",f:"FAIRDEAL REALESTATE PVT LTD.pdf"},
+  {l:"FAIRDEAL SKYHIGH PVT LTD",f:"FAIRDEAL SKYHIGH PVT LTD.pdf"},
+  {l:"FAIRDEAL SKYRISE PVT LTD",f:"FAIRDEAL SKYRISE PVT LTD.pdf"},
+  {l:"GOLDVIEW VANIJYA PVT LTD",f:"GOLDVIEW VANIJYA PVT LTD.pdf"},
+  {l:"Innocent Designer Pvt Ltd",f:"Innocent Designer Pvt Ltd.pdf"},
+  {l:"JAI MATA CREATIONS PVT LTD",f:"JAI MATA CREATIONS PVT LTD.pdf"},
+  {l:"JAIN BUILDCON PVT LTD",f:"JAIN BUILDCON PVT LTD.pdf"},
+  {l:"JAIN GROUP PROJECTS PVT LTD",f:"JAIN GROUP PROJECTS PVT LTD.pdf"},
+  {l:"JAIN HEIGHTS PVT LTD",f:"JAIN HEIGHTS PVT LTD.pdf"},
+  {l:"JAIN PLAZA PVT LTD",f:"JAIN PLAZA PVT LTD.pdf"},
+  {l:"JAINEX COMMERCE PVT LTD",f:"JAINEX COMMERCE PVT LTD.pdf"},
+  {l:"JFC HIRE PURCHASE PVT LTD",f:"JFC HIRE PURCHASE PVT LTD.pdf"},
+  {l:"Kathrene Designer Pvt Ltd",f:"Kathrene Designer Pvt Ltd.pdf"},
+  {l:"MAHABIR BHOOMI DEVELOPER PVT LTD",f:"MAHABIR BHOOMI DEVELOPER PVT LTD.pdf"},
+  {l:"MAHABIR ENCLAVE PVT LTD",f:"MAHABIR ENCLAVE PVT LTD.pdf"},
+  {l:"MAHABIR GARDEN PVT LTD",f:"MAHABIR GARDEN PVT LTD.pdf"},
+  {l:"MAHABIR GRIHA NIRMAN PVT LTD",f:"MAHABIR GRIHA NIRMAN PVT LTD.pdf"},
+  {l:"MAHABIR HEIGHTS PVT LTD",f:"MAHABIR HEIGHTS PVT LTD.pdf"},
+  {l:"MAHABIR HOMES PVT LTD",f:"MAHABIR HOMES PVT LTD.pdf"},
+  {l:"MAHABIR REAL ESTATE DEVE PVT LTD",f:"MAHABIR REAL ESTATE DEVE PVT LTD.pdf"},
+  {l:"MAHABIR SKYHIGH PVT LTD",f:"MAHABIR SKYHIGH PVT LTD.pdf"},
+  {l:"MANIKFINTRADE PVT LTD",f:"MANIKFINTRADE PVT LTD.pdf"},
+  {l:"MOTITREE PROJECT MANAGERS PVT LTD",f:"MOTITREE PROJECT MANAGERS PVT LTD.pdf"},
+  {l:"Manomay Advisory Pvt Ltd",f:"Manomay Advisory Pvt Ltd.pdf"},
+  {l:"NETTLES TRADERS PVT LTD",f:"NETTLES TRADERS PVT LTD.pdf"},
+  {l:"NIDHI BHOOMI NIRMAN PVT LTD",f:"NIDHI BHOOMI NIRMAN PVT LTD.pdf"},
+  {l:"NIDHI GRIHA NIRMAN PVT LTD",f:"NIDHI GRIHA NIRMAN PVT LTD.pdf"},
+  {l:"NIDHI HEIGHTS PVT LTD",f:"NIDHI HEIGHTS PVT LTD.pdf"},
+  {l:"NIDHI INFRA DEVELOPMENT PVT LTD",f:"NIDHI INFRA DEVELOPMENT PVT LTD.pdf"},
+  {l:"NIDHI INFRA NIRMAAN PVT LTD",f:"NIDHI INFRA NIRMAAN PVT LTD.pdf"},
+  {l:"NORTEL DEALCOM PVT LTD",f:"NORTEL DEALCOM PVT LTD.pdf"},
+  {l:"Omkara Designer Pvt Ltd",f:"Omkara Designer Pvt Ltd.pdf"},
+  {l:"P J BHOOMI NIRMAN PVT LTD",f:"P J BHOOMI NIRMAN PVT LTD.pdf"},
+  {l:"P J BUIDCON PVT LTD",f:"P J BUIDCON PVT LTD.pdf"},
+  {l:"P J GRIHA NIRMAN PVT LTD",f:"P J GRIHA NIRMAN PVT LTD.pdf"},
+  {l:"P J HEIGHTS PVT LTD",f:"P J HEIGHTS PVT LTD.pdf"},
+  {l:"P J INFRA DEVELOPMENT PVT LTD",f:"P J INFRA DEVELOPMENT PVT LTD.pdf"},
+  {l:"P J INFRA NIRMAN PVT LTD",f:"P J INFRA NIRMAN PVT LTD.pdf"},
+  {l:"PALANHARE APARTMENT PVT LTD",f:"PALANHARE APARTMENT PVT LTD.pdf"},
+  {l:"PALANHARE AWAS PVT LTD",f:"PALANHARE AWAS PVT LTD.pdf"},
+  {l:"PALANHARE BHOOMI NIRMAN PVT LTD",f:"PALANHARE BHOOMI NIRMAN PVT LTD.pdf"},
+  {l:"PALANHARE BUILDCON PVT LTD",f:"PALANHARE BUILDCON PVT LTD.pdf"},
+  {l:"PALANHARE BUILDTECH PVT LTD",f:"PALANHARE BUILDTECH PVT LTD.pdf"},
+  {l:"PALANHARE BUILDWELL PVT LTD",f:"PALANHARE BUILDWELL PVT LTD.pdf"},
+  {l:"PALANHARE CONCLAVE PVT LTD",f:"PALANHARE CONCLAVE PVT LTD.pdf"},
+  {l:"PALANHARE DEVELOPERS PVT LTD",f:"PALANHARE DEVELOPERS PVT LTD.pdf"},
+  {l:"PALANHARE ENCLAVE PVT LTD",f:"PALANHARE ENCLAVE PVT LTD.pdf"},
+  {l:"PALANHARE FORT PVT LTD",f:"PALANHARE FORT PVT LTD.pdf"},
+  {l:"PALANHARE HEIGHTS PVT LTD",f:"PALANHARE HEIGHTS PVT LTD.pdf"},
+  {l:"PALANHARE HIGHRISE PVT LTD",f:"PALANHARE HIGHRISE PVT LTD.pdf"},
+  {l:"PALANHARE INFRABUILD PVT LTD",f:"PALANHARE INFRABUILD PVT LTD.pdf"},
+  {l:"PALANHARE INFRACON PVT LTD",f:"PALANHARE INFRACON PVT LTD.pdf"},
+  {l:"PALANHARE INFRAESTATES PVT LTD",f:"PALANHARE INFRAESTATES PVT LTD.pdf"},
+  {l:"PALANHARE INFRASTRUCTURE PVT LTD",f:"PALANHARE INFRASTRUCTURE PVT LTD.pdf"},
+  {l:"PALANHARE KUTIR PVT LTD",f:"PALANHARE KUTIR PVT LTD.pdf"},
+  {l:"PALANHARE MANORE PVT LTD",f:"PALANHARE MANORE PVT LTD.pdf"},
+  {l:"PALANHARE NIRMAAN PVT LTD",f:"PALANHARE NIRMAAN PVT LTD.pdf"},
+  {l:"PALANHARE NIWAS PVT LTD",f:"PALANHARE NIWAS PVT LTD.pdf"},
+  {l:"PALANHARE PLAZA PVT LTD",f:"PALANHARE PLAZA PVT LTD.pdf"},
+  {l:"PALANHARE PRODEV BUILDERS PVT LTD",f:"PALANHARE PRODEV BUILDERS PVT LTD.pdf"},
+  {l:"PALANHARE PROMOTER PVT LTD",f:"PALANHARE PROMOTER PVT LTD.pdf"},
+  {l:"PALANHARE PROPERTY PVT LTD",f:"PALANHARE PROPERTY PVT LTD.pdf"},
+  {l:"PALANHARE REALCON PVT LTD",f:"PALANHARE REALCON PVT LTD.pdf"},
+  {l:"PALANHARE REALTORS PVT LTD",f:"PALANHARE REALTORS PVT LTD.pdf"},
+  {l:"PALANHARE SKYRISE PVT LTD",f:"PALANHARE SKYRISE PVT LTD.pdf"},
+  {l:"PALANHARE SKYSCRAPERS PVT LTD",f:"PALANHARE SKYSCRAPERS PVT LTD.pdf"},
+  {l:"PALANHARE TOWER PVT LTD",f:"PALANHARE TOWER PVT LTD.pdf"},
+  {l:"PALANHARE VILLA PVT LTD",f:"PALANHARE VILLA PVT LTD.pdf"},
+  {l:"PARAS FINVEST PVT LTD",f:"PARAS FINVEST PVT LTD.pdf"},
+  {l:"Pics Dealer Pvt Ltd",f:"Pics Dealer Pvt Ltd.pdf"},
+  {l:"REVERIE INFRA DEVELOPERS PVT LTD",f:"REVERIE INFRA DEVELOPERS PVT LTD.pdf"},
+  {l:"REVERIE INFRA ESTATE PVT LTD",f:"REVERIE INFRA ESTATE PVT LTD.pdf"},
+  {l:"REVERIE INFRA STRUCTURAL DEVELOPMENT PVT LTD",f:"REVERIE INFRA STRUCTURAL DEVELOPMENT PVT LTD.pdf"},
+  {l:"REVERIE SKYSCRAPERS PVT LTD",f:"REVERIE SKYSCRAPERS PVT LTD.pdf"},
+  {l:"RISHI BHOOMI NIRMAN PVT LTD",f:"RISHI BHOOMI NIRMAN PVT LTD.pdf"},
+  {l:"RISHI HEIGHTS PVT LTD",f:"RISHI HEIGHTS PVT LTD.pdf"},
+  {l:"RISHI INFRA BUILDERS PVT LTD",f:"RISHI INFRA BUILDERS PVT LTD.pdf"},
+  {l:"RISHI INFRA NIRMAN PVT LTD",f:"RISHI INFRA NIRMAN PVT LTD.pdf"},
+  {l:"RISHI SKYHIGH PVT LTD",f:"RISHI SKYHIGH PVT LTD.pdf"},
+  {l:"RISHI SKYRISE PVT LTD",f:"RISHI SKYRISE PVT LTD.pdf"},
+  {l:"RISHI SKYSCRAPPERS PVT LTD",f:"RISHI SKYSCRAPPERS PVT LTD.pdf"},
+  {l:"RISU IMPLEX PVT LTD",f:"RISU IMPLEX PVT LTD.pdf"},
+  {l:"RIVERIE GRIHA NIRMAN PVT LTD",f:"RIVERIE GRIHA NIRMAN PVT LTD.pdf"},
+  {l:"RIVERIE INFRA DEVELOPERS PVT LTD",f:"RIVERIE INFRA DEVELOPERS PVT LTD.pdf"},
+  {l:"RIVERIE INFRA NIRMAN PVT LTD",f:"RIVERIE INFRA NIRMAN PVT LTD.pdf"},
+  {l:"RJ GARDEN PVT LTD",f:"RJ GARDEN PVT LTD.pdf"},
+  {l:"RJ HEIGHTS PVT LTD",f:"RJ HEIGHTS PVT LTD.pdf"},
+  {l:"RJ HOMES PVT LTD",f:"RJ HOMES PVT LTD.pdf"},
+  {l:"RJ RELATORS PVT LTD",f:"RJ RELATORS PVT LTD.pdf"},
+  {l:"RJ SKYHIGH PVT LTD",f:"RJ SKYHIGH PVT LTD.pdf"},
+  {l:"Reception Agencies Pvt ltd",f:"Reception Agencies Pvt ltd.pdf"},
+  {l:"Reception Marketin Pvt Ltd",f:"Reception Marketin Pvt Ltd.pdf"},
+  {l:"Reception Trader Pvt Ltd",f:"Reception Trader Pvt Ltd.pdf"},
+  {l:"SALSIFY COMMOSALES PVT LTD",f:"SALSIFY COMMOSALES PVT LTD.pdf"},
+  {l:"SHALLOT TRADERS PVT LTD",f:"SHALLOT TRADERS PVT LTD.pdf"},
+  {l:"SHREE MAHAVIR INFRA NIRMAN PROJECTS PVT LTD",f:"SHREE MAHAVIR INFRA NIRMAN PROJECTS PVT LTD.pdf"},
+  {l:"SJ HOMES PVT LTD",f:"SJ HOMES PVT LTD.pdf"},
+  {l:"SJ INFRA PROJECT PVT LTD",f:"SJ INFRA PROJECT PVT LTD.pdf"},
+  {l:"SJ SKYCRAPPERS PVT LTD",f:"SJ SKYCRAPPERS PVT LTD.pdf"},
+  {l:"SYMPHONIC VANIJYA PVT LTD",f:"SYMPHONIC VANIJYA PVT LTD.pdf"},
+  {l:"TRANCE BUILDCON PVT LTD",f:"TRANCE BUILDCON PVT LTD.pdf"},
+  {l:"TRANCE INFRA HEIGHTS PVT LTD",f:"TRANCE INFRA HEIGHTS PVT LTD.pdf"},
+  {l:"TRANCE INFRA PROJECTS PVT LTD",f:"TRANCE INFRA PROJECTS PVT LTD.pdf"},
+  {l:"TRANCE INFRA STRUCTURAL DEVELOPMENT PVT LTD",f:"TRANCE INFRA STRUCTURAL DEVELOPMENT PVT LTD.pdf"},
+  {l:"TRANCE SKYSCRAPERS PVT LTD",f:"TRANCE SKYSCRAPERS PVT LTD.pdf"},
+  {l:"US CREATION PVT LTD",f:"US CREATION PVT LTD.pdf"},
+  {l:"Wholesome Designer Pvt Ltd",f:"Wholesome Designer Pvt Ltd.pdf"},
+  {l:"Wholesome Suppler Pvt Ltd",f:"Wholesome Suppler Pvt Ltd.pdf"}
+],
+  "14_15": [
+  {l:"ALBELA VANIJYA PVT LTD",f:"ALBELA VANIJYA PVT LTD.pdf"},
+  {l:"ALBELA VINTRADE PVT LTD",f:"ALBELA VINTRADE PVT LTD.pdf"},
+  {l:"BAJRANG CREATIONS PVT LTD",f:"BAJRANG CREATIONS PVT LTD.pdf"},
+  {l:"BISWAPITA PROPERTIES PVT LTD",f:"BISWAPITA PROPERTIES PVT LTD.pdf"},
+  {l:"BLUE HORIZON COMMODITIES PVT LTD",f:"BLUE HORIZON COMMODITIES PVT LTD.pdf"},
+  {l:"BOOTHNATH MARCOM PVT LTD",f:"BOOTHNATH MARCOM PVT LTD.pdf"},
+  {l:"BUTTLE CONSULTANCY PVT LTD",f:"BUTTLE CONSULTANCY PVT LTD.pdf"},
+  {l:"BUTTLE DISTRIBUTOR PVT LTD",f:"BUTTLE DISTRIBUTOR PVT LTD.pdf"},
+  {l:"DAMODAR TRADING PVT LTD",f:"DAMODAR TRADING PVT LTD.pdf"},
+  {l:"DHANRISHI SALES P LIMITED",f:"DHANRISHI SALES P LIMITED.pdf"},
+  {l:"DHANRISHI SALES PRIVATE LIMITED",f:"DHANRISHI SALES PRIVATE LIMITED.pdf"},
+  {l:"DOLPHIN AGENTS PVT LTD",f:"DOLPHIN AGENTS PVT LTD.pdf"},
+  {l:"DREAM APPLICATION SOFTWARE PVT LTD",f:"DREAM APPLICATION SOFTWARE PVT LTD.pdf"},
+  {l:"DREAM DEVELOPERS PVT LTD",f:"DREAM DEVELOPERS PVT LTD.pdf"},
+  {l:"DREAM ENCLAVE PVT LTD",f:"DREAM ENCLAVE PVT LTD.pdf"},
+  {l:"DREAM GATEWAY HOTELS PVT LTD",f:"DREAM GATEWAY HOTELS PVT LTD.pdf"},
+  {l:"DREAM INFRA NIRMAAN PRIVATE LIMITED",f:"DREAM INFRA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"DREAM NIRMAN PVT LTD",f:"DREAM NIRMAN PVT LTD.pdf"},
+  {l:"DREAM PLAZA PVT LTD",f:"DREAM PLAZA PVT LTD.pdf"},
+  {l:"DREAM REALITIES PVT LTD",f:"DREAM REALITIES PVT LTD.pdf"},
+  {l:"DREAM RETREATS PVT LTD",f:"DREAM RETREATS PVT LTD.pdf"},
+  {l:"DREAM SKYSCRAPERS PRIVATE LIMITED",f:"DREAM SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"DREAM TOWER KOLKATA PVT LTD",f:"DREAM TOWER KOLKATA PVT LTD.pdf"},
+  {l:"DUBSON DEALCOM PVT LTD",f:"DUBSON DEALCOM PVT LTD.pdf"},
+  {l:"FAIRDEAL ENCLAVE PVT LTD",f:"FAIRDEAL ENCLAVE PVT LTD.pdf"},
+  {l:"FAIRDEAL GRIHA NIRMAN PVT LTD",f:"FAIRDEAL GRIHA NIRMAN PVT LTD.pdf"},
+  {l:"FAIRDEAL HEIGHTS PVT LTD",f:"FAIRDEAL HEIGHTS PVT LTD.pdf"},
+  {l:"FAIRDEAL HOUSING PVT LTD",f:"FAIRDEAL HOUSING PVT LTD.pdf"},
+  {l:"FAIRDEAL INFRA BUILDERS PVT LTD",f:"FAIRDEAL INFRA BUILDERS PVT LTD.pdf"},
+  {l:"FAIRDEAL INFRA VENTURES PVT LTD",f:"FAIRDEAL INFRA VENTURES PVT LTD.pdf"},
+  {l:"FAIRDEAL REAL ESTATE DEVELOPERS PVT LTD",f:"FAIRDEAL REAL ESTATE DEVELOPERS PVT LTD.pdf"},
+  {l:"FAIRDEAL SKYHIGH PVT LTD",f:"FAIRDEAL SKYHIGH PVT LTD.pdf"},
+  {l:"FAIRDEAL SKYRISE PVT LTD",f:"FAIRDEAL SKYRISE PVT LTD.pdf"},
+  {l:"FAIRDEAL SKYSCRAPERS PVT LTD",f:"FAIRDEAL SKYSCRAPERS PVT LTD.pdf"},
+  {l:"GILLANDERS PROPERTIES PVT LTD",f:"GILLANDERS PROPERTIES PVT LTD.pdf"},
+  {l:"GOLDVIEW VANIJYA PVT LTD",f:"GOLDVIEW VANIJYA PVT LTD.pdf"},
+  {l:"GROWWELL VYAPAAR PVT LTD",f:"GROWWELL VYAPAAR PVT LTD.pdf"},
+  {l:"INNOCENT DESIGNER PVT LTD",f:"INNOCENT DESIGNER PVT LTD.pdf"},
+  {l:"JAI MATA CREATIONS PVT LTD",f:"JAI MATA CREATIONS PVT LTD.pdf"},
+  {l:"JAIN BUILDCON PRIVATE LIMITED",f:"JAIN BUILDCON PRIVATE LIMITED.pdf"},
+  {l:"JAIN GROUP PROJECTS PVT LTD",f:"JAIN GROUP PROJECTS PVT LTD.pdf"},
+  {l:"JAIN HEIGHTS PRIVATE LIMITED",f:"JAIN HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"JAIN PLAZA PVT LTD",f:"JAIN PLAZA PVT LTD.pdf"},
+  {l:"JAINEX COMMERCE PVT LTD",f:"JAINEX COMMERCE PVT LTD.pdf"},
+  {l:"JFC HIRE PURCHASE PVT LTD",f:"JFC HIRE PURCHASE PVT LTD.pdf"},
+  {l:"KATHRENE DESIGNER PVT LTD",f:"KATHRENE DESIGNER PVT LTD.pdf"},
+  {l:"MAHABIR BHOOMI DEVELOPERS PVT LTD",f:"MAHABIR BHOOMI DEVELOPERS PVT LTD.pdf"},
+  {l:"MAHABIR ENCLAVE PVT LTD",f:"MAHABIR ENCLAVE PVT LTD.pdf"},
+  {l:"MAHABIR GARDEN PVT LTD",f:"MAHABIR GARDEN PVT LTD.pdf"},
+  {l:"MAHABIR GRIHA NIRMAN PVT LTD",f:"MAHABIR GRIHA NIRMAN PVT LTD.pdf"},
+  {l:"MAHABIR HEIGHTS PVT LTD",f:"MAHABIR HEIGHTS PVT LTD.pdf"},
+  {l:"MAHABIR HOMES PVT LTD",f:"MAHABIR HOMES PVT LTD.pdf"},
+  {l:"MAHABIR REAL ESTATE DEVELOPERS PVT LTD",f:"MAHABIR REAL ESTATE DEVELOPERS PVT LTD.pdf"},
+  {l:"MAHABIR SKYHIGH P LTD",f:"MAHABIR SKYHIGH P LTD.pdf"},
+  {l:"MAHABIR SKYHIGH PVT LTD",f:"MAHABIR SKYHIGH PVT LTD.pdf"},
+  {l:"MANIK FINTRADE PVT LTD",f:"MANIK FINTRADE PVT LTD.pdf"},
+  {l:"MANOMAY ADVISORY PVT LTD",f:"MANOMAY ADVISORY PVT LTD.pdf"},
+  {l:"MOTITREE PROJECT MANAGERS PRIVATE LIMITED",f:"MOTITREE PROJECT MANAGERS PRIVATE LIMITED.pdf"},
+  {l:"NIDHI BHOOMI NIRMAAN PRIVATE LIMITED",f:"NIDHI BHOOMI NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"NIDHI GRIHA NIRMAN PRIVATE LIMITED",f:"NIDHI GRIHA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"NIDHI HEIGHTS PRIVATE LIMITED",f:"NIDHI HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"NIDHI INFRA DEVELOPMENT PRIVATE LIMITED",f:"NIDHI INFRA DEVELOPMENT PRIVATE LIMITED.pdf"},
+  {l:"NIDHI INFRA NIRMAAN PRIVATE LIMITED",f:"NIDHI INFRA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"NORTEL DEALCOM PVT LTD",f:"NORTEL DEALCOM PVT LTD.pdf"},
+  {l:"OMKARA DESIGNER PVT LTD",f:"OMKARA DESIGNER PVT LTD.pdf"},
+  {l:"PALANHARE APARTMENT PVT LTD",f:"PALANHARE APARTMENT PVT LTD.pdf"},
+  {l:"PALANHARE AWAS PVT LTD",f:"PALANHARE AWAS PVT LTD.pdf"},
+  {l:"PALANHARE BHOOMI NIRMAN PVT LTD",f:"PALANHARE BHOOMI NIRMAN PVT LTD.pdf"},
+  {l:"PALANHARE BUILDCON PVT LTD",f:"PALANHARE BUILDCON PVT LTD.pdf"},
+  {l:"PALANHARE BUILDTECH PVT LTD",f:"PALANHARE BUILDTECH PVT LTD.pdf"},
+  {l:"PALANHARE BUILDWELL PVT LTD",f:"PALANHARE BUILDWELL PVT LTD.pdf"},
+  {l:"PALANHARE CONCLAVE PVT LTD",f:"PALANHARE CONCLAVE PVT LTD.pdf"},
+  {l:"PALANHARE DEVELOPERS PVT LTD",f:"PALANHARE DEVELOPERS PVT LTD.pdf"},
+  {l:"PALANHARE ENCLAVE PVT LTD",f:"PALANHARE ENCLAVE PVT LTD.pdf"},
+  {l:"PALANHARE FORT PVT LTD",f:"PALANHARE FORT PVT LTD.pdf"},
+  {l:"PALANHARE HEIGHTS PVT LTD",f:"PALANHARE HEIGHTS PVT LTD.pdf"},
+  {l:"PALANHARE HIGHRISE PVT LTD",f:"PALANHARE HIGHRISE PVT LTD.pdf"},
+  {l:"PALANHARE INFRABUILD PVT LTD",f:"PALANHARE INFRABUILD PVT LTD.pdf"},
+  {l:"PALANHARE INFRACON PVT LTD",f:"PALANHARE INFRACON PVT LTD.pdf"},
+  {l:"PALANHARE INFRAESTATE PVT LTD",f:"PALANHARE INFRAESTATE PVT LTD.pdf"},
+  {l:"PALANHARE INFRASTRUCTURE PVT LTD",f:"PALANHARE INFRASTRUCTURE PVT LTD.pdf"},
+  {l:"PALANHARE KUTIR PVT LTD",f:"PALANHARE KUTIR PVT LTD.pdf"},
+  {l:"PALANHARE MANORE PVT LTD",f:"PALANHARE MANORE PVT LTD.pdf"},
+  {l:"PALANHARE NIRMAAN PVT LTD",f:"PALANHARE NIRMAAN PVT LTD.pdf"},
+  {l:"PALANHARE NIWAS PVT LTD",f:"PALANHARE NIWAS PVT LTD.pdf"},
+  {l:"PALANHARE PLAZA PVT LTD",f:"PALANHARE PLAZA PVT LTD.pdf"},
+  {l:"PALANHARE PRODEV BUILDERS PVT LTD",f:"PALANHARE PRODEV BUILDERS PVT LTD.pdf"},
+  {l:"PALANHARE PROMOTER PVT LTD",f:"PALANHARE PROMOTER PVT LTD.pdf"},
+  {l:"PALANHARE PROPERTY PVT LTD",f:"PALANHARE PROPERTY PVT LTD.pdf"},
+  {l:"PALANHARE REALCON PVT LTD",f:"PALANHARE REALCON PVT LTD.pdf"},
+  {l:"PALANHARE REALTORS PVT LTD",f:"PALANHARE REALTORS PVT LTD.pdf"},
+  {l:"PALANHARE SKYRISE PVT LTD",f:"PALANHARE SKYRISE PVT LTD.pdf"},
+  {l:"PALANHARE SKYSCRAPERS PVT LTD",f:"PALANHARE SKYSCRAPERS PVT LTD.pdf"},
+  {l:"PALANHARE TOWER PVT LTD",f:"PALANHARE TOWER PVT LTD.pdf"},
+  {l:"PALANHARE VILLA PVT LTD",f:"PALANHARE VILLA PVT LTD.pdf"},
+  {l:"PARAS FINVEST PVT LTD",f:"PARAS FINVEST PVT LTD.pdf"},
+  {l:"PICS DEALER PVT LTD",f:"PICS DEALER PVT LTD.pdf"},
+  {l:"PINKU SONU INVESTMENTS & PROPERTIES PVT LTD",f:"PINKU SONU INVESTMENTS & PROPERTIES PVT LTD.pdf"},
+  {l:"PJ BHOOMI NIRMAN PRIVATE LIMITED",f:"PJ BHOOMI NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"PJ BUILDCON PRIVATE LIMITED",f:"PJ BUILDCON PRIVATE LIMITED.pdf"},
+  {l:"PJ GRIHA NIRMAN PRIVATE LIMITED",f:"PJ GRIHA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"PJ INFRA DEVELOPMENT P LTD",f:"PJ INFRA DEVELOPMENT P LTD.pdf"},
+  {l:"PJ INFRA DEVELOPMENT PRIVATE LIMITED",f:"PJ INFRA DEVELOPMENT PRIVATE LIMITED.pdf"},
+  {l:"PJ INFRA NIRMAN PRIVATE LIMITED",f:"PJ INFRA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"R J GARDEN PVT LTD",f:"R J GARDEN PVT LTD.pdf"},
+  {l:"R J HEIGHTS PVT LTD",f:"R J HEIGHTS PVT LTD.pdf"},
+  {l:"R J HOMES PVT LTD",f:"R J HOMES PVT LTD.pdf"},
+  {l:"R J REALTORS PVT LTD",f:"R J REALTORS PVT LTD.pdf"},
+  {l:"R J SKYHIGH PVT LTD",f:"R J SKYHIGH PVT LTD.pdf"},
+  {l:"RECEPTION AGENCIES PVT LTD",f:"RECEPTION AGENCIES PVT LTD.pdf"},
+  {l:"RECEPTION MARKETING PVT LTD (2)",f:"RECEPTION MARKETING PVT LTD (2).pdf"},
+  {l:"RECEPTION MARKETING PVT LTD",f:"RECEPTION MARKETING PVT LTD.pdf"},
+  {l:"RECEPTION TRADER PVT LTD",f:"RECEPTION TRADER PVT LTD.pdf"},
+  {l:"REVERIE INFRA ESTATE PRIVATE LIMITED",f:"REVERIE INFRA ESTATE PRIVATE LIMITED.pdf"},
+  {l:"REVERIE INFRA STRUCTURAL DEVELOPMENT PVT LTD",f:"REVERIE INFRA STRUCTURAL DEVELOPMENT PVT LTD.pdf"},
+  {l:"REVERIE SKYSCRAPERS PRIVATE LIMITED",f:"REVERIE SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"RISHI BHOOMI NIRMAN PRIVATE LIMITED",f:"RISHI BHOOMI NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"RISHI HEIGHTS PRIVATE LIMITED",f:"RISHI HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"RISHI INFRA BUILDERS PVT LTD",f:"RISHI INFRA BUILDERS PVT LTD.pdf"},
+  {l:"RISHI INFRA NIRMAN PRIVATE LIMITED",f:"RISHI INFRA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"RISHI SKYHIGH PVT LTD",f:"RISHI SKYHIGH PVT LTD.pdf"},
+  {l:"RISHI SKYRISE PVT LTD",f:"RISHI SKYRISE PVT LTD.pdf"},
+  {l:"RISHI SKYSCRAPERS PVT LTD",f:"RISHI SKYSCRAPERS PVT LTD.pdf"},
+  {l:"RISU IMPEX PVT LTD",f:"RISU IMPEX PVT LTD.pdf"},
+  {l:"RIVERIE GRIHA NIRMAN PRIVATE LIMITED",f:"RIVERIE GRIHA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"RIVERIE INFRA DEVELOPERS PRIVATE LIMITED",f:"RIVERIE INFRA DEVELOPERS PRIVATE LIMITED.pdf"},
+  {l:"RIVERIE INFRA NIRMAN PRIVATE LIMITED",f:"RIVERIE INFRA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"S J HOMES PVT LTD",f:"S J HOMES PVT LTD.pdf"},
+  {l:"S J INFRA PROJECT PVT LTD",f:"S J INFRA PROJECT PVT LTD.pdf"},
+  {l:"S J SKYSCRAPERS PVT LTD",f:"S J SKYSCRAPERS PVT LTD.pdf"},
+  {l:"SALSIFY COMMOSALES PRIVATE LIMITED",f:"SALSIFY COMMOSALES PRIVATE LIMITED.pdf"},
+  {l:"SHALLOT TRADERS PRIVATE LIMITED",f:"SHALLOT TRADERS PRIVATE LIMITED.pdf"},
+  {l:"SHREE MAHAVIR INFRA NIRMAAN PRIVATE LIMITED",f:"SHREE MAHAVIR INFRA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"SYMPHONIC VANIJYA PVT LTD",f:"SYMPHONIC VANIJYA PVT LTD.pdf"},
+  {l:"TRANCE BUILDCON PRIVATE LIMITED",f:"TRANCE BUILDCON PRIVATE LIMITED.pdf"},
+  {l:"TRANCE INFRA HEIGHTS PRIVATE LIMITED",f:"TRANCE INFRA HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"TRANCE INFRA PROJECTS PRIVATE LIMITED",f:"TRANCE INFRA PROJECTS PRIVATE LIMITED.pdf"},
+  {l:"TRANCE INFRA STRUCTURAL DEVELOPMENT PVT LTD",f:"TRANCE INFRA STRUCTURAL DEVELOPMENT PVT LTD.pdf"},
+  {l:"TRANCE SKYSCRAPERS PRIVATE LIMITED",f:"TRANCE SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"U. S. CREATION PVT. LTD.",f:"U. S. CREATION PVT. LTD..pdf"},
+  {l:"WHOLESOME DESIGNER PVT LTD",f:"WHOLESOME DESIGNER PVT LTD.pdf"},
+  {l:"WHOLESOME SUPPLIER PVT LTD",f:"WHOLESOME SUPPLIER PVT LTD.pdf"}
+],
+  "15_16": [
+  {l:"ALBELA VANIJYA P LTD",f:"ALBELA VANIJYA P LTD.pdf"},
+  {l:"ALBELA VINTRADE PVT LTD",f:"ALBELA VINTRADE PVT LTD.pdf"},
+  {l:"BAJRANG CREATIONS PVT LTD",f:"BAJRANG CREATIONS PVT LTD.pdf"},
+  {l:"BHOOTHNATH MARCOM P LTD",f:"BHOOTHNATH MARCOM P LTD.pdf"},
+  {l:"BISWAPITA PROPERTIES PVT LTD",f:"BISWAPITA PROPERTIES PVT LTD.pdf"},
+  {l:"BLUE HORIZON COMMODITIES P LTD",f:"BLUE HORIZON COMMODITIES P LTD.pdf"},
+  {l:"BUTTLE CONSULTENCY PVT LTD",f:"BUTTLE CONSULTENCY PVT LTD.pdf"},
+  {l:"BUTTLE DISTRIBUTOR PVT LTD",f:"BUTTLE DISTRIBUTOR PVT LTD.pdf"},
+  {l:"DAMODAR TRADING PVT LTD",f:"DAMODAR TRADING PVT LTD.pdf"},
+  {l:"DAYAWAN COMMOSALE PVT LTD",f:"DAYAWAN COMMOSALE PVT LTD.pdf"},
+  {l:"DHANRISHI SALES PVT LTD",f:"DHANRISHI SALES PVT LTD.pdf"},
+  {l:"DOLPHIN AGENTS PVT LTD",f:"DOLPHIN AGENTS PVT LTD.pdf"},
+  {l:"DREAM APARTMENT HOUSING PVT LTD",f:"DREAM APARTMENT HOUSING PVT LTD.pdf"},
+  {l:"DREAM APPLICATION SOFTWARE PVT LTD",f:"DREAM APPLICATION SOFTWARE PVT LTD.pdf"},
+  {l:"DREAM DEVELOPERS PVT LTD",f:"DREAM DEVELOPERS PVT LTD.pdf"},
+  {l:"DREAM ENCLAVE PVT LTD",f:"DREAM ENCLAVE PVT LTD.pdf"},
+  {l:"DREAM GATEWAY HOTELS PVT LTD",f:"DREAM GATEWAY HOTELS PVT LTD.pdf"},
+  {l:"DREAM INFRA NIRMAAN PVT LTD",f:"DREAM INFRA NIRMAAN PVT LTD.pdf"},
+  {l:"DREAM NIRMAN PVT LTD",f:"DREAM NIRMAN PVT LTD.pdf"},
+  {l:"DREAM PARK HOUSING P LTD",f:"DREAM PARK HOUSING P LTD.pdf"},
+  {l:"DREAM PLAZZA PVT LTD",f:"DREAM PLAZZA PVT LTD.pdf"},
+  {l:"DREAM PROJECTS BALANCE SHEET F.Y-15-16",f:"DREAM PROJECTS BALANCE SHEET F.Y-15-16.pdf"},
+  {l:"DREAM REALITIES PVT LTD",f:"DREAM REALITIES PVT LTD.pdf"},
+  {l:"DREAM RESIDENCY HOUSING PVT LTD",f:"DREAM RESIDENCY HOUSING PVT LTD.pdf"},
+  {l:"DREAM RETREATS PVT LTD",f:"DREAM RETREATS PVT LTD.pdf"},
+  {l:"DREAM SKYSCRAPERS PVT LTD",f:"DREAM SKYSCRAPERS PVT LTD.pdf"},
+  {l:"DREAM TOWER KOLKATA PVT LTD",f:"DREAM TOWER KOLKATA PVT LTD.pdf"},
+  {l:"DUBSON DEALCOM PVT LTD",f:"DUBSON DEALCOM PVT LTD.pdf"},
+  {l:"FAIRDEAL ENCLAVE PVT LTD",f:"FAIRDEAL ENCLAVE PVT LTD.pdf"},
+  {l:"FAIRDEAL GRIHA NIRMAN PVT LTD",f:"FAIRDEAL GRIHA NIRMAN PVT LTD.pdf"},
+  {l:"FAIRDEAL HEIGHT  PVT LTD",f:"FAIRDEAL HEIGHT  PVT LTD.pdf"},
+  {l:"FAIRDEAL HOUSING PVT LTD",f:"FAIRDEAL HOUSING PVT LTD.pdf"},
+  {l:"FAIRDEAL INFRA BUILDERS PVT LTD",f:"FAIRDEAL INFRA BUILDERS PVT LTD.pdf"},
+  {l:"FAIRDEAL INFRA VENTURE PVT LTD",f:"FAIRDEAL INFRA VENTURE PVT LTD.pdf"},
+  {l:"FAIRDEAL REALESTATE DEVELOPERS PVT LTD",f:"FAIRDEAL REALESTATE DEVELOPERS PVT LTD.pdf"},
+  {l:"FAIRDEAL SKYHIGH  PVT LTD",f:"FAIRDEAL SKYHIGH  PVT LTD.pdf"},
+  {l:"FAIRDEAL SKYRISE PVT LTD",f:"FAIRDEAL SKYRISE PVT LTD.pdf"},
+  {l:"FAIRDEAL SKYSCRAPERS PVT LTD",f:"FAIRDEAL SKYSCRAPERS PVT LTD.pdf"},
+  {l:"GILLANDERS  PROPERTIES PVT LTD",f:"GILLANDERS  PROPERTIES PVT LTD.pdf"},
+  {l:"GOLDVIEW VANIJYA PVT LTD",f:"GOLDVIEW VANIJYA PVT LTD.pdf"},
+  {l:"GROWWELL VYAPAAR PVT LTD",f:"GROWWELL VYAPAAR PVT LTD.pdf"},
+  {l:"INNOCENT DESIGNER PVT LTD",f:"INNOCENT DESIGNER PVT LTD.pdf"},
+  {l:"JAI MATA CREATIONS PVT LTD",f:"JAI MATA CREATIONS PVT LTD.pdf"},
+  {l:"JAIN BUILDCON PVT LTD",f:"JAIN BUILDCON PVT LTD.pdf"},
+  {l:"JAIN GROUP PROJECTS PVT.LTD",f:"JAIN GROUP PROJECTS PVT.LTD.pdf"},
+  {l:"JAIN HEIGHTS PVT LTD",f:"JAIN HEIGHTS PVT LTD.pdf"},
+  {l:"JAIN PLAZA PVT LTD",f:"JAIN PLAZA PVT LTD.pdf"},
+  {l:"JAINEX COMMERCE PVT LTD",f:"JAINEX COMMERCE PVT LTD.pdf"},
+  {l:"JFC HIRE PURCHASE PVT LTD",f:"JFC HIRE PURCHASE PVT LTD.pdf"},
+  {l:"KATHRENE DESIGNER PVT LTD",f:"KATHRENE DESIGNER PVT LTD.pdf"},
+  {l:"MAHABIR BHOOMI DEVELOPERS PVT LTD",f:"MAHABIR BHOOMI DEVELOPERS PVT LTD.pdf"},
+  {l:"MAHABIR ENCLAVE PVT LTD",f:"MAHABIR ENCLAVE PVT LTD.pdf"},
+  {l:"MAHABIR GARDEN PVT LTD",f:"MAHABIR GARDEN PVT LTD.pdf"},
+  {l:"MAHABIR GRIHA NIRMAN PVT LTD",f:"MAHABIR GRIHA NIRMAN PVT LTD.pdf"},
+  {l:"MAHABIR HEIGHTS PVT LTD",f:"MAHABIR HEIGHTS PVT LTD.pdf"},
+  {l:"MAHABIR HOMES PVT LTD",f:"MAHABIR HOMES PVT LTD.pdf"},
+  {l:"MAHABIR REAL ESTATE DEVELOPERS PVT LTD",f:"MAHABIR REAL ESTATE DEVELOPERS PVT LTD.pdf"},
+  {l:"MAHABIR SKYHIGH PVT LTD",f:"MAHABIR SKYHIGH PVT LTD.pdf"},
+  {l:"MANIK FINTRADE PVT LTD",f:"MANIK FINTRADE PVT LTD.pdf"},
+  {l:"MANOMAY ADVISORY PVT LTD",f:"MANOMAY ADVISORY PVT LTD.pdf"},
+  {l:"MOTITREE PROJECT MANAGERS PVT LTD",f:"MOTITREE PROJECT MANAGERS PVT LTD.pdf"},
+  {l:"NETTLES TRADERS PVT LTD",f:"NETTLES TRADERS PVT LTD.pdf"},
+  {l:"NIDHI BHOOMI NIRMAN PVT LTD",f:"NIDHI BHOOMI NIRMAN PVT LTD.pdf"},
+  {l:"NIDHI GRIHA NIRMAAN PVT LTD",f:"NIDHI GRIHA NIRMAAN PVT LTD.pdf"},
+  {l:"NIDHI HEIGHTS PVT LTD",f:"NIDHI HEIGHTS PVT LTD.pdf"},
+  {l:"NIDHI INFRA DEVELOPEMENT PVT LTD",f:"NIDHI INFRA DEVELOPEMENT PVT LTD.pdf"},
+  {l:"NIDHI INFRA NIRMAAN PVT LTD",f:"NIDHI INFRA NIRMAAN PVT LTD.pdf"},
+  {l:"NORTEL DEALCOM PVT LTD",f:"NORTEL DEALCOM PVT LTD.pdf"},
+  {l:"OMKARA DESIGNER PVT LTD",f:"OMKARA DESIGNER PVT LTD.pdf"},
+  {l:"P J BHOOMI NIRMAAN PVT LTD",f:"P J BHOOMI NIRMAAN PVT LTD.pdf"},
+  {l:"P J BUILDCON PVT LTD",f:"P J BUILDCON PVT LTD.pdf"},
+  {l:"P J GRIHA NIRMAAN PVT LTD",f:"P J GRIHA NIRMAAN PVT LTD.pdf"},
+  {l:"PALANHARA FORT PVT LTD",f:"PALANHARA FORT PVT LTD.pdf"},
+  {l:"PALANHARE APARTMENT PVT LTD",f:"PALANHARE APARTMENT PVT LTD.pdf"},
+  {l:"PALANHARE BHOOMI NIRMAN PVT LTD",f:"PALANHARE BHOOMI NIRMAN PVT LTD.pdf"},
+  {l:"PALANHARE BUILDTECH PVT LTD",f:"PALANHARE BUILDTECH PVT LTD.pdf"},
+  {l:"PALANHARE BUILDWELL PVT LTD",f:"PALANHARE BUILDWELL PVT LTD.pdf"},
+  {l:"PALANHARE CONCLAVE PVT LTD",f:"PALANHARE CONCLAVE PVT LTD.pdf"},
+  {l:"PALANHARE ENCLAVE PVT LTD",f:"PALANHARE ENCLAVE PVT LTD.pdf"},
+  {l:"PALANHARE INFRACON PVT LTD",f:"PALANHARE INFRACON PVT LTD.pdf"},
+  {l:"PALANHARE INFRAESTATE PVT LTD",f:"PALANHARE INFRAESTATE PVT LTD.pdf"},
+  {l:"PALANHARE INFRASTRUCTURE PVT LTD",f:"PALANHARE INFRASTRUCTURE PVT LTD.pdf"},
+  {l:"PALANHARE KUTIR PVT LTD",f:"PALANHARE KUTIR PVT LTD.pdf"},
+  {l:"PALANHARE NIRMAAN PVT LTD",f:"PALANHARE NIRMAAN PVT LTD.pdf"},
+  {l:"PALANHARE NIWAS PVT LTD",f:"PALANHARE NIWAS PVT LTD.pdf"},
+  {l:"PALANHARE PLAZA PVT LTD",f:"PALANHARE PLAZA PVT LTD.pdf"},
+  {l:"PALANHARE PRODEV BUILDERS PVT LTD",f:"PALANHARE PRODEV BUILDERS PVT LTD.pdf"},
+  {l:"PALANHARE PROPERTY PVT LTD",f:"PALANHARE PROPERTY PVT LTD.pdf"},
+  {l:"PALANHARE REALCON PVT LTD",f:"PALANHARE REALCON PVT LTD.pdf"},
+  {l:"PALANHARE REALTORS PVT LTD",f:"PALANHARE REALTORS PVT LTD.pdf"},
+  {l:"PALANHARE TOWER PVT LTD",f:"PALANHARE TOWER PVT LTD.pdf"},
+  {l:"PALANHARE VILLA PVT LTD",f:"PALANHARE VILLA PVT LTD.pdf"},
+  {l:"PANAHARE BUILDCON PVT LTD",f:"PANAHARE BUILDCON PVT LTD.pdf"},
+  {l:"PARAS FINVEST PVT LTD",f:"PARAS FINVEST PVT LTD.pdf"},
+  {l:"PICS DEALER PVT LTD",f:"PICS DEALER PVT LTD.pdf"},
+  {l:"PINKU SONU INVESTMENTS & PROPERTIES PVT LTD",f:"PINKU SONU INVESTMENTS & PROPERTIES PVT LTD.pdf"},
+  {l:"PJ HEIGHT PVT LTD",f:"PJ HEIGHT PVT LTD.pdf"},
+  {l:"PJ INFRA DEVELOPMENT PVT LTD",f:"PJ INFRA DEVELOPMENT PVT LTD.pdf"},
+  {l:"PJ INFRA NIRMAN PVT LTD",f:"PJ INFRA NIRMAN PVT LTD.pdf"},
+  {l:"R.J. REALTORS PVT LTD",f:"R.J. REALTORS PVT LTD.pdf"},
+  {l:"R.J.GARDEN PVT LTD",f:"R.J.GARDEN PVT LTD.pdf"},
+  {l:"R.J.HEIGHTS PVT LTD",f:"R.J.HEIGHTS PVT LTD.pdf"},
+  {l:"R.J.HOMES PVT LTD",f:"R.J.HOMES PVT LTD.pdf"},
+  {l:"R.J.SKYHIGH PVT LTD",f:"R.J.SKYHIGH PVT LTD.pdf"},
+  {l:"RAVERIE INFRA STRUCTURAL DEVELOPMENT PVT LTD",f:"RAVERIE INFRA STRUCTURAL DEVELOPMENT PVT LTD.pdf"},
+  {l:"RECEPTION AGENCIES PVT LTD",f:"RECEPTION AGENCIES PVT LTD.pdf"},
+  {l:"RECEPTION MARKETING PVT LTD",f:"RECEPTION MARKETING PVT LTD.pdf"},
+  {l:"RECEPTION TRADER PVT LTD",f:"RECEPTION TRADER PVT LTD.pdf"},
+  {l:"REVERIE INFRA ESTATE PVT LTD",f:"REVERIE INFRA ESTATE PVT LTD.pdf"},
+  {l:"REVERIE SKYSCRAPERS PVT LTD",f:"REVERIE SKYSCRAPERS PVT LTD.pdf"},
+  {l:"RISHI BHOOMI NIRMAN PVT LTD",f:"RISHI BHOOMI NIRMAN PVT LTD.pdf"},
+  {l:"RISHI HEIGHTS PVT LTD",f:"RISHI HEIGHTS PVT LTD.pdf"},
+  {l:"RISHI INFRA BUILDERS PVT LTD",f:"RISHI INFRA BUILDERS PVT LTD.pdf"},
+  {l:"RISHI INFRA NIRMAAN PVT LTD",f:"RISHI INFRA NIRMAAN PVT LTD.pdf"},
+  {l:"RISHI SKYHIGH PVT LTD",f:"RISHI SKYHIGH PVT LTD.pdf"},
+  {l:"RISHI SKYRISE PVT LTD",f:"RISHI SKYRISE PVT LTD.pdf"},
+  {l:"RISHI SKYSCRAPERS  PVT LTD",f:"RISHI SKYSCRAPERS  PVT LTD.pdf"},
+  {l:"RISU IMPEX PVT LTD",f:"RISU IMPEX PVT LTD.pdf"},
+  {l:"RIVERIE GRIHA NIRMAN PVT LTD",f:"RIVERIE GRIHA NIRMAN PVT LTD.pdf"},
+  {l:"RIVERIE INFRA DEVELOPERS PVT LTD",f:"RIVERIE INFRA DEVELOPERS PVT LTD.pdf"},
+  {l:"RIVERIE INFRA NIRMAAN PVT LTD",f:"RIVERIE INFRA NIRMAAN PVT LTD.pdf"},
+  {l:"S.J INFRA PROJECT PVT LTD",f:"S.J INFRA PROJECT PVT LTD.pdf"},
+  {l:"S.J. HOMES PVT LTD",f:"S.J. HOMES PVT LTD.pdf"},
+  {l:"S.J.SKYSCRAPERS PVT LTD",f:"S.J.SKYSCRAPERS PVT LTD.pdf"},
+  {l:"SALSIFY COMMOSALES PVT LTD",f:"SALSIFY COMMOSALES PVT LTD.pdf"},
+  {l:"SHALLOT TRADERS PVT LTD",f:"SHALLOT TRADERS PVT LTD.pdf"},
+  {l:"SHREE MAHAVIR INFRA PVT LTD",f:"SHREE MAHAVIR INFRA PVT LTD.pdf"},
+  {l:"SYMPHONIC VANIJYA PVT LTD",f:"SYMPHONIC VANIJYA PVT LTD.pdf"},
+  {l:"TRANCE BUILDCON PVT LTD",f:"TRANCE BUILDCON PVT LTD.pdf"},
+  {l:"TRANCE INFRA HEIGHT PVT LTD",f:"TRANCE INFRA HEIGHT PVT LTD.pdf"},
+  {l:"TRANCE INFRA PROJECTS PVT LTD",f:"TRANCE INFRA PROJECTS PVT LTD.pdf"},
+  {l:"TRANCE INFRA STRUCTURAL PVT LTD",f:"TRANCE INFRA STRUCTURAL PVT LTD.pdf"},
+  {l:"TRANCE SKYCRAPERS PVT LTD",f:"TRANCE SKYCRAPERS PVT LTD.pdf"},
+  {l:"US CREATION PVT LTD",f:"US CREATION PVT LTD.pdf"},
+  {l:"WHOLESOME DESIGNER PVT LTD",f:"WHOLESOME DESIGNER PVT LTD.pdf"},
+  {l:"WHOLESOME SUPPLIER P LTD",f:"WHOLESOME SUPPLIER P LTD.pdf"}
+],
+  "16_17": [
+  {l:"ALBELA VANIIYA PRIVATE LIMITED",f:"ALBELA VANIIYA PRIVATE LIMITED.pdf"},
+  {l:"ALBELA VINTRADE PRIVATE LIMITED",f:"ALBELA VINTRADE PRIVATE LIMITED.pdf"},
+  {l:"BAJRANG CREATIONS PRIVATE LIMITED",f:"BAJRANG CREATIONS PRIVATE LIMITED.pdf"},
+  {l:"BISWAPITA PROPERTIES PRIVATE LIMITED",f:"BISWAPITA PROPERTIES PRIVATE LIMITED.pdf"},
+  {l:"BLUE HORIZON COMMODITIES.PRIVATE LIMITED",f:"BLUE HORIZON COMMODITIES.PRIVATE LIMITED.pdf"},
+  {l:"BOOTHNATH MARCOM PRIVATE LIMITED",f:"BOOTHNATH MARCOM PRIVATE LIMITED.pdf"},
+  {l:"BUTTLE CONSULTANCY PRIVATE LIMITED",f:"BUTTLE CONSULTANCY PRIVATE LIMITED.pdf"},
+  {l:"BUTTLE DISTRIBUTOR PRTVATE LIMITED",f:"BUTTLE DISTRIBUTOR PRTVATE LIMITED.pdf"},
+  {l:"DAMODAR TRADING PRIVATE LIMITED",f:"DAMODAR TRADING PRIVATE LIMITED.pdf"},
+  {l:"DAYAWAN COMMOSALE PRIVATE LIMITED",f:"DAYAWAN COMMOSALE PRIVATE LIMITED.pdf"},
+  {l:"DHANRISHI SALES PRIVATE LIMITED",f:"DHANRISHI SALES PRIVATE LIMITED.pdf"},
+  {l:"DOLPHIN AGENTS PRIVATE LIMITED",f:"DOLPHIN AGENTS PRIVATE LIMITED.pdf"},
+  {l:"DREAM APARTMENT HOUSING PRIVATE LIMITED",f:"DREAM APARTMENT HOUSING PRIVATE LIMITED.pdf"},
+  {l:"DREAM APPLICATION SOFTWARE PRIVATE LIMITED",f:"DREAM APPLICATION SOFTWARE PRIVATE LIMITED.pdf"},
+  {l:"DREAM DEVELOPERS PRIVATE LIMITED",f:"DREAM DEVELOPERS PRIVATE LIMITED.pdf"},
+  {l:"DREAM ENCTAVE PRTVATE LIMITED",f:"DREAM ENCTAVE PRTVATE LIMITED.pdf"},
+  {l:"DREAM GATEWAY HOTELS PRIVATE LIMITED",f:"DREAM GATEWAY HOTELS PRIVATE LIMITED.pdf"},
+  {l:"DREAM INFRA NIBMAAN PRIVATE LIMITED",f:"DREAM INFRA NIBMAAN PRIVATE LIMITED.pdf"},
+  {l:"DREAM NIRMAN PRIVATE LIMITED",f:"DREAM NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"DREAM PARK HOUSING PRTVATE LIMITED",f:"DREAM PARK HOUSING PRTVATE LIMITED.pdf"},
+  {l:"DREAM PLAZA PRIVATE LIMITED",f:"DREAM PLAZA PRIVATE LIMITED.pdf"},
+  {l:"DREAM REALITIES PRIVATE LIMITED",f:"DREAM REALITIES PRIVATE LIMITED.pdf"},
+  {l:"DREAM RESIDENCY HOUSING PRTVATE LIMITED",f:"DREAM RESIDENCY HOUSING PRTVATE LIMITED.pdf"},
+  {l:"DREAM RETREATS PRTVATE LIMITED",f:"DREAM RETREATS PRTVATE LIMITED.pdf"},
+  {l:"DREAM SKYSCRAPERS PRIVATE LIMITED",f:"DREAM SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"DREAM TOWER KOLKATA PRIVATE LIMITED",f:"DREAM TOWER KOLKATA PRIVATE LIMITED.pdf"},
+  {l:"DUBSON DEALCOM PRIVATE LIMITED",f:"DUBSON DEALCOM PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL ENCLAVE PRIVATE LIMITED",f:"FAIRDEAL ENCLAVE PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL GRIHA NIRMAN PRIVATE LIMITED",f:"FAIRDEAL GRIHA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL HEIGHTS PRIVATE LIMITED",f:"FAIRDEAL HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL HOUSING PRIVATE LIMITED",f:"FAIRDEAL HOUSING PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL INFRA BUILDERS PRIVATE LIMITED",f:"FAIRDEAL INFRA BUILDERS PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL INFRA VENTURBS PRIVATE LIMITED",f:"FAIRDEAL INFRA VENTURBS PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL REAL ESTATE DEVELOPERS PRIVATE LIMITED",f:"FAIRDEAL REAL ESTATE DEVELOPERS PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL SKYHIGH PRIVATE LIMITED",f:"FAIRDEAL SKYHIGH PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL SKYRISE PRIVATE LIMITED",f:"FAIRDEAL SKYRISE PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL SKYSCRAPERS PRIVATE LIMITED",f:"FAIRDEAL SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"GILLANDERS PROPERTIES PRIVATE LIMTTED",f:"GILLANDERS PROPERTIES PRIVATE LIMTTED.pdf"},
+  {l:"GOLDVIEW VANIIYA PRIVATE LIMITED",f:"GOLDVIEW VANIIYA PRIVATE LIMITED.pdf"},
+  {l:"GROWWELL VYAPAAR PRIVATE LIMITED",f:"GROWWELL VYAPAAR PRIVATE LIMITED.pdf"},
+  {l:"INDEPENDENT AUDITOR'S REPORT",f:"INDEPENDENT AUDITOR'S REPORT.pdf"},
+  {l:"INNOCENT DESIGNER PRIVATE LIMITED",f:"INNOCENT DESIGNER PRIVATE LIMITED.pdf"},
+  {l:"JAI MATA CREATIONS PRIVATE LIMITED",f:"JAI MATA CREATIONS PRIVATE LIMITED.pdf"},
+  {l:"JAIN GROUP PROJECT PRIVATE LIMITED",f:"JAIN GROUP PROJECT PRIVATE LIMITED.pdf"},
+  {l:"JAIN PLAZA PRIVATE LIMITED",f:"JAIN PLAZA PRIVATE LIMITED.pdf"},
+  {l:"JAINEX COMMERCE PRIVATE LIMITED",f:"JAINEX COMMERCE PRIVATE LIMITED.pdf"},
+  {l:"KATHRENE DESIGNER PRIVATE LINIITED",f:"KATHRENE DESIGNER PRIVATE LINIITED.pdf"},
+  {l:"MAHABIR BHOOMI DEVELOPERS PRIVATE LIMITED",f:"MAHABIR BHOOMI DEVELOPERS PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR ENCLAVE PRIVATE LIMITED",f:"MAHABIR ENCLAVE PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR GARDEN PRIVATE LIMITED",f:"MAHABIR GARDEN PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR GRIHA NIRMAN PRIVATE LIMITED",f:"MAHABIR GRIHA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR HEIGHTS PRIVATE LIMITED",f:"MAHABIR HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR HOMES PRIVATE LIMITED",f:"MAHABIR HOMES PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR REAL ESTATE DEVELOPERS PRIVATE LIMITED",f:"MAHABIR REAL ESTATE DEVELOPERS PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR SKYHIGH PRIVATE LIMITED",f:"MAHABIR SKYHIGH PRIVATE LIMITED.pdf"},
+  {l:"MANIK FINTRADE PRIVATE LIMITED",f:"MANIK FINTRADE PRIVATE LIMITED.pdf"},
+  {l:"MANOMAY ADVISORY PRIVATE LIMITED",f:"MANOMAY ADVISORY PRIVATE LIMITED.pdf"},
+  {l:"MOTITREE PROJECT MANAGERS PRIVATE LIMITED",f:"MOTITREE PROJECT MANAGERS PRIVATE LIMITED.pdf"},
+  {l:"NETTLESS TRADERS PRIVATE LIMITED",f:"NETTLESS TRADERS PRIVATE LIMITED.pdf"},
+  {l:"NIDHI BHOOMI NIRMAAN PRIVATE LIMITED",f:"NIDHI BHOOMI NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"NIDHI GRIHA NIRMAAN PRIVATE LIMITED",f:"NIDHI GRIHA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"NIDHI HEIGHTS PRIVATE LIMITED",f:"NIDHI HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"NIDHI INFRA DEVELOPMENT PRIVATE LIMITED",f:"NIDHI INFRA DEVELOPMENT PRIVATE LIMITED.pdf"},
+  {l:"NIDHI INFRA NIRMAAN PRIVATE LIMITED",f:"NIDHI INFRA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"NORTEL DEALCOM PRIVATE LIMITED",f:"NORTEL DEALCOM PRIVATE LIMITED.pdf"},
+  {l:"OMKARA DESIGNER PRIVATE LIMITED",f:"OMKARA DESIGNER PRIVATE LIMITED.pdf"},
+  {l:"P J BHOOMI NIRMAAN PRIVATE LIMITED",f:"P J BHOOMI NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"P J BUILDCON PRIVATE LIMITED",f:"P J BUILDCON PRIVATE LIMITED.pdf"},
+  {l:"P J GRIHA NIRMAAN PRIVATE LIMITED",f:"P J GRIHA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"P J HEIGHTS PRIVATE LIMITED",f:"P J HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"P J INFRA DEVELOPMENT PRIVATE LIMITED",f:"P J INFRA DEVELOPMENT PRIVATE LIMITED.pdf"},
+  {l:"P J INFRA NIRMAN PRIVATE LIMITED",f:"P J INFRA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"PALANHAITE KUTIR PRIVATE LIMITED",f:"PALANHAITE KUTIR PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE APARTMENT PRIVATE LIMITED",f:"PALANHARE APARTMENT PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE BHOOMI NIRMAN PRIVATE LIMITED",f:"PALANHARE BHOOMI NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE BUILDCON PRIVATE LIMITED",f:"PALANHARE BUILDCON PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE BUILDTECH PRIVATE LIMITED",f:"PALANHARE BUILDTECH PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE BUILDWELL PRIVATE LIMITED",f:"PALANHARE BUILDWELL PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE CONCLAVE PRIVATE LIMITED",f:"PALANHARE CONCLAVE PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE ENCLAVE PRIVATE LIMITED",f:"PALANHARE ENCLAVE PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE FORT PRIVATE LIMITED",f:"PALANHARE FORT PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE INFRACON PRIVATE LIMITED",f:"PALANHARE INFRACON PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE INFRAESTATE PRIVATE LIMITED",f:"PALANHARE INFRAESTATE PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE INFRASTRUCTURE PRIVATE LIMITED",f:"PALANHARE INFRASTRUCTURE PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE NIRMAAN PRIVATE LIMITED",f:"PALANHARE NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE NIWAS PRIVATE LIMITED",f:"PALANHARE NIWAS PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE PLAZA PRIVATE LIMITED",f:"PALANHARE PLAZA PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE PRODEV BUILDERS PRIVATE LIMITED",f:"PALANHARE PRODEV BUILDERS PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE PROPERTY PRIVATE LIMITED",f:"PALANHARE PROPERTY PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE REALCON PRIVATE LIMITED",f:"PALANHARE REALCON PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE REALTORS PRIVATE LIMITED",f:"PALANHARE REALTORS PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE TOWER PRIVATE LIMITED",f:"PALANHARE TOWER PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE VILLA PRIVATE LIMITED",f:"PALANHARE VILLA PRIVATE LIMITED.pdf"},
+  {l:"PARAS FINVEST PRIVATE LIMITED",f:"PARAS FINVEST PRIVATE LIMITED.pdf"},
+  {l:"PICS DEATER PRIVATE LIMITED",f:"PICS DEATER PRIVATE LIMITED.pdf"},
+  {l:"PINKU SONU INVESTMENT & PROPERTIES PRIVATE LIMITED",f:"PINKU SONU INVESTMENT & PROPERTIES PRIVATE LIMITED.pdf"},
+  {l:"R J GARDEN PRIVATE LIMITED",f:"R J GARDEN PRIVATE LIMITED.pdf"},
+  {l:"R J HEIGHTS PRIVATE LIMITED",f:"R J HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"R J HOMES PRIVATE LIMITED",f:"R J HOMES PRIVATE LIMITED.pdf"},
+  {l:"R J REALTORS PRIVATE LIMITED",f:"R J REALTORS PRIVATE LIMITED.pdf"},
+  {l:"R J SKYHIGH PRIVATE LIMITED",f:"R J SKYHIGH PRIVATE LIMITED.pdf"},
+  {l:"RECEPTION AGENCIES PRIVATE LIMITED",f:"RECEPTION AGENCIES PRIVATE LIMITED.pdf"},
+  {l:"RISHI INFRA NIRMAAN PRIVATE LIMITED",f:"RISHI INFRA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"RISHI SKYHIGH PRIVATE LIMITED",f:"RISHI SKYHIGH PRIVATE LIMITED.pdf"},
+  {l:"RISHI SKYRISE PRIVATE LIMITED",f:"RISHI SKYRISE PRIVATE LIMITED.pdf"},
+  {l:"RISHI SKYSCRAPERS PRIVATE LIMITED",f:"RISHI SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"RISHU IMPEX PRIVATE LIMITED",f:"RISHU IMPEX PRIVATE LIMITED.pdf"},
+  {l:"RIVERIE GRIHA NIRMAAN PRIVATE LIMITED",f:"RIVERIE GRIHA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"RIVERIE INFRA DEVELOPERS PRIVATE LIMITED",f:"RIVERIE INFRA DEVELOPERS PRIVATE LIMITED.pdf"},
+  {l:"RIVERIE INFRA NIRMAN PRIVATE LIMITED",f:"RIVERIE INFRA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"S J HOMES PRIVATE LIMITED",f:"S J HOMES PRIVATE LIMITED.pdf"},
+  {l:"S J SKYSCRAPERS PRIVATE LIMITED",f:"S J SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"SALSIFY COMMOSALES PRIVATE LIMITED",f:"SALSIFY COMMOSALES PRIVATE LIMITED.pdf"},
+  {l:"SHALLOT TRADERS PRIVATE LIMITED",f:"SHALLOT TRADERS PRIVATE LIMITED.pdf"},
+  {l:"SJ INFRA PROIECTS PRIVATE LIMITED",f:"SJ INFRA PROIECTS PRIVATE LIMITED.pdf"},
+  {l:"SYMPHONIC VANIJYA PRIVATE LIMITED",f:"SYMPHONIC VANIJYA PRIVATE LIMITED.pdf"},
+  {l:"TAIN BUILDCON PRIVATE LIMITED",f:"TAIN BUILDCON PRIVATE LIMITED.pdf"},
+  {l:"TAIN HEIGHTS PRIVATE LIMITED",f:"TAIN HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"TRANCE BUILDCON PRIVATE LIMITED",f:"TRANCE BUILDCON PRIVATE LIMITED.pdf"},
+  {l:"TRANCE INFRA HEIGHTS PRIVATE LIMITED",f:"TRANCE INFRA HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"TRANCE INFRA PROTECTS PRIVATE LIMITED",f:"TRANCE INFRA PROTECTS PRIVATE LIMITED.pdf"},
+  {l:"TRANCE INFRA STRUCTURAL DEVELOPMENT PRIVATE LIMITED",f:"TRANCE INFRA STRUCTURAL DEVELOPMENT PRIVATE LIMITED.pdf"},
+  {l:"TRANCE SKYSCRAPERS PRIVATE LIMITED",f:"TRANCE SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"US CREATION PRIVATE LIMITED",f:"US CREATION PRIVATE LIMITED.pdf"},
+  {l:"WHOLESOME DESIGNER PRIVATE LIMITED",f:"WHOLESOME DESIGNER PRIVATE LIMITED.pdf"},
+  {l:"WHOLESOME SUPPLIER PRIVATE LIMITED",f:"WHOLESOME SUPPLIER PRIVATE LIMITED.pdf"}
+],
+  "17_18": [
+  {l:"ALBELA VANIJYA PVT LTD",f:"ALBELA VANIJYA PVT LTD.pdf"},
+  {l:"ALBELA VINTRADE PRIVATE LIMITED",f:"ALBELA VINTRADE PRIVATE LIMITED.pdf"},
+  {l:"ARTMICADO PRIVATE LIMITED",f:"ARTMICADO PRIVATE LIMITED.pdf"},
+  {l:"BAJRANG CREATION PRIVATE LIMITED",f:"BAJRANG CREATION PRIVATE LIMITED.pdf"},
+  {l:"BISWAPITA PROPERTIES PRIVATE LIMITED",f:"BISWAPITA PROPERTIES PRIVATE LIMITED.pdf"},
+  {l:"BLUE HORIZON COMMODITIES PRIVATE LIMITED",f:"BLUE HORIZON COMMODITIES PRIVATE LIMITED.pdf"},
+  {l:"BOOTHNATH MARCOM PRIVATE LIMITED",f:"BOOTHNATH MARCOM PRIVATE LIMITED.pdf"},
+  {l:"BUTTLE CONSULTANCY PRIVATE LIMITED",f:"BUTTLE CONSULTANCY PRIVATE LIMITED.pdf"},
+  {l:"BUTTLE DISTRIBUTOR PRIVATE LIMITED",f:"BUTTLE DISTRIBUTOR PRIVATE LIMITED.pdf"},
+  {l:"DAMODAR TRADING PVT LTD",f:"DAMODAR TRADING PVT LTD.pdf"},
+  {l:"DAYAWAN COMMOSALE PRIVATE LIMITED",f:"DAYAWAN COMMOSALE PRIVATE LIMITED.pdf"},
+  {l:"DHANRISHI SALES PRIVATE LIMITED",f:"DHANRISHI SALES PRIVATE LIMITED.pdf"},
+  {l:"DOLPHIN AGENTS PVT LTD",f:"DOLPHIN AGENTS PVT LTD.pdf"},
+  {l:"DREAM APPARTMENT HOUSING PRIVATE LIMITED",f:"DREAM APPARTMENT HOUSING PRIVATE LIMITED.pdf"},
+  {l:"DREAM APPLICATION PRIVATE LIMITED",f:"DREAM APPLICATION PRIVATE LIMITED.pdf"},
+  {l:"DREAM DEVLOPERS PRIVATE LIMITED",f:"DREAM DEVLOPERS PRIVATE LIMITED.pdf"},
+  {l:"DREAM ENCLAVE PRIVATE LIMITED",f:"DREAM ENCLAVE PRIVATE LIMITED.pdf"},
+  {l:"DREAM GATEWAY HOTEL LIMITED",f:"DREAM GATEWAY HOTEL LIMITED.pdf"},
+  {l:"DREAM INFRA NIRMAAN PRIVATE LIMITED",f:"DREAM INFRA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"DREAM NIRMAN PVT LTD",f:"DREAM NIRMAN PVT LTD.pdf"},
+  {l:"DREAM PARK HOUSING PVT LTD",f:"DREAM PARK HOUSING PVT LTD.pdf"},
+  {l:"DREAM PLAZA PRIVATE LIMITED",f:"DREAM PLAZA PRIVATE LIMITED.pdf"},
+  {l:"DREAM REALITIES PRIVATE LIMITED",f:"DREAM REALITIES PRIVATE LIMITED.pdf"},
+  {l:"DREAM RESIDENCY HOUSING PRIVATE LIMITED",f:"DREAM RESIDENCY HOUSING PRIVATE LIMITED.pdf"},
+  {l:"DREAM RETREATS PRIVATE LIMITED",f:"DREAM RETREATS PRIVATE LIMITED.pdf"},
+  {l:"DREAM SKYSCRAPERS PRIVATE LIMITED",f:"DREAM SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"DREAM TOWER KOLKATA PRIVATE LIMITED",f:"DREAM TOWER KOLKATA PRIVATE LIMITED.pdf"},
+  {l:"DUBSON DEALCOM PVT LTD",f:"DUBSON DEALCOM PVT LTD.pdf"},
+  {l:"FAIRDEAL ENCLAVE PRIVATE LIMITED",f:"FAIRDEAL ENCLAVE PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL GRIHA NIRMAN PRIVATE LIMITED",f:"FAIRDEAL GRIHA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL HEIGHTS PRIVATE LIMITED",f:"FAIRDEAL HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL HOUSING PRIVATE LIMITED",f:"FAIRDEAL HOUSING PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL INFRA BUILDERS PRIVATE LIMITED",f:"FAIRDEAL INFRA BUILDERS PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL INFRA VENTURES PRIVATE LIMITED",f:"FAIRDEAL INFRA VENTURES PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL REAL ESTATE DEVLOPERS PRIVATE LIMITED",f:"FAIRDEAL REAL ESTATE DEVLOPERS PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL SKYHIGH PRIVATE LIMITED",f:"FAIRDEAL SKYHIGH PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL SKYRISE PRIVATE LIMITED",f:"FAIRDEAL SKYRISE PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL SKYSCRAPERS PRIVATE LIMITED",f:"FAIRDEAL SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"GILLANDERS PROPERTIES KOLKATA PRIVATE LIMITED",f:"GILLANDERS PROPERTIES KOLKATA PRIVATE LIMITED.pdf"},
+  {l:"GOLDVIEW VANIJYA PVT LTD",f:"GOLDVIEW VANIJYA PVT LTD.pdf"},
+  {l:"GROWWELL VYAPAAR  PRIVATE LIMITED",f:"GROWWELL VYAPAAR  PRIVATE LIMITED.pdf"},
+  {l:"INNOCENT DESIGNER PRIVATE LIMITED",f:"INNOCENT DESIGNER PRIVATE LIMITED.pdf"},
+  {l:"JAI MATA CREATION PRIVATE LIMITED",f:"JAI MATA CREATION PRIVATE LIMITED.pdf"},
+  {l:"JAIN BUILDCON PVT LTD",f:"JAIN BUILDCON PVT LTD.pdf"},
+  {l:"JAIN GROUP PROJECTS PVT LTD",f:"JAIN GROUP PROJECTS PVT LTD.pdf"},
+  {l:"JAIN HEIGHTS PVT LTD",f:"JAIN HEIGHTS PVT LTD.pdf"},
+  {l:"JAIN PLAZA PVT LTD",f:"JAIN PLAZA PVT LTD.pdf"},
+  {l:"JAINEX COMMERCE PVT LTD",f:"JAINEX COMMERCE PVT LTD.pdf"},
+  {l:"JFC HIRE PURCHASE PVT LTD",f:"JFC HIRE PURCHASE PVT LTD.pdf"},
+  {l:"KATHRENE DESIGNER PRIVATE LIMITED",f:"KATHRENE DESIGNER PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR BHOOMI DEVLOPERS PRIVATE LIMITED",f:"MAHABIR BHOOMI DEVLOPERS PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR ENCLAVE  PRIVATE LIMITED",f:"MAHABIR ENCLAVE  PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR GARDEN PRIVATE LIMITED",f:"MAHABIR GARDEN PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR GRIHA NIRMAN PRIVATE LIMITED",f:"MAHABIR GRIHA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR HEIGHTS PRIVATE LIMITED",f:"MAHABIR HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR HOMES PRIVATE LIMITED",f:"MAHABIR HOMES PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR REAL ESTATE DEVLOPERS PRIVATE LIMITED",f:"MAHABIR REAL ESTATE DEVLOPERS PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR SKYHIGH PRIVATE LIMITED",f:"MAHABIR SKYHIGH PRIVATE LIMITED.pdf"},
+  {l:"MANIK FINTRADE PVT LTD",f:"MANIK FINTRADE PVT LTD.pdf"},
+  {l:"MANOMAY ADVOSORY PRIVATE LIMITED",f:"MANOMAY ADVOSORY PRIVATE LIMITED.pdf"},
+  {l:"MOTITREE PROJECTS MANAGERS PRIVATE LIMITED",f:"MOTITREE PROJECTS MANAGERS PRIVATE LIMITED.pdf"},
+  {l:"NETTLESS TRADERS PVT LTD",f:"NETTLESS TRADERS PVT LTD.pdf"},
+  {l:"NIDHI BHOOMI NIRMAAN PVT LTD",f:"NIDHI BHOOMI NIRMAAN PVT LTD.pdf"},
+  {l:"NIDHI GRIHA NIRMAAN PVT LTD",f:"NIDHI GRIHA NIRMAAN PVT LTD.pdf"},
+  {l:"NIDHI HEIGHTS PVT LTD",f:"NIDHI HEIGHTS PVT LTD.pdf"},
+  {l:"NIDHI INFRA DEVLOPMENT PVT LTD",f:"NIDHI INFRA DEVLOPMENT PVT LTD.pdf"},
+  {l:"NIDHI INFRA NIRMAAN PVT LTD",f:"NIDHI INFRA NIRMAAN PVT LTD.pdf"},
+  {l:"NORTEL DEALCOM PVT LTD",f:"NORTEL DEALCOM PVT LTD.pdf"},
+  {l:"OMKARA DESOGNER PRIVATE LIMITED",f:"OMKARA DESOGNER PRIVATE LIMITED.pdf"},
+  {l:"P J BHOOMI NIRMAN PVT LTD",f:"P J BHOOMI NIRMAN PVT LTD.pdf"},
+  {l:"P J BUILDCON PVT LTD",f:"P J BUILDCON PVT LTD.pdf"},
+  {l:"P J GRIHA NIRMAAN PVT LTD",f:"P J GRIHA NIRMAAN PVT LTD.pdf"},
+  {l:"P J HEIGHTS PVT LTD",f:"P J HEIGHTS PVT LTD.pdf"},
+  {l:"P J INFRA DEVLOPMENT PVT LTD",f:"P J INFRA DEVLOPMENT PVT LTD.pdf"},
+  {l:"P J INFRA NIRMAAN PRIVATE LIMITED",f:"P J INFRA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE APARTMENT PRIVATE LIMITED",f:"PALANHARE APARTMENT PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE BHOOMI NIRMAN PRIVATE LIMITED",f:"PALANHARE BHOOMI NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE BUIDCON PRIVATE LIMITED",f:"PALANHARE BUIDCON PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE BUILDTECH PRIVATE LIMITED",f:"PALANHARE BUILDTECH PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE BUILDWELL PVT LTD",f:"PALANHARE BUILDWELL PVT LTD.pdf"},
+  {l:"PALANHARE CONCLAVE PVT LTD",f:"PALANHARE CONCLAVE PVT LTD.pdf"},
+  {l:"PALANHARE ENCLAVE PVT LTD",f:"PALANHARE ENCLAVE PVT LTD.pdf"},
+  {l:"PALANHARE FORT PRIVATE LIMITED",f:"PALANHARE FORT PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE INFRACON PRIVATE LIMITED",f:"PALANHARE INFRACON PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE INFRAESTATES PRIVATE LIMITED",f:"PALANHARE INFRAESTATES PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE INFRASTRUCTURE PRIVATE LIMITED",f:"PALANHARE INFRASTRUCTURE PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE KUTIR PRIVATE LIMITED",f:"PALANHARE KUTIR PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE NIRMAAN PRIVATE LIMITED",f:"PALANHARE NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE NIWAS PRIVATE LIMITED",f:"PALANHARE NIWAS PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE PLAZA PRIVATE LIMITED",f:"PALANHARE PLAZA PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE PRODEV BUILDERS PVT LTD",f:"PALANHARE PRODEV BUILDERS PVT LTD.pdf"},
+  {l:"PALANHARE PROPERTY PRIVATE LIMITED",f:"PALANHARE PROPERTY PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE REALCON PRIVATE LIMITED",f:"PALANHARE REALCON PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE REALTORS PRIVATE LIMITED",f:"PALANHARE REALTORS PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE TOWER PRIVATE LIMITED",f:"PALANHARE TOWER PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE VILLA PRIVATE LIMITED",f:"PALANHARE VILLA PRIVATE LIMITED.pdf"},
+  {l:"PARAS FINVEST PVT LTD",f:"PARAS FINVEST PVT LTD.pdf"},
+  {l:"PICS DEALER PRIVATE LIMITED",f:"PICS DEALER PRIVATE LIMITED.pdf"},
+  {l:"PINKU SONU PVT LTD",f:"PINKU SONU PVT LTD.pdf"},
+  {l:"R J GARDEN PRIVATE LIMITED",f:"R J GARDEN PRIVATE LIMITED.pdf"},
+  {l:"R J HEIGHTS PRIVATE LIMITED",f:"R J HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"R J HOMES PRIVATE LIMITED",f:"R J HOMES PRIVATE LIMITED.pdf"},
+  {l:"R J REALTORS PRIVATE LIMITED",f:"R J REALTORS PRIVATE LIMITED.pdf"},
+  {l:"R J SKYHIGH PRIVATE LIMITED",f:"R J SKYHIGH PRIVATE LIMITED.pdf"},
+  {l:"RECEPTION AGENCIES PRIVATE LIMITED",f:"RECEPTION AGENCIES PRIVATE LIMITED.pdf"},
+  {l:"RECEPTION MARKETING PRIVATE LIMITED",f:"RECEPTION MARKETING PRIVATE LIMITED.pdf"},
+  {l:"RECEPTION TRADER PRIVATE LIMITED",f:"RECEPTION TRADER PRIVATE LIMITED.pdf"},
+  {l:"REVERIE INFRA STRUCTURAL DEVELOPMENT PRIVATE LIMITED",f:"REVERIE INFRA STRUCTURAL DEVELOPMENT PRIVATE LIMITED.pdf"},
+  {l:"REVERIE SKYSCRAPERS PRIVATE LIMITED",f:"REVERIE SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"RISHI BHOOMI NIRMAAN PRIVATE LIMITED",f:"RISHI BHOOMI NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"RISHI HEIGHTS PRIVATE LIMITED",f:"RISHI HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"RISHI INFRA BUILDERS PRIVATE LIMITED",f:"RISHI INFRA BUILDERS PRIVATE LIMITED.pdf"},
+  {l:"RISHI INFRA NIRMAAN PRIVATE LIMITED",f:"RISHI INFRA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"RISHI SKYHIGH PRIVATE LIMITED",f:"RISHI SKYHIGH PRIVATE LIMITED.pdf"},
+  {l:"RISHI SKYRISE PRIVATE LIMITED",f:"RISHI SKYRISE PRIVATE LIMITED.pdf"},
+  {l:"RISHI SKYSCRAPERS PRIVATE LIMITED",f:"RISHI SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"RISU IMPEX PRIVATE LIMITED",f:"RISU IMPEX PRIVATE LIMITED.pdf"},
+  {l:"RIVERIE GRIHA NIRMAAN PRIVATE LIMITED",f:"RIVERIE GRIHA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"RIVERIE INFRA DEVLOPERS PRIVATE LIMITED",f:"RIVERIE INFRA DEVLOPERS PRIVATE LIMITED.pdf"},
+  {l:"RIVERIE INFRA ESTATE PVT LTD",f:"RIVERIE INFRA ESTATE PVT LTD.pdf"},
+  {l:"RIVERIE INFRA NIRMAN PRIVATE LIMITED",f:"RIVERIE INFRA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"S J HOMES PRIVATE LIMITED",f:"S J HOMES PRIVATE LIMITED.pdf"},
+  {l:"S J INFRA  PROJECT PRIVATE LIMITED",f:"S J INFRA  PROJECT PRIVATE LIMITED.pdf"},
+  {l:"S J SKYSCRAPERS PRIVATE LIMITED",f:"S J SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"SALLOT TRADERS PVT LTD",f:"SALLOT TRADERS PVT LTD.pdf"},
+  {l:"SALSIFY COMMOSALES PVT LTD",f:"SALSIFY COMMOSALES PVT LTD.pdf"},
+  {l:"SHREE MAHABIR INFRA NIRMAAN PRIVATE LIMITED",f:"SHREE MAHABIR INFRA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"SYMPHONIC VANIJYA PRIVATE LIMITED",f:"SYMPHONIC VANIJYA PRIVATE LIMITED.pdf"},
+  {l:"TRANCE BUILCON PRIVATE LIMITED",f:"TRANCE BUILCON PRIVATE LIMITED.pdf"},
+  {l:"TRANCE INFRA HEIGHTS PRIVATE LIMITED",f:"TRANCE INFRA HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"TRANCE INFRA PROJECTS PRIVATE LIMITED",f:"TRANCE INFRA PROJECTS PRIVATE LIMITED.pdf"},
+  {l:"TRANCE INFRA STRUCTURAL DEVLOPMENT PRIVATE LIMITED",f:"TRANCE INFRA STRUCTURAL DEVLOPMENT PRIVATE LIMITED.pdf"},
+  {l:"TRANCE SKYSCRAPERS PRIVATE LIMITED",f:"TRANCE SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"US CREATION PRIVATE LIMITED",f:"US CREATION PRIVATE LIMITED.pdf"},
+  {l:"WHOLESOME DESINER PRIVATE LIMITED",f:"WHOLESOME DESINER PRIVATE LIMITED.pdf"},
+  {l:"WHOLESOME SUPPLIER PRIVATE LIMITED",f:"WHOLESOME SUPPLIER PRIVATE LIMITED.pdf"}
+],
+  "18_19": [
+  {l:"ALBELA VANIJYA PVT LTD",f:"ALBELA VANIJYA PVT LTD.pdf"},
+  {l:"ALBELA VINTRADE PRIVATE LIMITED",f:"ALBELA VINTRADE PRIVATE LIMITED.pdf"},
+  {l:"ARTMICADO PRIVATE LIMITED",f:"ARTMICADO PRIVATE LIMITED.pdf"},
+  {l:"BAJRANG CREATION PRIVATE LIMITED",f:"BAJRANG CREATION PRIVATE LIMITED.pdf"},
+  {l:"BISWAPITA PROPERTIES PRIVATE LIMITED",f:"BISWAPITA PROPERTIES PRIVATE LIMITED.pdf"},
+  {l:"BLUE HORIZON COMMODITIES PRIVATE LIMITED",f:"BLUE HORIZON COMMODITIES PRIVATE LIMITED.pdf"},
+  {l:"BOOTHNATH MARCOM PRIVATE LIMITED",f:"BOOTHNATH MARCOM PRIVATE LIMITED.pdf"},
+  {l:"BUTTLE CONSULTANCY PRIVATE LIMITED",f:"BUTTLE CONSULTANCY PRIVATE LIMITED.pdf"},
+  {l:"BUTTLE DISTRIBUTOR PRIVATE LIMITED",f:"BUTTLE DISTRIBUTOR PRIVATE LIMITED.pdf"},
+  {l:"DAMODAR TRADING PVT LTD",f:"DAMODAR TRADING PVT LTD.pdf"},
+  {l:"DAYAWAN COMMOSALE PRIVATE LIMITED",f:"DAYAWAN COMMOSALE PRIVATE LIMITED.pdf"},
+  {l:"DHANRISHI SALES PVT LTD",f:"DHANRISHI SALES PVT LTD.pdf"},
+  {l:"DOLPHIN AGENTS PVT LTD",f:"DOLPHIN AGENTS PVT LTD.pdf"},
+  {l:"DREAM APPARTMENT HOUSING PVT LTD",f:"DREAM APPARTMENT HOUSING PVT LTD.pdf"},
+  {l:"DREAM APPLICATION PRIVATE LIMITED",f:"DREAM APPLICATION PRIVATE LIMITED.pdf"},
+  {l:"DREAM DEVLOPERS PRIVATE LIMITED",f:"DREAM DEVLOPERS PRIVATE LIMITED.pdf"},
+  {l:"DREAM ENCLAVE PRIVATE LIMITED",f:"DREAM ENCLAVE PRIVATE LIMITED.pdf"},
+  {l:"DREAM INFRA NIRMAAN PVT LTD",f:"DREAM INFRA NIRMAAN PVT LTD.pdf"},
+  {l:"DREAM NIRMAN PVT LTD",f:"DREAM NIRMAN PVT LTD.pdf"},
+  {l:"DREAM PARK HOUSING PVT LTD",f:"DREAM PARK HOUSING PVT LTD.pdf"},
+  {l:"DREAM PLAZA PRIVATE LIMITED",f:"DREAM PLAZA PRIVATE LIMITED.pdf"},
+  {l:"DREAM REALITIES PRIVATE LIMITED",f:"DREAM REALITIES PRIVATE LIMITED.pdf"},
+  {l:"DREAM RESIDENCY HOUSING PVT LTD",f:"DREAM RESIDENCY HOUSING PVT LTD.pdf"},
+  {l:"DREAM RETREATS PRIVATE LIMITED",f:"DREAM RETREATS PRIVATE LIMITED.pdf"},
+  {l:"DREAM SKYSCRAPERS PVT LTD",f:"DREAM SKYSCRAPERS PVT LTD.pdf"},
+  {l:"DREAM TOWER KOLKATA PRIVATE LIMITED",f:"DREAM TOWER KOLKATA PRIVATE LIMITED.pdf"},
+  {l:"DUBSON DEALCOM PVT LTD",f:"DUBSON DEALCOM PVT LTD.pdf"},
+  {l:"Dream Gateway Hotel Limited",f:"Dream Gateway Hotel Limited.pdf"},
+  {l:"FAIRDEAL ENCLAVE PRIVATE LIMITED",f:"FAIRDEAL ENCLAVE PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL GRIHA NIRMAN PRIVATE LIMITED",f:"FAIRDEAL GRIHA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL HEIGHTS PRIVATE LIMITED",f:"FAIRDEAL HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL HOUSING PRIVATE LIMITED",f:"FAIRDEAL HOUSING PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL INFRA BUILDERS PRIVATE LIMITED",f:"FAIRDEAL INFRA BUILDERS PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL INFRA VENTURES PRIVATE LIMITED",f:"FAIRDEAL INFRA VENTURES PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL REAL ESTATE DEVLOPERS PRIVATE LIMITED",f:"FAIRDEAL REAL ESTATE DEVLOPERS PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL SKYHIGH PRIVATE LIMITED",f:"FAIRDEAL SKYHIGH PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL SKYRISE PRIVATE LIMITED",f:"FAIRDEAL SKYRISE PRIVATE LIMITED.pdf"},
+  {l:"FAIRDEAL SKYSCRAPERS PRIVATE LIMITED",f:"FAIRDEAL SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"GILLANDERS PROPERTIES KOLKATA PRIVATE LIMITED",f:"GILLANDERS PROPERTIES KOLKATA PRIVATE LIMITED.pdf"},
+  {l:"GOLDVIEW VANIJYA PVT LTD",f:"GOLDVIEW VANIJYA PVT LTD.pdf"},
+  {l:"GROWWELL VYAPAAR  PRIVATE LIMITED",f:"GROWWELL VYAPAAR  PRIVATE LIMITED.pdf"},
+  {l:"INNOCENT DESIGNER PRIVATE LIMITED",f:"INNOCENT DESIGNER PRIVATE LIMITED.pdf"},
+  {l:"JAI MATA CREATION PRIVATE LIMITED",f:"JAI MATA CREATION PRIVATE LIMITED.pdf"},
+  {l:"JAIN BUILDCON PVT LTD",f:"JAIN BUILDCON PVT LTD.pdf"},
+  {l:"JAIN GROUP PROJECTS PVT LTD",f:"JAIN GROUP PROJECTS PVT LTD.pdf"},
+  {l:"JAIN HEIGHTS PVT LTD",f:"JAIN HEIGHTS PVT LTD.pdf"},
+  {l:"JAIN PLAZA PVT LTD",f:"JAIN PLAZA PVT LTD.pdf"},
+  {l:"JAINEX COMMERCE PVT LTD",f:"JAINEX COMMERCE PVT LTD.pdf"},
+  {l:"JFC HIRE PURCHASE PVT LTD",f:"JFC HIRE PURCHASE PVT LTD.pdf"},
+  {l:"KATHRENE DESIGNER PRIVATE LIMITED",f:"KATHRENE DESIGNER PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR BHOOMI DEVLOPERS PRIVATE LIMITED",f:"MAHABIR BHOOMI DEVLOPERS PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR ENCLAVE  PRIVATE LIMITED",f:"MAHABIR ENCLAVE  PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR GARDEN PRIVATE LIMITED",f:"MAHABIR GARDEN PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR GRIHA NIRMAN PRIVATE LIMITED",f:"MAHABIR GRIHA NIRMAN PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR HEIGHTS PRIVATE LIMITED",f:"MAHABIR HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR HOMES PRIVATE LIMITED",f:"MAHABIR HOMES PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR REAL ESTATE DEVLOPERS PRIVATE LIMITED",f:"MAHABIR REAL ESTATE DEVLOPERS PRIVATE LIMITED.pdf"},
+  {l:"MAHABIR SKYHIGH PRIVATE LIMITED",f:"MAHABIR SKYHIGH PRIVATE LIMITED.pdf"},
+  {l:"MANIK FINTRADE PVT LTD",f:"MANIK FINTRADE PVT LTD.pdf"},
+  {l:"MANOMAY ADVOSORY PRIVATE LIMITED",f:"MANOMAY ADVOSORY PRIVATE LIMITED.pdf"},
+  {l:"MOTITREE PROJECTS MANAGERS PVT LTD",f:"MOTITREE PROJECTS MANAGERS PVT LTD.pdf"},
+  {l:"NETTLES TRADERS PVT LTD",f:"NETTLES TRADERS PVT LTD.pdf"},
+  {l:"NIDHI BHOOMI NIRMAAN PVT LTD",f:"NIDHI BHOOMI NIRMAAN PVT LTD.pdf"},
+  {l:"NIDHI GRIHA NIRMAAN PVT LTD",f:"NIDHI GRIHA NIRMAAN PVT LTD.pdf"},
+  {l:"NIDHI HEIGHTS PVT LTD",f:"NIDHI HEIGHTS PVT LTD.pdf"},
+  {l:"NIDHI INFRA DEVLOPMENT PVT LTD",f:"NIDHI INFRA DEVLOPMENT PVT LTD.pdf"},
+  {l:"NIDHI INFRA NIRMAAN PVT LTD",f:"NIDHI INFRA NIRMAAN PVT LTD.pdf"},
+  {l:"NORTEL DEALCOM PVT LTD",f:"NORTEL DEALCOM PVT LTD.pdf"},
+  {l:"OMKARA DESOGNER PRIVATE LIMITED",f:"OMKARA DESOGNER PRIVATE LIMITED.pdf"},
+  {l:"PALANHARE APARTMENT PVT LTD",f:"PALANHARE APARTMENT PVT LTD.pdf"},
+  {l:"PALANHARE BHOOMI NIRMAAN PVT LTD",f:"PALANHARE BHOOMI NIRMAAN PVT LTD.pdf"},
+  {l:"PALANHARE BUILDCON PVT LTD",f:"PALANHARE BUILDCON PVT LTD.pdf"},
+  {l:"PALANHARE BUILDTECH PVT LTD",f:"PALANHARE BUILDTECH PVT LTD.pdf"},
+  {l:"PALANHARE BUILDWELL PVT LTD",f:"PALANHARE BUILDWELL PVT LTD.pdf"},
+  {l:"PALANHARE CONCLAVE PVT LTD",f:"PALANHARE CONCLAVE PVT LTD.pdf"},
+  {l:"PALANHARE ENCLAVE PVT LTD",f:"PALANHARE ENCLAVE PVT LTD.pdf"},
+  {l:"PALANHARE FORT PVT LTD",f:"PALANHARE FORT PVT LTD.pdf"},
+  {l:"PALANHARE INFRACON PVT LTD",f:"PALANHARE INFRACON PVT LTD.pdf"},
+  {l:"PALANHARE INFRESTATE PVT LTD",f:"PALANHARE INFRESTATE PVT LTD.pdf"},
+  {l:"PALANHARE INFRESTRUCTURE PVT LTD",f:"PALANHARE INFRESTRUCTURE PVT LTD.pdf"},
+  {l:"PALANHARE KUTIR PVT LTD",f:"PALANHARE KUTIR PVT LTD.pdf"},
+  {l:"PALANHARE NIRMAAN PVT LTD",f:"PALANHARE NIRMAAN PVT LTD.pdf"},
+  {l:"PALANHARE NIWAS PVT LTD",f:"PALANHARE NIWAS PVT LTD.pdf"},
+  {l:"PALANHARE PLAZA PVT LTD",f:"PALANHARE PLAZA PVT LTD.pdf"},
+  {l:"PALANHARE PRODEV BUILDERS PVT LTD",f:"PALANHARE PRODEV BUILDERS PVT LTD.pdf"},
+  {l:"PALANHARE PROPERTY PVT LTD",f:"PALANHARE PROPERTY PVT LTD.pdf"},
+  {l:"PALANHARE REALCON PVT LTD",f:"PALANHARE REALCON PVT LTD.pdf"},
+  {l:"PALANHARE REALTORS PVT LTD",f:"PALANHARE REALTORS PVT LTD.pdf"},
+  {l:"PALANHARE TOWER PVT LTD",f:"PALANHARE TOWER PVT LTD.pdf"},
+  {l:"PALANHARE VILLA PVT LTD",f:"PALANHARE VILLA PVT LTD.pdf"},
+  {l:"PARAS FINVEST PVT LTD",f:"PARAS FINVEST PVT LTD.pdf"},
+  {l:"PICS DEALER PRIVATE LIMITED",f:"PICS DEALER PRIVATE LIMITED.pdf"},
+  {l:"PINKU SONU PVT LTD",f:"PINKU SONU PVT LTD.pdf"},
+  {l:"PJ BHOOMI NIRMAAN PVT LTD",f:"PJ BHOOMI NIRMAAN PVT LTD.pdf"},
+  {l:"PJ BUILDCON PVT LTD",f:"PJ BUILDCON PVT LTD.pdf"},
+  {l:"PJ GRIHA NIRMAAN PVT LTD",f:"PJ GRIHA NIRMAAN PVT LTD.pdf"},
+  {l:"PJ HEIGHTS PVT LTD",f:"PJ HEIGHTS PVT LTD.pdf"},
+  {l:"PJ INFRA DEVLOPMENT PVT LTD",f:"PJ INFRA DEVLOPMENT PVT LTD.pdf"},
+  {l:"PJ INFRA NIRMAAN PVT LTD",f:"PJ INFRA NIRMAAN PVT LTD.pdf"},
+  {l:"R J GARDEN PRIVATE LIMITED",f:"R J GARDEN PRIVATE LIMITED.pdf"},
+  {l:"R J HEIGHTS PRIVATE LIMITED",f:"R J HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"R J HOMES PRIVATE LIMITED",f:"R J HOMES PRIVATE LIMITED.pdf"},
+  {l:"R J REALTORS PRIVATE LIMITED",f:"R J REALTORS PRIVATE LIMITED.pdf"},
+  {l:"R J SKYHIGH PRIVATE LIMITED",f:"R J SKYHIGH PRIVATE LIMITED.pdf"},
+  {l:"RECEPTION AGENCIES PRIVATE LIMITED",f:"RECEPTION AGENCIES PRIVATE LIMITED.pdf"},
+  {l:"RECEPTION MARKETING PRIVATE LIMITED",f:"RECEPTION MARKETING PRIVATE LIMITED.pdf"},
+  {l:"RECEPTION TRADER PRIVATE LIMITED",f:"RECEPTION TRADER PRIVATE LIMITED.pdf"},
+  {l:"REVERIE INFRA ESTATE PRTVATE LIMITED",f:"REVERIE INFRA ESTATE PRTVATE LIMITED.pdf"},
+  {l:"REVERIE INFRA STRUCTURAL DEVLOPMENT PVT LTD",f:"REVERIE INFRA STRUCTURAL DEVLOPMENT PVT LTD.pdf"},
+  {l:"REVERIE SKYSCRAPERS PVT LTD",f:"REVERIE SKYSCRAPERS PVT LTD.pdf"},
+  {l:"RISHI BHOOMI NIRMAN PRWATE LIMITED",f:"RISHI BHOOMI NIRMAN PRWATE LIMITED.pdf"},
+  {l:"RISHI HEIGHTS PRIVATE LIMITED",f:"RISHI HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"RISHI INFRA BUILDERS PRIVATE LIMITED",f:"RISHI INFRA BUILDERS PRIVATE LIMITED.pdf"},
+  {l:"RISHI INFRA NIRMAAN PRIVATE LIMITED",f:"RISHI INFRA NIRMAAN PRIVATE LIMITED.pdf"},
+  {l:"RISHI SKYHIGH PRIVATE LIMITED",f:"RISHI SKYHIGH PRIVATE LIMITED.pdf"},
+  {l:"RISHI SKYRISE PRIVATE LIMITED",f:"RISHI SKYRISE PRIVATE LIMITED.pdf"},
+  {l:"RISHI SKYSCRAPERS PRIVATE LIMITED",f:"RISHI SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"RISU IMPEX PRIVATE LIMITED",f:"RISU IMPEX PRIVATE LIMITED.pdf"},
+  {l:"RIVERIE GRIHA NIRMAAN PRIVATE LIMMED",f:"RIVERIE GRIHA NIRMAAN PRIVATE LIMMED.pdf"},
+  {l:"RIVERIE INFRA DEVELOPERS PVT  LIMITED",f:"RIVERIE INFRA DEVELOPERS PVT  LIMITED.pdf"},
+  {l:"RIVERIE INFRA NIRMAN PRTVATE LIMITED",f:"RIVERIE INFRA NIRMAN PRTVATE LIMITED.pdf"},
+  {l:"S J HOMES PRIVATE LIMITED",f:"S J HOMES PRIVATE LIMITED.pdf"},
+  {l:"S J INFRA  PROJECT PRIVATE LIMITED",f:"S J INFRA  PROJECT PRIVATE LIMITED.pdf"},
+  {l:"S J SKYSCRAPERS PRIVATE LIMITED",f:"S J SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"SALSIFY COMMOSALES PVT LTD",f:"SALSIFY COMMOSALES PVT LTD.pdf"},
+  {l:"SHALLOT TRADERS PVT LTD",f:"SHALLOT TRADERS PVT LTD.pdf"},
+  {l:"SHREE MAHABIR INFRANIRMAN PRTVATE LIMITED",f:"SHREE MAHABIR INFRANIRMAN PRTVATE LIMITED.pdf"},
+  {l:"SYMPHONIC VANIJYA PRIVATE LIMITED",f:"SYMPHONIC VANIJYA PRIVATE LIMITED.pdf"},
+  {l:"TRANCE BUILDCON PRIVATE LIMITED",f:"TRANCE BUILDCON PRIVATE LIMITED.pdf"},
+  {l:"TRANCE INFRA HEIGHTS PRIVATE LIMITED",f:"TRANCE INFRA HEIGHTS PRIVATE LIMITED.pdf"},
+  {l:"TRANCE INFRA PROJECTS PRTVATE LIMITED",f:"TRANCE INFRA PROJECTS PRTVATE LIMITED.pdf"},
+  {l:"TRANCE INFRA STRUCTURAL DEVELOPMENT PRIVATE LIMITED",f:"TRANCE INFRA STRUCTURAL DEVELOPMENT PRIVATE LIMITED.pdf"},
+  {l:"TRANCE SKYSCRAPERS PRIVATE LIMITED",f:"TRANCE SKYSCRAPERS PRIVATE LIMITED.pdf"},
+  {l:"US CREATION PRIVATE LIMITED",f:"US CREATION PRIVATE LIMITED.pdf"},
+  {l:"WHOLESOME DESINER PRIVATE LIMITED",f:"WHOLESOME DESINER PRIVATE LIMITED.pdf"},
+  {l:"WHOLESOME SUPPLIER PRIVATE LIMITED",f:"WHOLESOME SUPPLIER PRIVATE LIMITED.pdf"}
+],
+  "fy15_16": [
+  {l:"ALBELA VANIJYA P LTD",f:"ALBELA VANIJYA P LTD.pdf"},
+  {l:"ALBELA VINTRADE P LTD-FS",f:"ALBELA VINTRADE P LTD-FS.pdf"},
+  {l:"BAJRANG CREATIONS PVT LTD",f:"BAJRANG CREATIONS PVT LTD.pdf"},
+  {l:"BHOOTHNATH MARCOM P LTD",f:"BHOOTHNATH MARCOM P LTD.pdf"},
+  {l:"BISWAPITA PROPERTIES PVT LTD",f:"BISWAPITA PROPERTIES PVT LTD.pdf"},
+  {l:"BLUE HORIZON COMMODITIES P LTD",f:"BLUE HORIZON COMMODITIES P LTD.pdf"},
+  {l:"BUTTLE CONSULTENCY PVT LTD",f:"BUTTLE CONSULTENCY PVT LTD.pdf"},
+  {l:"BUTTLE DISTRIBUTOR PVT LTD",f:"BUTTLE DISTRIBUTOR PVT LTD.pdf"},
+  {l:"DAMODAR TRADING PVT LTD",f:"DAMODAR TRADING PVT LTD.pdf"},
+  {l:"DAYAWAN COMMOSALE PVT LTD",f:"DAYAWAN COMMOSALE PVT LTD.pdf"},
+  {l:"DHANRISHI SALES PVT LTD",f:"DHANRISHI SALES PVT LTD.pdf"},
+  {l:"DOLPHIN AGENTS PVT LTD",f:"DOLPHIN AGENTS PVT LTD.pdf"},
+  {l:"DREAM APARTMENT HOUSING PVT LTD",f:"DREAM APARTMENT HOUSING PVT LTD.pdf"},
+  {l:"DREAM APPLICATION SOFTWARE PVT LTD",f:"DREAM APPLICATION SOFTWARE PVT LTD.pdf"},
+  {l:"DREAM DEVELOPERS PVT LTD",f:"DREAM DEVELOPERS PVT LTD.pdf"},
+  {l:"DREAM ENCLAVE PVT LTD",f:"DREAM ENCLAVE PVT LTD.pdf"},
+  {l:"DREAM GATEWAY HOTELS PVT LTD",f:"DREAM GATEWAY HOTELS PVT LTD.pdf"},
+  {l:"DREAM INFRA NIRMAAN PVT LTD",f:"DREAM INFRA NIRMAAN PVT LTD.pdf"},
+  {l:"DREAM NIRMAN PVT LTD",f:"DREAM NIRMAN PVT LTD.pdf"},
+  {l:"DREAM PARK HOUSING P LTD",f:"DREAM PARK HOUSING P LTD.pdf"},
+  {l:"DREAM PLAZZA PVT LTD",f:"DREAM PLAZZA PVT LTD.pdf"},
+  {l:"DREAM REALITIES PVT LTD",f:"DREAM REALITIES PVT LTD.pdf"},
+  {l:"DREAM RESIDENCY HOUSING PVT LTD",f:"DREAM RESIDENCY HOUSING PVT LTD.pdf"},
+  {l:"DREAM RETREATS PVT LTD",f:"DREAM RETREATS PVT LTD.pdf"},
+  {l:"DREAM SKYSCRAPERS PVT LTD",f:"DREAM SKYSCRAPERS PVT LTD.pdf"},
+  {l:"DREAM TOWER KOLKATA PVT LTD",f:"DREAM TOWER KOLKATA PVT LTD.pdf"},
+  {l:"DUBSON DEALCOM PVT LTD",f:"DUBSON DEALCOM PVT LTD.pdf"},
+  {l:"FAIRDEAL ENCLAVE PVT LTD",f:"FAIRDEAL ENCLAVE PVT LTD.pdf"},
+  {l:"FAIRDEAL GRIHA NIRMAN PVT LTD",f:"FAIRDEAL GRIHA NIRMAN PVT LTD.pdf"},
+  {l:"FAIRDEAL HEIGHT  PVT LTD",f:"FAIRDEAL HEIGHT  PVT LTD.pdf"},
+  {l:"FAIRDEAL HOUSING PVT LTD",f:"FAIRDEAL HOUSING PVT LTD.pdf"},
+  {l:"FAIRDEAL INFRA BUILDERS PVT LTD",f:"FAIRDEAL INFRA BUILDERS PVT LTD.pdf"},
+  {l:"FAIRDEAL INFRA VENTURE PVT LTD",f:"FAIRDEAL INFRA VENTURE PVT LTD.pdf"},
+  {l:"FAIRDEAL REALESTATE DEVELOPERS PVT LTD",f:"FAIRDEAL REALESTATE DEVELOPERS PVT LTD.pdf"},
+  {l:"FAIRDEAL SKYHIGH  PVT LTD",f:"FAIRDEAL SKYHIGH  PVT LTD.pdf"},
+  {l:"FAIRDEAL SKYRISE PVT LTD",f:"FAIRDEAL SKYRISE PVT LTD.pdf"},
+  {l:"FAIRDEAL SKYSCRAPERS PVT LTD",f:"FAIRDEAL SKYSCRAPERS PVT LTD.pdf"},
+  {l:"GILLANDERS  PROPERTIES PVT LTD",f:"GILLANDERS  PROPERTIES PVT LTD.pdf"},
+  {l:"GOLDVIEW VANIJYA PVT LTD",f:"GOLDVIEW VANIJYA PVT LTD.pdf"},
+  {l:"GROWWELL VYAPAAR PVT LTD",f:"GROWWELL VYAPAAR PVT LTD.pdf"},
+  {l:"INNOCENT DESIGNER PVT LTD",f:"INNOCENT DESIGNER PVT LTD.pdf"},
+  {l:"JAI MATA CREATIONS PVT LTD",f:"JAI MATA CREATIONS PVT LTD.pdf"},
+  {l:"JAIN BUILDCON PVT LTD",f:"JAIN BUILDCON PVT LTD.pdf"},
+  {l:"JAIN GROUP PROJECTS PVT.LTD",f:"JAIN GROUP PROJECTS PVT.LTD.pdf"},
+  {l:"JAIN HEIGHTS PVT LTD",f:"JAIN HEIGHTS PVT LTD.pdf"},
+  {l:"JAIN PLAZA PVT LTD",f:"JAIN PLAZA PVT LTD.pdf"},
+  {l:"JAINEX COMMERCE PVT LTD",f:"JAINEX COMMERCE PVT LTD.pdf"},
+  {l:"JFC HIRE PURCHASE PVT LTD",f:"JFC HIRE PURCHASE PVT LTD.pdf"},
+  {l:"KATHRENE DESIGNER PVT LTD",f:"KATHRENE DESIGNER PVT LTD.pdf"},
+  {l:"MAHABIR BHOOMI DEVELOPERS PVT LTD",f:"MAHABIR BHOOMI DEVELOPERS PVT LTD.pdf"},
+  {l:"MAHABIR ENCLAVE PVT LTD",f:"MAHABIR ENCLAVE PVT LTD.pdf"},
+  {l:"MAHABIR GARDEN PVT LTD",f:"MAHABIR GARDEN PVT LTD.pdf"},
+  {l:"MAHABIR GRIHA NIRMAN PVT LTD",f:"MAHABIR GRIHA NIRMAN PVT LTD.pdf"},
+  {l:"MAHABIR HEIGHTS PVT LTD",f:"MAHABIR HEIGHTS PVT LTD.pdf"},
+  {l:"MAHABIR HOMES PVT LTD",f:"MAHABIR HOMES PVT LTD.pdf"},
+  {l:"MAHABIR REAL ESTATE DEVELOPERS PVT LTD",f:"MAHABIR REAL ESTATE DEVELOPERS PVT LTD.pdf"},
+  {l:"MAHABIR SKYHIGH PVT LTD",f:"MAHABIR SKYHIGH PVT LTD.pdf"},
+  {l:"MANIK FINTRADE PVT LTD",f:"MANIK FINTRADE PVT LTD.pdf"},
+  {l:"MANOMAY ADVISORY PVT LTD",f:"MANOMAY ADVISORY PVT LTD.pdf"},
+  {l:"MOTITREE PROJECT MANAGERS PVT LTD",f:"MOTITREE PROJECT MANAGERS PVT LTD.pdf"},
+  {l:"NETTLES TRADERS PVT LTD",f:"NETTLES TRADERS PVT LTD.pdf"},
+  {l:"NIDHI BHOOMI NIRMAN PVT LTD",f:"NIDHI BHOOMI NIRMAN PVT LTD.pdf"},
+  {l:"NIDHI GRIHA NIRMAAN PVT LTD",f:"NIDHI GRIHA NIRMAAN PVT LTD.pdf"},
+  {l:"NIDHI HEIGHTS PVT LTD",f:"NIDHI HEIGHTS PVT LTD.pdf"},
+  {l:"NIDHI INFRA DEVELOPEMENT PVT LTD",f:"NIDHI INFRA DEVELOPEMENT PVT LTD.pdf"},
+  {l:"NIDHI INFRA NIRMAAN PVT LTD",f:"NIDHI INFRA NIRMAAN PVT LTD.pdf"},
+  {l:"NORTEL DEALCOM PVT LTD",f:"NORTEL DEALCOM PVT LTD.pdf"},
+  {l:"OMKARA DESIGNER PVT LTD",f:"OMKARA DESIGNER PVT LTD.pdf"},
+  {l:"P J BHOOMI NIRMAAN PVT LTD",f:"P J BHOOMI NIRMAAN PVT LTD.pdf"},
+  {l:"P J BUILDCON PVT LTD",f:"P J BUILDCON PVT LTD.pdf"},
+  {l:"P J GRIHA NIRMAAN PVT LTD",f:"P J GRIHA NIRMAAN PVT LTD.pdf"},
+  {l:"PALANHARA FORT PVT LTD",f:"PALANHARA FORT PVT LTD.pdf"},
+  {l:"PALANHARE APARTMENT PVT LTD",f:"PALANHARE APARTMENT PVT LTD.pdf"},
+  {l:"PALANHARE BHOOMI NIRMAN PVT LTD",f:"PALANHARE BHOOMI NIRMAN PVT LTD.pdf"},
+  {l:"PALANHARE BUILDTECH PVT LTD",f:"PALANHARE BUILDTECH PVT LTD.pdf"},
+  {l:"PALANHARE BUILDWELL PVT LTD",f:"PALANHARE BUILDWELL PVT LTD.pdf"},
+  {l:"PALANHARE CONCLAVE PVT LTD",f:"PALANHARE CONCLAVE PVT LTD.pdf"},
+  {l:"PALANHARE ENCLAVE PVT LTD",f:"PALANHARE ENCLAVE PVT LTD.pdf"},
+  {l:"PALANHARE INFRACON PVT LTD",f:"PALANHARE INFRACON PVT LTD.pdf"},
+  {l:"PALANHARE INFRAESTATE PVT LTD",f:"PALANHARE INFRAESTATE PVT LTD.pdf"},
+  {l:"PALANHARE INFRASTRUCTURE PVT LTD",f:"PALANHARE INFRASTRUCTURE PVT LTD.pdf"},
+  {l:"PALANHARE KUTIR PVT LTD",f:"PALANHARE KUTIR PVT LTD.pdf"},
+  {l:"PALANHARE NIRMAAN PVT LTD",f:"PALANHARE NIRMAAN PVT LTD.pdf"},
+  {l:"PALANHARE NIWAS PVT LTD",f:"PALANHARE NIWAS PVT LTD.pdf"},
+  {l:"PALANHARE PLAZA PVT LTD",f:"PALANHARE PLAZA PVT LTD.pdf"},
+  {l:"PALANHARE PRODEV BUILDERS PVT LTD",f:"PALANHARE PRODEV BUILDERS PVT LTD.pdf"},
+  {l:"PALANHARE PROPERTY PVT LTD",f:"PALANHARE PROPERTY PVT LTD.pdf"},
+  {l:"PALANHARE REALCON PVT LTD",f:"PALANHARE REALCON PVT LTD.pdf"},
+  {l:"PALANHARE REALTORS PVT LTD",f:"PALANHARE REALTORS PVT LTD.pdf"},
+  {l:"PALANHARE TOWER PVT LTD",f:"PALANHARE TOWER PVT LTD.pdf"},
+  {l:"PALANHARE VILLA PVT LTD",f:"PALANHARE VILLA PVT LTD.pdf"},
+  {l:"PANAHARE BUILDCON PVT LTD",f:"PANAHARE BUILDCON PVT LTD.pdf"},
+  {l:"PARAS FINVEST PVT LTD",f:"PARAS FINVEST PVT LTD.pdf"},
+  {l:"PICS DEALER PVT LTD",f:"PICS DEALER PVT LTD.pdf"},
+  {l:"PINKU SONU INVESTMENTS & PROPERTIES PVT LTD",f:"PINKU SONU INVESTMENTS & PROPERTIES PVT LTD.pdf"},
+  {l:"PJ HEIGHT PVT LTD",f:"PJ HEIGHT PVT LTD.pdf"},
+  {l:"PJ INFRA DEVELOPMENT PVT LTD",f:"PJ INFRA DEVELOPMENT PVT LTD.pdf"},
+  {l:"PJ INFRA NIRMAN PVT LTD",f:"PJ INFRA NIRMAN PVT LTD.pdf"},
+  {l:"R.J. REALTORS PVT LTD",f:"R.J. REALTORS PVT LTD.pdf"},
+  {l:"R.J.GARDEN PVT LTD",f:"R.J.GARDEN PVT LTD.pdf"},
+  {l:"R.J.HEIGHTS PVT LTD",f:"R.J.HEIGHTS PVT LTD.pdf"},
+  {l:"R.J.HOMES PVT LTD",f:"R.J.HOMES PVT LTD.pdf"},
+  {l:"R.J.SKYHIGH PVT LTD",f:"R.J.SKYHIGH PVT LTD.pdf"},
+  {l:"RAVERIE INFRA STRUCTURAL DEVELOPMENT PVT LTD",f:"RAVERIE INFRA STRUCTURAL DEVELOPMENT PVT LTD.pdf"},
+  {l:"RECEPTION AGENCIES PVT LTD",f:"RECEPTION AGENCIES PVT LTD.pdf"},
+  {l:"RECEPTION MARKETING PVT LTD",f:"RECEPTION MARKETING PVT LTD.pdf"},
+  {l:"RECEPTION TRADER PVT LTD",f:"RECEPTION TRADER PVT LTD.pdf"},
+  {l:"REVERIE INFRA ESTATE PVT LTD",f:"REVERIE INFRA ESTATE PVT LTD.pdf"},
+  {l:"REVERIE SKYSCRAPERS PVT LTD",f:"REVERIE SKYSCRAPERS PVT LTD.pdf"},
+  {l:"RISHI BHOOMI NIRMAN PVT LTD",f:"RISHI BHOOMI NIRMAN PVT LTD.pdf"},
+  {l:"RISHI HEIGHTS PVT LTD",f:"RISHI HEIGHTS PVT LTD.pdf"},
+  {l:"RISHI INFRA BUILDERS PVT LTD",f:"RISHI INFRA BUILDERS PVT LTD.pdf"},
+  {l:"RISHI INFRA NIRMAAN PVT LTD",f:"RISHI INFRA NIRMAAN PVT LTD.pdf"},
+  {l:"RISHI SKYHIGH PVT LTD",f:"RISHI SKYHIGH PVT LTD.pdf"},
+  {l:"RISHI SKYRISE PVT LTD",f:"RISHI SKYRISE PVT LTD.pdf"},
+  {l:"RISHI SKYSCRAPERS  PVT LTD",f:"RISHI SKYSCRAPERS  PVT LTD.pdf"},
+  {l:"RISU IMPEX PVT LTD",f:"RISU IMPEX PVT LTD.pdf"},
+  {l:"RIVERIE GRIHA NIRMAN PVT LTD",f:"RIVERIE GRIHA NIRMAN PVT LTD.pdf"},
+  {l:"RIVERIE INFRA DEVELOPERS PVT LTD",f:"RIVERIE INFRA DEVELOPERS PVT LTD.pdf"},
+  {l:"RIVERIE INFRA NIRMAAN PVT LTD",f:"RIVERIE INFRA NIRMAAN PVT LTD.pdf"},
+  {l:"S.J INFRA PROJECT PVT LTD",f:"S.J INFRA PROJECT PVT LTD.pdf"},
+  {l:"S.J. HOMES PVT LTD",f:"S.J. HOMES PVT LTD.pdf"},
+  {l:"S.J.SKYSCRAPERS PVT LTD",f:"S.J.SKYSCRAPERS PVT LTD.pdf"},
+  {l:"SALSIFY COMMOSALES PVT LTD",f:"SALSIFY COMMOSALES PVT LTD.pdf"},
+  {l:"SHALLOT TRADERS PVT LTD",f:"SHALLOT TRADERS PVT LTD.pdf"},
+  {l:"SHREE MAHAVIR INFRA PVT LTD",f:"SHREE MAHAVIR INFRA PVT LTD.pdf"},
+  {l:"SYMPHONIC VANIJYA PVT LTD",f:"SYMPHONIC VANIJYA PVT LTD.pdf"},
+  {l:"TRANCE BUILDCON PVT LTD",f:"TRANCE BUILDCON PVT LTD.pdf"},
+  {l:"TRANCE INFRA HEIGHT PVT LTD",f:"TRANCE INFRA HEIGHT PVT LTD.pdf"},
+  {l:"TRANCE INFRA PROJECTS PVT LTD",f:"TRANCE INFRA PROJECTS PVT LTD.pdf"},
+  {l:"TRANCE INFRA STRUCTURAL PVT LTD",f:"TRANCE INFRA STRUCTURAL PVT LTD.pdf"},
+  {l:"TRANCE SKYCRAPERS PVT LTD",f:"TRANCE SKYCRAPERS PVT LTD.pdf"},
+  {l:"US CREATION PVT LTD",f:"US CREATION PVT LTD.pdf"},
+  {l:"WHOLESOME DESIGNER PVT LTD",f:"WHOLESOME DESIGNER PVT LTD.pdf"},
+  {l:"WHOLESOME SUPPLIER P LTD",f:"WHOLESOME SUPPLIER P LTD.pdf"}
+]
+};
+
+const BS_FOLDER = {
+  "13_14": "ACCT. & FINANCE/ALL BALANCE SHEET/13-14 BS/",
+  "14_15": "ACCT. & FINANCE/ALL BALANCE SHEET/14-15 BS/",
+  "15_16": "ACCT. & FINANCE/ALL BALANCE SHEET/15-16 BS/",
+  "16_17": "ACCT. & FINANCE/ALL BALANCE SHEET/16-17 BS/",
+  "17_18": "ACCT. & FINANCE/ALL BALANCE SHEET/17-18 BS/",
+  "18_19": "ACCT. & FINANCE/ALL BALANCE SHEET/18-19 BS/",
+  "fy15_16": "ACCT. & FINANCE/ALL BALANCE SHEET/BALANCE SHEET F.Y-15-16/"
+};
+
+const PAN_FOLDER = {
+  "pvt": "ACCT. & FINANCE/PAN CARD/PAN CARD/",
+  "llp": "ACCT. & FINANCE/PAN CARD/PAN OF LLP/"
+};
+
+function encPath(p){
+  return p.split('/').map(encodeURIComponent).join('/');
+}
+
+function rowHtml(folder, item, idx){
+  var safe = (item.l||"").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  var url  = encPath(folder) + encodeURIComponent(item.f);
+  return '<div class="lh-row" data-search="'+(item.l||"").toLowerCase().replace(/"/g,'&quot;')+'" '+
+    'style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid var(--bdr);font-size:12.5px;background:'+(idx%2?'#fff':'#fafafa')+'">'+
+    '<span style="flex:1;padding-right:10px">'+safe+'</span>'+
+    '<a class="btn btn-r btn-sm" target="_blank" rel="noopener" href="'+url+'" '+
+      'style="text-decoration:none;color:#fff;flex-shrink:0">Open ↗</a>'+
+    '</div>';
+}
+
+function renderBS(){
+  var y = (document.getElementById('bsYear')||{}).value || '18_19';
+  var q = (document.getElementById('bsSearch')||{}).value || '';
+  q = q.trim().toLowerCase();
+  var folder = BS_FOLDER[y];
+  var items = BS_DATA[y] || [];
+  var visible = 0;
+  var html = items.map(function(it,i){
+    var match = !q || (it.l||"").toLowerCase().indexOf(q) > -1;
+    if (match) visible++;
+    return match ? rowHtml(folder, it, i) : '';
+  }).filter(Boolean).join('');
+  var list = document.getElementById('bsList');
+  if (list) list.innerHTML = html || '<div style="padding:18px;text-align:center;color:var(--gry);font-style:italic">No matches.</div>';
+  var c = document.getElementById('bsCount');
+  if (c) c.textContent = visible + ' / ' + items.length;
+}
+
+function renderPAN(){
+  var t = (document.getElementById('panType')||{}).value || 'pvt';
+  var q = (document.getElementById('panSearch')||{}).value || '';
+  q = q.trim().toLowerCase();
+  var folder = PAN_FOLDER[t];
+  var items = t === 'llp' ? PAN_LLP : PAN_PVT;
+  var visible = 0;
+  var html = items.map(function(it,i){
+    var match = !q || (it.l||"").toLowerCase().indexOf(q) > -1;
+    if (match) visible++;
+    return match ? rowHtml(folder, it, i) : '';
+  }).filter(Boolean).join('');
+  var list = document.getElementById('panList');
+  if (list) list.innerHTML = html || '<div style="padding:18px;text-align:center;color:var(--gry);font-style:italic">No matches.</div>';
+  var c = document.getElementById('panCount');
+  if (c) c.textContent = visible + ' / ' + items.length;
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  renderBS();
+  renderPAN();
+});
+// run immediately as well
+renderBS();
+renderPAN();
+
+</script>
+</body>
+</html>
